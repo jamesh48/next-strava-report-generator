@@ -1,0 +1,223 @@
+{
+  "chooseSportRadios": [
+    {
+      "type": "radio",
+      "id": "run",
+      "name": "modality",
+      "value": "Run",
+      "labelText": "Running"
+    },
+    {
+      "type": "radio",
+      "id": "swim",
+      "name": "modality",
+      "value": "Swim",
+      "labelText": "Swimming"
+    },
+    {
+      "type": "radio",
+      "id": "ride",
+      "name": "modality",
+      "value": "Ride",
+      "labelText": "Cycling"
+    },
+    {
+      "type": "radio",
+      "id": "walk",
+      "name": "modality",
+      "value": "Walk",
+      "labelText": "Walking"
+    }
+  ],
+  "distanceRunRadios": [
+    {
+      "type": "radio",
+      "id": "allresults",
+      "name": "distance",
+      "value": "0",
+      "labelText": "All Results"
+    },
+    {
+      "type": "radio",
+      "id": "5k",
+      "name": "distance",
+      "value": "5000",
+      "labelText": "5k"
+    },
+    {
+      "type": "radio",
+      "id": "10k",
+      "name": "distance",
+      "value": "10000",
+      "labelText": "10k"
+    },
+    {
+      "type": "radio",
+      "id": "halfmarathon",
+      "name": "distance",
+      "value": "21097.5",
+      "labelText": "Half Marathon"
+    },
+    {
+      "type": "radio",
+      "id": "marathon",
+      "name": "distance",
+      "value": "42195",
+      "labelText": "Marathon"
+    },
+    {
+      "type": "radioAndText",
+      "name": "distance",
+      "id": "custom-distance",
+      "placeholder": "Custom Distance"
+    }
+  ],
+  "distanceRideRadios": [
+    {
+      "type": "radio",
+      "id": "allresults",
+      "name": "ridedistance",
+      "value": "0",
+      "labelText": "All Results"
+    },
+    {
+      "type": "radio",
+      "id": "fiftymiles",
+      "name": "ridedistance",
+      "value": "80467.2",
+      "labelText": "50 Miles"
+    },
+    {
+      "type": "radio",
+      "id": "metriccentury",
+      "name": "ridedistance",
+      "value": "100000",
+      "labelText": "Metric Century"
+    },
+    {
+      "type": "radio",
+      "id": "century",
+      "name": "ridedistance",
+      "value": "160934.4",
+      "labelText": "Century"
+    },
+    {
+      "type": "radio",
+      "id": "doublecentury",
+      "name": "ridedistance",
+      "value": "321868.8",
+      "labelText": "Double Century"
+    },
+    {
+      "type": "radioAndText",
+      "id": "custom-distance",
+      "name": "ridedistance",
+      "placeholder": "Custom Distance"
+    }
+  ],
+  "distanceSwimRadios": [
+    {
+      "type": "radio",
+      "id": "allresults",
+      "name": "swimdistance",
+      "value": "0",
+      "labelText": "All Results"
+    },
+    {
+      "type": "radio",
+      "id": "mile",
+      "name": "swimdistance",
+      "value": "1500",
+      "labelText": "Mile"
+    },
+    {
+      "type": "radio",
+      "id": "3k",
+      "name": "swimdistance",
+      "value": "3000",
+      "labelText": "3k"
+    },
+    {
+      "type": "radio",
+      "id": "5k",
+      "name": "swimdistance",
+      "value": "5000",
+      "labelText": "5k"
+    },
+    {
+      "type": "radio",
+      "id": "10k",
+      "name": "swimdistance",
+      "value": "10000",
+      "labelText": "10k"
+    },
+    {
+      "type": "radioAndText",
+      "id": "custom-distance",
+      "name": "swimdistance",
+      "placeholder": "Custom Distance"
+    }
+  ],
+  "formatRunRadios": [
+    {
+      "type": "radio",
+      "id": "kph",
+      "name": "format",
+      "value": "kph",
+      "labelText": "Kilometers/Hour"
+    },
+    {
+      "type": "radio",
+      "id": "mph",
+      "name": "format",
+      "value": "mph",
+      "labelText": "Miles/Hour"
+    },
+    {
+      "type": "radio",
+      "id": "mps",
+      "name": "format",
+      "value": "mps",
+      "labelText": "Meters/Second"
+    }
+  ],
+  "formatRideRadios": [
+    {
+      "type": "radio",
+      "id": "kph",
+      "name": "format",
+      "value": "kph",
+      "labelText": "Kilometers/Hour"
+    },
+    {
+      "type": "radio",
+      "id": "mph",
+      "name": "format",
+      "value": "mph",
+      "labelText": "Miles/Hour"
+    },
+    {
+      "type": "radio",
+      "id": "mps",
+      "name": "format",
+      "value": "mps",
+      "labelText": "Meters/Second"
+    }
+  ],
+  "formatSwimRadios": [
+    {
+      "type": "radio",
+      "id": "avgmpace",
+      "name": "format",
+      "value": "avgmpace",
+      "labelText": "Pace per 100 Meters"
+    },
+    {
+      "type": "radio",
+      "id": "avgypace",
+      "name": "format",
+      "value": "avgypace",
+      "labelText": "Pace per 100 Yards"
+    }
+  ]
+}

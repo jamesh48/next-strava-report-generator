@@ -1,0 +1,127 @@
+#report {
+  margin: 2.5% auto;
+  width: 95%;
+  .pageNoUls,
+  .entryUls {
+    list-style-type: none;
+    margin-bottom: 1%;
+  }
+
+  .entryUls {
+    -webkit-box-shadow: 0 0 10px coral;
+    box-shadow: 0 0 10px coral;
+
+    li {
+      .innerEntry {
+        border: 1px solid coral;
+        background-color: paleturquoise;
+        //questionable
+        &:hover {
+          background-color: darkturquoise;
+          p {
+            color: ivory;
+          }
+        }
+        .generalEntry {
+          padding: 10px;
+          & > p {
+            padding-left: 1.5%;
+          }
+          .entryTitle {
+            text-decoration: underline;
+            color: orangered;
+            padding-left: 12.5px;
+            &:hover {
+              color: blue;
+            }
+          }
+          #noEntriesFound {
+            padding-bottom: 0px;
+          }
+          #champ {
+            padding-left: 15px;
+            padding-top: 0px;
+            padding-bottom: 10px;
+          }
+        }
+        .specialEntry {
+          color: ivory;
+          .entryTitle {
+            color: ivory;
+            padding-left: 5px;
+          }
+        }
+      }
+      #entry1 {
+        background-color: goldenrod;
+      }
+
+      #entry2 {
+        background-color: silver;
+      }
+
+      #entry3 {
+        background-color: #cd7f32;
+      }
+    }
+  }
+
+  .pageNoUls {
+    display: flex;
+    justify-content: center;
+    .pageNos {
+      display: inline-block;
+      border: 1px solid coral;
+      padding: 5px 10px 5px 10px;
+      background-color: paleturquoise;
+      margin-top: 5px;
+      &:hover {
+        cursor: pointer;
+        background-color: coral;
+        border-left: 2px solid ivory;
+        border-right: 2px solid ivory;
+      }
+    }
+  }
+}
+
+.detailedEntry {
+  background-color: coral;
+  border: 2px solid orangered;
+  display: flex;
+  flex-direction: column;
+  text-rendering: geometricPrecision;
+  & > p {
+    padding-left: 1.5%;
+  }
+  .topActivityDescription {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1%;
+    margin-bottom: 1%;
+    h4,
+    p {
+      color: ivory;
+    }
+    .editingActivityTextarea {
+      width: 75%;
+      height: 3.5vmax;
+      align-self: center;
+    }
+  }
+  .editingContainer {
+    align-self: flex-end;
+    padding: 0.5% 1.25%;
+    // .editingSubmitLink {
+    //   margin-right: 1%;
+    // }
+    .editingLink {
+      color: blue;
+      cursor: pointer;
+      margin-right: 10%;
+      &:hover {
+        color: ivory;
+      }
+    }
+  }
+}

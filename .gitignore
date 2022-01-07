@@ -32,3 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+backend/testData
+backend/node_modules
+backend/configs/dotenv/.env
+next.config.js

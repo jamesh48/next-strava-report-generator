@@ -1,0 +1,210 @@
+#mainContainer {
+  background-color: darkslategray;
+  #upperSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    margin: 2.5% auto;
+    padding-top: 25px;
+    border: 1px solid coral;
+    -webkit-box-shadow: 0 0 10px coral;
+    box-shadow: 0 0 10px coral;
+    background-color: darkturquoise;
+    #userProfile {
+      text-rendering: geometricPrecision;
+      display: flex;
+      margin: 2.5% 0;
+      width: 95%;
+      background-color: #52fff3;
+      border: 1px solid orangered;
+      border-top: none;
+      border-left: none;
+      box-shadow: 2.5px 2.5px 5px 0px orangered;
+
+      #userImg {
+        flex: 0.4;
+      }
+
+      #userInfo {
+        display: flex;
+        flex-direction: column;
+        flex: 0.6;
+        color: orangered;
+        border-left: none;
+      }
+
+      .ytdTotals {
+        flex: 1;
+        background-color: #52fff3;
+        border-left: none;
+        padding-left: 5px;
+        border-left: 1px solid coral;
+      }
+
+      .profileBoxes {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    #buttonsAndBar {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      #buttonLayout {
+        display: flex;
+        justify-content: center;
+        width: 95%;
+        margin: 2.5% auto 0 auto;
+        border: 1px solid orangered;
+        border-top: none;
+        border-left: none;
+        background-color: #52fff3;
+        box-shadow: 2.5px 2.5px 5px 0px orangered;
+        .chooseRadioContainer {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          align-items: center;
+          &:first-child {
+            border-right: 1px solid coral;
+          }
+          &:last-child {
+            border-left: 1px solid coral;
+          }
+          .multipleRadioButtonContainer {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            .singleRadioButtonContainer {
+              flex: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* .inner-entry:hover {
+  background-color: darkturquoise;
+} */
+
+/* .inner-entry:hover > p {
+  color: ivory;
+} */
+
+.chooseTitle {
+  color: orangered;
+}
+
+.ytdTotalsTitle {
+  text-decoration: underline;
+  color: orangered;
+}
+
+.ytdTotalsTitle,
+#userLocation,
+.ytdDescriptor,
+#userName,
+.entryDescriptor {
+  cursor: default;
+}
+
+.speed {
+  display: inline;
+  padding: none;
+}
+
+#custom-distance {
+  margin-top: 1.5%;
+  margin-left: 5%;
+}
+
+#funStats {
+  display: grid;
+  margin-left: 2.5%;
+  grid-template-columns: 14% 20.5% 17.5% 2% auto;
+  grid-template-rows: auto;
+}
+
+#topActivityGear {
+  margin-left: 1.5%;
+}
+
+#goldenHeartRate,
+#kudosX,
+#trophyCase {
+  display: flex;
+  max-height: 3rem;
+  max-width: 10rem;
+  & > span {
+    flex: 0.5;
+  }
+  .kudosDescriptors {
+    padding-left: 2.5%;
+    flex: 1;
+  }
+}
+
+#heartRateImg,
+#kudos-img,
+#trophyImg {
+  height: 50px;
+  width: 50px;
+  grid-area: photo;
+}
+
+#maxHeartRate,
+#commentCount,
+#emptyCount {
+  grid-area: mhr;
+}
+
+#avgHeartRate,
+#kudosCount,
+#achievementCount {
+  grid-area: ahr;
+}
+
+.kudos,
+.heartRate,
+.achievements,
+#top-activity-gear {
+  color: ivory;
+}
+
+.heartRate,
+.kudos,
+.achievements {
+  margin: 0;
+}
+.heartRate,
+.heartRate > p,
+.kudos,
+.kudos > p,
+.achievements,
+.achievements > p {
+  display: inline-block;
+}
+
+#rateLimitContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .rate-limit-message {
+    &:first-child {
+      text-decoration: underline;
+    }
+    display: flex;
+    justify-content: center;
+    color: orangered;
+    width: 100%;
+    padding: 0.5% 0;
+  }
+}
