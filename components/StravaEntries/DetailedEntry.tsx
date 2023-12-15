@@ -35,7 +35,13 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
       {/* Kudos & Comments */}
       <div id={appStyles.funStats}>
         <div id={appStyles.kudosX}>
-          <Image height="150" width="150" alt="kudos-img" src="/images/kudos.jpeg" />
+          <Image
+            height={150}
+            width={150}
+            alt="kudos-img"
+            layout="intrinsic"
+            src="/images/kudos.jpeg"
+          />
           <div className={appStyles.kudosDescriptors}>
             <h5 id={reportStyles.kudosCount} className={appStyles.kudos}>
               Kudos- <p>{currentActivity.kudos_count}</p>
@@ -49,13 +55,21 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
         {/* Heart Rate */}
         {currentActivity.average_heartrate ? (
           <div id={appStyles.goldenHeartRate}>
-            <img id={appStyles.heartRateImg} src="/images/heartrate.png" />
-            <h5 id={appStyles.avgHeartRate} className={appStyles.heartRate}>
-              Avg Heart Rate- <p>{`${currentActivity.average_heartrate} bpm`}</p>
-            </h5>
-            <h5 id={appStyles.maxHeartRate} className={appStyles.heartRate}>
-              Max Heart Rate- <p>{`${currentActivity.max_heartrate} bpm`}</p>
-            </h5>
+            <Image
+              alt="heart-rate"
+              height={150}
+              width={150}
+              layout="intrinsic"
+              src="/images/heartrate.png"
+            />
+            <div className={appStyles.heartRateDescriptors}>
+              <h5 id={appStyles.avgHeartRate} className={appStyles.heartRate}>
+                Avg- <p>{`${currentActivity.average_heartrate} bpm`}</p>
+              </h5>
+              <h5 id={appStyles.maxHeartRate} className={appStyles.heartRate}>
+                Max- <p>{`${currentActivity.max_heartrate} bpm`}</p>
+              </h5>
+            </div>
           </div>
         ) : (
           <div id={appStyles.goldenHeartRate}>
@@ -64,6 +78,7 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
               height={150}
               width={150}
               src="/images/heartrate.png"
+              layout="intrinsic"
             />
             <h5 className={appStyles.heartRate} id={appStyles.avgHeartRate}>
               <p>No HR Info Available</p>
@@ -83,10 +98,12 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
             src="/images/trophy.jpeg"
             layout="intrinsic"
           />
-          <h5 className={appStyles.achievements} id={appStyles.achievementCount}>
-            Achievement Count-
-            <p>{currentActivity.achievement_count}</p>
-          </h5>
+          <div className={appStyles.achievementCountDescriptor}>
+            <h5 className={appStyles.achievements} id={appStyles.achievementCount}>
+              Achievement Count-
+              <p>{currentActivity.achievement_count}</p>
+            </h5>
+          </div>
           <h5 className={appStyles.achievements} id={appStyles.emptyCount}>
             <p></p>
           </h5>
@@ -100,6 +117,7 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
             src={currentActivity.photos.primary.urls["600"]}
             height={150}
             width={150}
+            layout="fixed"
             alt="highlight-photo"
           />
         ) : null}

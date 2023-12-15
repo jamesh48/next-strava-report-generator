@@ -14,10 +14,7 @@ authRouter.get("/authLink", (_req, res) => {
 authRouter.get(
   "/exchange_token",
   // @ts-ignore (not all code paths return a value)
-  async (
-    { session, query: { error, scope, code: authCodeFromStrava } }: any,
-    res: Response
-  ) => {
+  async ({ session, query: { error, scope, code: authCodeFromStrava } }: any, res: Response) => {
     if (error === "access_denied") return res.send(error);
     const {
       data: {
@@ -25,13 +22,13 @@ authRouter.get(
         expires_at,
         refresh_token,
         access_token,
-        athlete: { id: athleteId, username }
-      }
+        athlete: { id: athleteId, username },
+      },
     } = await axios.post(`https://www.strava.com/oauth/token`, {
       client_id: process.env.USER_ID,
       client_secret: process.env.CLIENT_SECRET,
       code: authCodeFromStrava,
-      grant_type: "authorization_code"
+      grant_type: "authorization_code",
     });
 
     const authBearer = `${token_type} ${access_token}`;
@@ -45,14 +42,14 @@ authRouter.get(
       readScope: true,
       readAllScope: readAllScope,
       // expires at is in seconds, sequelize requires ms
-      expiresAt: expires_at * 1000
+      expiresAt: expires_at * 1000,
     });
 
     await upsertRefreshToken({
       athleteId: athleteId,
       refreshToken: refresh_token,
       readScope: true,
-      readAllScope: readAllScope
+      readAllScope: readAllScope,
     });
 
     // Save in Express Session
@@ -60,7 +57,7 @@ authRouter.get(
     session.save(() => {
       res.redirect("/");
     });
-  }
+  },
 );
 
 export default authRouter;

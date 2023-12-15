@@ -35,7 +35,7 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
 
   const updateEntries: () => Promise<void> = async () => {
     globalDispatch({ type: "TOGGLE LOADED OFF" });
-    const { data: allActivities } = await axios.post("/addAllActivities");
+    const { data: allActivities } = await axios.post("/api/addAllActivities");
     globalDispatch({ type: "TOGGLE LOADED ON" });
     globalDispatch({
       type: "SET TOTAL ENTRIES",

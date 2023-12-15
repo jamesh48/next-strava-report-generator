@@ -4,19 +4,18 @@ const { performance } = require("perf_hooks");
 import "colors";
 import express, { Request, Response } from "express";
 // import redis = require("redis");
-const redis = require("redis");
 const next = require("next");
-const connectRedis = require("connect-redis");
 const cors = require("cors");
-import session = require("express-session");
-// import session from "express-session";
-import dataRouter from "./dataRouter";
-import authRouter from "./authRouter";
 
 // Redis ->
+const redis = require("redis");
+const connectRedis = require("connect-redis");
+import session = require("express-session");
 const redisStore = connectRedis(session);
 const redisClient = redis.createClient();
 
+import dataRouter from "./dataRouter";
+import authRouter from "./authRouter";
 const dev = process.env.NODE_ENV !== "production";
 
 const server = express();
@@ -29,6 +28,7 @@ const server = express();
 (() => {
   const app = next({ dev });
   const handle = app.getRequestHandler();
+  console.log("\n\n\n\n" + handle);
   return app.prepare().then(() => {
     server.use(
       cors({

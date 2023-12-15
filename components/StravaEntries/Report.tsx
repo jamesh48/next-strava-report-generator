@@ -81,7 +81,6 @@ const Report: React.FC<ReportProps> = (props) => {
   const showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement> =
     async (event) => {
       event.preventDefault();
-      console.log(event.currentTarget)
       const individualEntry = await getIndividualEntry(
         Number(event.currentTarget.dataset.indentry)
       );

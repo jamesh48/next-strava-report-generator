@@ -1,15 +1,10 @@
 // https://stackoverflow.com/questions/60014874/how-to-use-typescript-with-sequelize
-require("dotenv").config({ path: require("path").resolve(".env") });
+require("dotenv").config({ path: require("path").resolve("backend/configs/dotenv/.env") });
+console.log(require("path").resolve("backend/configs/dotenv/.env"));
 import * as sequelize from "sequelize";
 import { ActivityFactory, ActivityStatic } from "./models/activity_model";
-import {
-  AccessTokenFactory,
-  AccessTokenStatic
-} from "./models/access_token_model";
-import {
-  RefreshTokenFactory,
-  RefreshTokenStatic
-} from "./models/refresh_token_model";
+import { AccessTokenFactory, AccessTokenStatic } from "./models/access_token_model";
+import { RefreshTokenFactory, RefreshTokenStatic } from "./models/refresh_token_model";
 export const dbConfig = new sequelize.Sequelize(
   process.env.PG_DATABASE || "",
   process.env.PG_USER || "",
@@ -43,7 +38,6 @@ const database: {
 } = {
   sequelize: sequelize,
   models: { Activity, AccessToken, RefreshToken }
-  // model
 };
 
 export default database;

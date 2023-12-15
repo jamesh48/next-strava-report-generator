@@ -9,7 +9,7 @@ import {
   getAllUserActivities,
   updateOneActivity,
   deleteTokens,
-  deleteEntries
+  deleteEntries,
 } from "../database/controllers";
 
 import {
@@ -17,7 +17,7 @@ import {
   getAllEntriesConfig,
   getStatsConfig,
   getIndEntryConfig,
-  getRefreshedAccessTokenConfig
+  getRefreshedAccessTokenConfig,
 } from "./apiConfigs";
 
 import { getStravaResults, recurseResults, refreshAccessToken } from "./serverUtils";
@@ -38,7 +38,7 @@ dataRouter.use(async (req: any, res: Response, next) => {
       console.log("refreshing access token!");
       const newAccessToken = await refreshAccessToken(
         getRefreshedAccessTokenConfig,
-        req.session.athleteId
+        req.session.athleteId,
       );
       req.currentAccessToken = newAccessToken;
     } else {
@@ -62,10 +62,7 @@ dataRouter.get("/loggedInUser", async ({ currentAccessToken }: any, res: Respons
     return send500(res, err.message);
   }
   try {
-    const statsConfig: AxiosRequestConfig = getStatsConfig(
-      currentAccessToken,
-      athlete.data.id
-    );
+    const statsConfig: AxiosRequestConfig = getStatsConfig(currentAccessToken, athlete.data.id);
     var stats = await axios(statsConfig);
   } catch (err: any) {
     return send500(res, err.message);
@@ -78,8 +75,8 @@ dataRouter.get("/loggedInUser", async ({ currentAccessToken }: any, res: Respons
 dataRouter.get("/allEntries", async ({ currentAccessToken }: any, res: Response) => {
   res.send(
     (await getAllUserActivities(currentAccessToken)).sort(
-      (a: any, b: any) => b.distance / b.moving_time - a.distance / a.moving_time
-    )
+      (a: any, b: any) => b.distance / b.moving_time - a.distance / a.moving_time,
+    ),
   );
 });
 
@@ -94,42 +91,35 @@ dataRouter.get(
     } catch (err: any) {
       return res.send(err.message);
     }
-  }
+  },
 );
 
-dataRouter.post(
-  "/addAllActivities",
-  async ({ currentAccessToken }: any, res: Response) => {
-    const callback = async (finalEntriesArr: any[]) => {
-      const totalEntries = finalEntriesArr
-        .sort((a, b) => b.distance / b.moving_time - a.distance / a.moving_time)
-        .filter(
-          (x) =>
-            x.type === "Walk" ||
-            x.type === "Swim" ||
-            x.type === "Run" ||
-            x.type === "Ride"
-        );
-      console.log(`Done: ${totalEntries.length} Results Fetched`.red);
-      console.log(`Uploading ${totalEntries.length} Entries to Database`);
-      const allActivities = await addAllActivities(totalEntries);
-      console.log(`Done- Uploaded ${allActivities.length} Entries to Database`);
-      res.json(allActivities);
-    };
+dataRouter.post("/addAllActivities", async ({ currentAccessToken }: any, res: Response) => {
+  const callback = async (finalEntriesArr: any[]) => {
+    const totalEntries = finalEntriesArr
+      .sort((a, b) => b.distance / b.moving_time - a.distance / a.moving_time)
+      .filter(
+        (x) => x.type === "Walk" || x.type === "Swim" || x.type === "Run" || x.type === "Ride",
+      );
+    console.log(`Done: ${totalEntries.length} Results Fetched`.red);
+    console.log(`Uploading ${totalEntries.length} Entries to Database`);
+    const allActivities = await addAllActivities(totalEntries);
+    console.log(`Done- Uploaded ${allActivities.length} Entries to Database`);
+    res.json(allActivities);
+  };
 
-    recurseResults(getAllEntriesConfig(currentAccessToken), [], callback);
-  }
-);
+  recurseResults(getAllEntriesConfig(currentAccessToken), [], callback);
+});
 
 dataRouter.put("/putActivityUpdate", async (req: any, res: Response) => {
   const putActivityUpdateConfig: AxiosRequestConfig = {
     method: "PUT",
     url: encodeURI(
-      `https://www.strava.com/api/v3/activities/${req.query.activityId}?name=${req.query.name}&description=${req.query.description}`
+      `https://www.strava.com/api/v3/activities/${req.query.activityId}?name=${req.query.name}&description=${req.query.description}`,
     ),
     headers: {
-      Authorization: req.currentAccessToken
-    }
+      Authorization: req.currentAccessToken,
+    },
   };
 
   try {

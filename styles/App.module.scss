@@ -145,7 +145,7 @@
   & > span {
     flex: 0.5;
   }
-  .kudosDescriptors {
+  .kudosDescriptors, .heartRateDescriptors, .achievementCountDescriptor {
     padding-left: 2.5%;
     flex: 1;
   }
@@ -174,7 +174,7 @@
 .kudos,
 .heartRate,
 .achievements,
-#top-activity-gear {
+#topActivityGear {
   color: ivory;
 }
 

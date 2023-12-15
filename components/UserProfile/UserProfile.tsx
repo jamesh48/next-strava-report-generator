@@ -4,27 +4,53 @@ import RunningTotals from "./RunningTotals";
 import SwimmingTotals from "./SwimmingTotals";
 import { ProfileData } from "./UserProfileTypes";
 import Image from "next/image";
-// import { fetchDataUser } from "../../lib/FetchUser";
-import testProfile from "../../backend/testData/profileTestData";
+import { fetchUserData } from "../../lib/FetchUser";
 import style from "../../styles/App.module.scss";
 
 const Profile: React.FC<{}> = () => {
-  // const resource = fetchDataUser();
-  //@ts-ignore
-  // const profile: ProfileData & number = resource.user.read();
-  const profile: ProfileData & number = testProfile;
+  const [rateLimit, setRateLimit] = React.useState(false);
+  const [userProfile, setUserProfile] = React.useState({
+    profile: "",
+    firstname: "",
+    lastname: "",
+    city: "",
+    state: "",
+    country: "",
+    ytd_run_totals: {
+      distance: 0,
+      count: 0,
+      elapsed_time: 0
+    },
+    ytd_swim_totals: {
+      distance: 0,
+      count: 0,
+      elapsed_time: 0
+    }
+  });
+  React.useEffect(() => {
+    async function fetchUser() {
+      const incomingUserProfile: ProfileData & number = await fetchUserData();
+      if (incomingUserProfile === 429) {
+        setRateLimit(true);
+      } else {
+        setUserProfile(incomingUserProfile);
+      }
+    }
+    fetchUser();
+  }, []);
   return (
-    (profile !== 429 && (
+    //@ts-ignore
+    (!rateLimit && userProfile?.profile && (
       <div id={style.userProfile}>
         <Image
           height="250"
           width="250"
           alt="profile-picture"
-          src={profile.profile}
+          src={userProfile.profile}
         ></Image>
-        <UserNameSection profile={profile} />
-        <RunningTotals profile={profile} />
-        <SwimmingTotals profile={profile} />
+        <UserNameSection profile={userProfile} />
+        <RunningTotals profile={userProfile} />
+        <SwimmingTotals profile={userProfile} />
       </div>
     )) || (
       <div id={style.userProfile}>
