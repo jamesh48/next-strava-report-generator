@@ -1,10 +1,10 @@
-import React from "react";
-import axios from "axios";
-import { useProgressBarProgressStore } from "./useProgressBarProgress";
-import { useInterval } from "./useInterval";
-import { useGlobalContext } from "../../GlobalStore/globalStore.js";
-import { ProgressBarProps } from "./ProgressBarTypes";
-import progressBarStyles from "../../../styles/progressBar.module.scss";
+import React from 'react';
+import axios from 'axios';
+import { useProgressBarProgressStore } from './useProgressBarProgress';
+import { useInterval } from './useInterval';
+import { useGlobalContext } from '../../GlobalStore/globalStore.js';
+import { ProgressBarProps } from './ProgressBarTypes';
+import progressBarStyles from '../../../styles/progressBar.module.scss';
 
 const ProgressBar: React.FC<ProgressBarProps> = () => {
   const [{ isLoaded }, globalDispatch] = useGlobalContext();
@@ -12,7 +12,7 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
     progressBarProgress,
     incrementProgressBarProgress,
     completeProgressBarProgress,
-    resetProgressBarProgress
+    resetProgressBarProgress,
   } = useProgressBarProgressStore((state) => state);
 
   useInterval(
@@ -30,33 +30,38 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   );
 
   const fillerStyles = {
-    width: `${progressBarProgress}%`
+    width: `${progressBarProgress}%`,
   };
 
   const updateEntries: () => Promise<void> = async () => {
-    globalDispatch({ type: "TOGGLE LOADED OFF" });
-    const { data: allActivities } = await axios.post("/api/addAllActivities");
-    globalDispatch({ type: "TOGGLE LOADED ON" });
+    globalDispatch({ type: 'TOGGLE LOADED OFF' });
+    const { data: allActivities } = await axios.post('/api/addAllActivities');
+    globalDispatch({ type: 'TOGGLE LOADED ON' });
     globalDispatch({
-      type: "SET TOTAL ENTRIES",
-      payload: allActivities
+      type: 'SET TOTAL ENTRIES',
+      payload: allActivities,
     });
   };
 
-  const setSortCondition: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+  const setSortCondition: React.ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
     globalDispatch({
-      type: "SET SORT CONDITION",
-      payload: event.currentTarget.value
+      type: 'SET SORT CONDITION',
+      payload: event.currentTarget.value,
     });
   };
 
   const destroyUser: React.MouseEventHandler<HTMLInputElement> = async () => {
-    await axios.delete("/destroy-user");
+    await axios.get('/api/destroyUser');
   };
 
   return progressBarProgress === 0 ? (
     <div className={progressBarStyles.updateButtonContainer}>
-      <select className={progressBarStyles.updateButton} onChange={setSortCondition}>
+      <select
+        className={progressBarStyles.updateButton}
+        onChange={setSortCondition}
+      >
         <option value="speedDesc">Speed: Fastest First</option>
         <option value="dateDesc">Date: Most Recent</option>
         <option value="dateAsc">Date: Least Recent</option>
@@ -81,7 +86,10 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   ) : (
     <div className={progressBarStyles.updateButtonContainer}>
       <div id={progressBarStyles.progressBarContainer}>
-        <div className={progressBarStyles.progressBarFiller} style={fillerStyles}>
+        <div
+          className={progressBarStyles.progressBarFiller}
+          style={fillerStyles}
+        >
           <span
             className={progressBarStyles.progressBarCounter}
           >{`${progressBarProgress}%`}</span>
