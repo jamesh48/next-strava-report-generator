@@ -8,7 +8,6 @@ on:
 jobs:
   # https://dev.to/aws-builders/deploy-to-aws-with-github-actions-and-aws-cdk-4m1e
   deploy:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -32,7 +31,7 @@ jobs:
         run: |
           cd iac;
           npm install;
-          cdk deploy --require-approval=never;
+          cdk synth --require-approval=never;
         env:
           AWS_ACCOUNT_NUMBER: ${{ vars.AWS_ACCOUNT_NUMBER }}
           AWS_CLUSTER_ARN: ${{ vars.AWS_CLUSTER_ARN }}
