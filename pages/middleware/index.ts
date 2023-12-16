@@ -1,2 +1,1 @@
-export * from './withAccessToken';
-export * from './withSession';
+export { default as withSession } from './withSession';

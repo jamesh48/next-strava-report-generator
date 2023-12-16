@@ -5,7 +5,6 @@ const handler = nextConnect();
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const code = req.query.code;
-
   try {
     const { data } = await axios(
       `${process.env.DATA_BASE_URL}/srg/exchange_token?code=${code}`

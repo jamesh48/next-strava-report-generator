@@ -7,7 +7,7 @@ const redisClient = redis.createClient();
 
 require('dotenv').config();
 
-export const withSession = () => {
+const withSession = () => {
   return session({
     name: process.env.EXPRESS_SESSION_COOKIE_NAME,
     // @ts-ignore
@@ -26,3 +26,5 @@ export const withSession = () => {
     }),
   });
 };
+
+export default withSession;

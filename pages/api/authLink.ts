@@ -4,7 +4,7 @@ import nextConnect from 'next-connect';
 const handler = nextConnect();
 
 handler.get((_req: NextApiRequest, res: NextApiResponse) => {
-  res.redirect(process.env.AUTH_LINK!);
+  res.send(process.env.AUTH_LINK!);
 });
 
 export default handler;

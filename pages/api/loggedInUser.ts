@@ -7,8 +7,8 @@ const handler = nextConnect();
 handler.use(withSession());
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const srg_athlete_id = req.cookies.athleteId;
   try {
+    const srg_athlete_id = req.cookies.athleteId;
     var athlete = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/getLoggedInUser`,
       method: 'GET',
