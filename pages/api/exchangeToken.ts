@@ -10,7 +10,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       `${process.env.DATA_BASE_URL}/srg/exchange_token?code=${code}`
     );
     res.setHeader('Set-Cookie', `athleteId=${data};`);
-    return res.redirect('http://localhost:8000');
+    return res.redirect(process.env.REDIRECT_URI_HOST!);
   } catch (err: any) {
     return res.send(err);
   }
