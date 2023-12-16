@@ -12,7 +12,7 @@ const GeneralEntry: React.FC<GeneralEntryProps> = ({
   editing,
   editedName,
   showIndividualEntry,
-  handleNameChange
+  handleNameChange,
 }) => {
   const m2y = 1.094;
   const mps2kph = 3.6;
@@ -28,10 +28,7 @@ const GeneralEntry: React.FC<GeneralEntryProps> = ({
       ? "Ran"
       : "traveled-";
 
-  const handleTime: (movingTime: number, pace?: string) => string = (
-    movingTime,
-    pace
-  ) => {
+  const handleTime: (movingTime: number, pace?: string) => string = (movingTime, pace) => {
     if (movingTime !== Infinity) {
       if (pace) {
         return new Date(movingTime * 1000).toISOString().substr(15, 4);
@@ -75,10 +72,7 @@ const GeneralEntry: React.FC<GeneralEntryProps> = ({
           </a>
         )}
         {format !== "avgypace" ? (
-          <EntryDescriptor
-            title={`Distance ${pastTense}`}
-            value={`${entry.distance} Meters`}
-          />
+          <EntryDescriptor title={`Distance ${pastTense}`} value={`${entry.distance} Meters`} />
         ) : (
           <EntryDescriptor
             title={`Distance ${pastTense}`}
@@ -115,10 +109,7 @@ const GeneralEntry: React.FC<GeneralEntryProps> = ({
         ) : format === "avgypace" ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
-            value={handleTime(
-              entry.moving_time / ((entry.distance * 1.094) / 100),
-              "pace"
-            )}
+            value={handleTime(entry.moving_time / ((entry.distance * 1.094) / 100), "pace")}
             extra="/100 Yards"
           />
         ) : format === "avgmpace" ? (
@@ -162,9 +153,7 @@ const GeneralEntry: React.FC<GeneralEntryProps> = ({
           />
         ) : null}
 
-        <p className={appStyles.entryEDescriptor}>
-          {new Date(entry.start_date).toLocaleString()}
-        </p>
+        <p className={appStyles.entryEDescriptor}>{new Date(entry.start_date).toLocaleString()}</p>
       </div>
     </div>
   );

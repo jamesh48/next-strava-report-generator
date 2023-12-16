@@ -13,7 +13,7 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
   editedDescription,
   handleEditingChange,
   handleDescriptionChange,
-  handleActivityUpdate
+  handleActivityUpdate,
 }) => {
   return (
     <div className={reportStyles.detailedEntry}>
@@ -27,9 +27,7 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
             onChange={handleDescriptionChange}
           ></textarea>
         ) : (
-          <p className={reportStyles.topActivityDescription}>
-            {currentActivity.description}
-          </p>
+          <p className={reportStyles.topActivityDescription}>{currentActivity.description}</p>
         )}
       </div>
       {/* Kudos & Comments */}
@@ -58,7 +56,7 @@ const DetailedEntry: React.FC<DetailedEntryProps> = ({
             <Image
               alt="heart-rate"
               height={150}
-              width={150}
+              width={300}
               layout="intrinsic"
               src="/images/heartrate.png"
             />

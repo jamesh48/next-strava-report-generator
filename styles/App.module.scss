@@ -142,10 +142,13 @@
   display: flex;
   max-height: 3rem;
   max-width: 10rem;
+  min-width: 100%;
   & > span {
     flex: 0.5;
   }
-  .kudosDescriptors, .heartRateDescriptors, .achievementCountDescriptor {
+  .kudosDescriptors,
+  .heartRateDescriptors,
+  .achievementCountDescriptor {
     padding-left: 2.5%;
     flex: 1;
   }

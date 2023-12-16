@@ -1,8 +1,20 @@
-import { getRefreshedAccessTokenConfig } from "../../backend/src/server/apiConfigs";
-import {
-  getCurrCredentials,
-  refreshAccessToken
-} from "../../backend/src/server/serverUtils";
+import { AxiosRequestConfig } from "axios";
+import { getCurrCredentials, refreshAccessToken } from "../../backend/src/server/serverUtils";
+
+const getRefreshedAccessTokenConfig: (refreshToken: string) => AxiosRequestConfig = (
+  refreshToken,
+) => {
+  return {
+    method: "POST",
+    url: "https://www.strava.com/api/v3/oauth/token",
+    data: {
+      client_id: process.env.USER_ID,
+      client_secret: process.env.CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    },
+  };
+};
 
 const withAccessToken = () => {
   return async (req: any, res: any, next: any) => {
@@ -19,7 +31,7 @@ const withAccessToken = () => {
         console.log("Refreshing Access Token...");
         const newAccessToken = await refreshAccessToken(
           getRefreshedAccessTokenConfig,
-          req.session.athleteId
+          req.session.athleteId,
         );
         req.currentAccessToken = newAccessToken;
       } else {

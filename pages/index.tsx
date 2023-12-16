@@ -1,6 +1,6 @@
-import Head from "next/head";
-import App from "../components/App/App";
-import { GlobalStoreProvider } from "../components/GlobalStore/globalStore";
+import Head from 'next/head';
+import App from '../components/App/App';
+import { GlobalStoreProvider } from '../components/GlobalStore/globalStore';
 export default function Home() {
   return (
     <div>
@@ -10,7 +10,7 @@ export default function Home() {
         <link rel="icon" href="/images/favicon.png" />
       </Head>
       <GlobalStoreProvider>
-        <App/>
+        <App />
       </GlobalStoreProvider>
     </div>
   );

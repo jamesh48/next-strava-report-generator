@@ -1,10 +1,10 @@
-const path = require("path");
-require("dotenv").config({ path: path.resolve("backend/configs/dotenv/.env") });
-import nextConnect from "next-connect";
+require('dotenv').config();
+import { NextApiRequest, NextApiResponse } from 'next';
+import nextConnect from 'next-connect';
 const handler = nextConnect();
 
-handler.get((_req, res: any) => {
-  res.send(process.env.AUTH_LINK);
+handler.get((_req: NextApiRequest, res: NextApiResponse) => {
+  res.redirect(process.env.AUTH_LINK!);
 });
 
 export default handler;

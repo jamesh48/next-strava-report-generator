@@ -1,19 +1,25 @@
-import session from "../middleware/withSession";
-import database from "../middleware/withDatabase";
-import accessToken from "../middleware/withAccessToken";
-import nextConnect from "next-connect";
-import { getAllUserActivities } from "../../backend/src/database/controllers";
-import { Response } from "express";
+import axios from 'axios';
+import nextConnect from 'next-connect';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { withSession } from '../middleware';
 const handler = nextConnect();
 
-handler.use(session());
-handler.use(accessToken());
-handler.use(database());
+handler.use(withSession());
 
-handler.get(async ({ currentAccessToken }: any, res: Response) => {
-  res.send(
-    (await getAllUserActivities(currentAccessToken)).sort(
-      (a: any, b: any) => b.distance / b.moving_time - a.distance / a.moving_time
+handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
+  const srg_athlete_id = req.cookies.athleteId;
+  const { data } = await axios({
+    url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
+    method: 'GET',
+    params: {
+      srg_athlete_id,
+    },
+  });
+
+  return res.send(
+    data.sort(
+      (a: any, b: any) =>
+        b.distance / b.moving_time - a.distance / a.moving_time
     )
   );
 });

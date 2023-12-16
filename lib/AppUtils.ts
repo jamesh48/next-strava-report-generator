@@ -1,7 +1,7 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
 export const authorizeApp = async () => {
-  const response: AxiosResponse = await axios("/api/authLink");
+  const response: AxiosResponse = await axios('/api/authLink');
   location = response.data;
 };
 
@@ -16,9 +16,12 @@ export const getUserActivities = async () => {
 
 export const getIndividualEntry = async (entryId: number) => {
   try {
-    const { data: individualEntryResponse }: AxiosResponse = await axios("/api/individualEntry", {
-      params: { entryid: entryId },
-    });
+    const { data: individualEntryResponse }: AxiosResponse = await axios(
+      '/api/individualEntry',
+      {
+        params: { entryid: entryId },
+      }
+    );
     console.log(individualEntryResponse);
     return individualEntryResponse;
   } catch (err: any) {
