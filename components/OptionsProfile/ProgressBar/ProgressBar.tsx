@@ -35,7 +35,10 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
 
   const updateEntries: () => Promise<void> = async () => {
     globalDispatch({ type: 'TOGGLE LOADED OFF' });
-    const { data: allActivities } = await axios.post('/api/addAllActivities');
+    const { data: allActivities } = await axios({
+      url: '/api/addAllActivities',
+      method: 'POST',
+    });
     globalDispatch({ type: 'TOGGLE LOADED ON' });
     globalDispatch({
       type: 'SET TOTAL ENTRIES',
@@ -53,7 +56,15 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   };
 
   const destroyUser: React.MouseEventHandler<HTMLInputElement> = async () => {
-    await axios({ url: '/api/destroyUser', method: 'GET' });
+    globalDispatch({ type: 'TOGGLE LOADED OFF' });
+    const { data } = await axios({ url: '/api/destroyUser', method: 'GET' });
+
+    console.log(data);
+    globalDispatch({ type: 'TOGGLE LOADED ON' });
+    globalDispatch({
+      type: 'SET TOTAL ENTRIES',
+      payload: [],
+    });
   };
 
   return progressBarProgress === 0 ? (

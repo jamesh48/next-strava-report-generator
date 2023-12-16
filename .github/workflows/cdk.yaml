@@ -40,6 +40,4 @@ jobs:
           CDK_REGION: ${{ vars.CDK_REGION }}
           CLIENT_ID: ${{ vars.STRAVA_CLIENT_ID }}
           DATA_BASE_URL: ${{ vars.DATA_BASE_URL }}
-          EXPRESS_SESSION_SECRET: ${{ vars.EXPRESS_SESSION_SECRET }}
-          EXPRESS_SESSION_COOKIE_NAME: ${{ vars.EXPRESS_SESSION_COOKIE_NAME }}
           REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}

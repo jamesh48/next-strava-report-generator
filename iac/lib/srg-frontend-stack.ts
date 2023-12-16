@@ -15,8 +15,6 @@ interface SRGFrontendStackProps extends cdk.StackProps {
   svc_env: {
     CLIENT_ID: string;
     DATA_BASE_URL: string;
-    EXPRESS_SESSION_COOKIE_NAME: string;
-    EXPRESS_SESSION_SECRET: string;
     REDIRECT_URI_HOST: string;
   };
 }
