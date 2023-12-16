@@ -33,4 +33,5 @@ COPY --from=builder /opt/srg-app/node_modules ./node_modules
 
 EXPOSE 8000
 ENV PORT 8000
+RUN redis-server
 CMD ["npm", "start"]
