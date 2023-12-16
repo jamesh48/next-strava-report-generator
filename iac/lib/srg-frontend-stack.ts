@@ -12,6 +12,11 @@ interface SRGFrontendStackProps extends cdk.StackProps {
     AWS_DEFAULT_SG: string;
     AWS_VPC_ID: string;
   };
+  svc_env: {
+    CLIENT_ID: string;
+    DATA_BASE_URL: string;
+    REDIRECT_URI_HOST: string;
+  };
 }
 export class SRGFrontendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: SRGFrontendStackProps) {
@@ -63,11 +68,8 @@ export class SRGFrontendStack extends cdk.Stack {
       'srgFrontend-container',
       {
         environment: {
-          DATA_BASE_URL: 'https://data.stravareportgenerator.com',
-          // strava_client_id: props.svc_env.STRAVA_CLIENT_ID,
-          // strava_client_secret: props.svc_env.STRAVA_CLIENT_SECRET,
-          // strava_exc_token_redirect_uri:
-          //   props.svc_env.STRAVA_EXC_TOKEN_REDIRECT_URI,
+          DATA_BASE_URL: props.svc_env.DATA_BASE_URL,
+          CLIENT_ID: props.svc_env.CLIENT_ID,
         },
         image: ecs.ContainerImage.fromAsset('../'),
         logging: new ecs.AwsLogDriver({

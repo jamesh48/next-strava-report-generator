@@ -40,3 +40,5 @@ jobs:
           AWS_VPC_ID: ${{ vars.AWS_VPC_ID }}
           CDK_REGION: ${{ vars.CDK_REGION }}
           DATA_BASE_URL: ${{ vars.DATA_BASE_URL }}
+          CLIENT_ID: ${{ vars.STRAVA_CLIENT_ID }}
+          REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}
