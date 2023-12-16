@@ -20,3 +20,5 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     return res.send(typedErr.message);
   }
 });
+
+export default handler;

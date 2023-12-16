@@ -59,12 +59,13 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
     globalDispatch({ type: 'TOGGLE LOADED OFF' });
     const { data } = await axios({ url: '/api/destroyUser', method: 'GET' });
 
-    console.log(data);
     globalDispatch({ type: 'TOGGLE LOADED ON' });
-    globalDispatch({
-      type: 'SET TOTAL ENTRIES',
-      payload: [],
-    });
+    if (data === 'deleted') {
+      globalDispatch({
+        type: 'SET TOTAL ENTRIES',
+        payload: [],
+      });
+    }
   };
 
   return progressBarProgress === 0 ? (
