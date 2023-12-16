@@ -63,6 +63,7 @@ export class SRGFrontendStack extends cdk.Stack {
       'srgFrontend-container',
       {
         environment: {
+          DATA_BASE_URL: 'https://data.stravareportgenerator.com',
           // strava_client_id: props.svc_env.STRAVA_CLIENT_ID,
           // strava_client_secret: props.svc_env.STRAVA_CLIENT_SECRET,
           // strava_exc_token_redirect_uri:
