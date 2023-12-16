@@ -6,6 +6,7 @@ import { useGlobalContext } from '../GlobalStore/globalStore';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '../StravaEntries/Report';
 import { getUserActivities } from '../../lib/AppUtils';
+import { Box } from '@mui/material';
 
 export default function App() {
   const [{}, globalDispatch] = useGlobalContext();
@@ -86,8 +87,21 @@ export default function App() {
   };
 
   return (
-    <main id={styles.mainContainer}>
-      <div id={styles.upperSection}>
+    <main id="mainContainer" style={{ backgroundColor: 'darkslategray' }}>
+      <Box
+        id={styles.upperSection}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '95%',
+          margin: '2.5% auto',
+          paddingTop: '25px',
+          border: '1px solid coral',
+          boxShadow: '0 0 10px coral',
+          backgroundColor: 'darkturquoise',
+        }}
+      >
         <UserProfile />
 
         <Radios
@@ -111,7 +125,7 @@ export default function App() {
           fromDateQuery={fromDateQuery}
           toDateQuery={toDateQuery}
         />
-      </div>
+      </Box>
     </main>
   );
 }

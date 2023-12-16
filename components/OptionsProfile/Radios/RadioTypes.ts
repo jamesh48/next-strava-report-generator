@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLInputElement>;
@@ -22,20 +22,6 @@ export interface RadioColumnProps {
   distance?: number;
   customDistance?: boolean;
   placeholder?: string;
-  setCallback: React.MouseEventHandler<HTMLInputElement>;
-}
-
-export interface SingleRadioProps {
-  id: string;
-  type: string;
-  index: number;
-  isLoaded: boolean;
-  name: string;
-  distance?: number;
-  customDistance?: boolean;
-  placeholder?: string;
-  labelText?: string | undefined;
-  value?: string | undefined;
   setCallback: React.MouseEventHandler<HTMLInputElement>;
 }
 

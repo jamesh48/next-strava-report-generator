@@ -1,6 +1,7 @@
-import React from "react";
-import style from "../../styles/App.module.scss";
-interface UserNameSection {
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+
+interface UserNameSectionProps {
   profile: {
     firstname: string;
     lastname: string;
@@ -10,16 +11,28 @@ interface UserNameSection {
   };
 }
 
-const UserNameSection: React.FC<UserNameSection> = ({ profile }) => {
+const UserNameSection = (props: UserNameSectionProps) => {
   return (
-    <div className={style.profileBoxes} id={style.userInfo}>
-      <h3 id={style.userName}>
-        {profile.firstname} {profile.lastname}
-      </h3>
-      <h5 id={style.userLocation}>
-        {profile.city}, {profile.state} {profile.country}
-      </h5>
-    </div>
+    <Box
+      className="profileBoxes"
+      id="userInfo"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 0.6,
+        color: 'orangered',
+        borderLeft: 'none',
+      }}
+    >
+      <Typography variant="h4" id="userName" sx={{ cursor: 'default' }}>
+        {props.profile.firstname} {props.profile.lastname}
+      </Typography>
+      <Typography id="userLocation" variant="h5" sx={{ cursor: 'default' }}>
+        {props.profile.city}, {props.profile.state} {props.profile.country}
+      </Typography>
+    </Box>
   );
 };
 

@@ -1,10 +1,23 @@
-import React from "react";
-import { SingleRadioProps } from "./RadioTypes";
-import appStyles from "../../../styles/App.module.scss";
+import React from 'react';
+import { Box } from '@mui/material';
 
-const SingleRadio: React.FC<SingleRadioProps> = (props) => {
-  return props.type === "radio" ? (
-    <div className={appStyles.singleRadioButtonContainer}>
+export interface SingleRadioProps {
+  id: string;
+  type: string;
+  index: number;
+  isLoaded: boolean;
+  name: string;
+  distance?: number;
+  customDistance?: boolean;
+  placeholder?: string;
+  labelText?: string | undefined;
+  value?: string | undefined;
+  setCallback: React.MouseEventHandler<HTMLInputElement>;
+}
+
+const SingleRadio = (props: SingleRadioProps) => {
+  return props.type === 'radio' ? (
+    <Box className="singleRadioButtonContainer" sx={{ flex: 1 }}>
       <input
         defaultChecked={props.index === 0}
         disabled={!props.isLoaded ? true : false}
@@ -14,17 +27,19 @@ const SingleRadio: React.FC<SingleRadioProps> = (props) => {
         value={props.value}
         // @ts-ignore
         checked={
-          props.name.indexOf("distance") > -1 && props.index === 0 && !props.distance
-            ? "Checked"
+          props.name.indexOf('distance') > -1 &&
+          props.index === 0 &&
+          !props.distance
+            ? 'Checked'
             : null
         }
         onClick={props.setCallback}
       />
       <label htmlFor="allresults">{props.labelText}</label>
       <br />
-    </div>
-  ) : props.type === "radioAndText" ? (
-    <div className={appStyles.singleRadioButtonContainer}>
+    </Box>
+  ) : props.type === 'radioAndText' ? (
+    <Box className="singleRadioButtonContainer" sx={{ flex: 1 }}>
       <input
         type="radio"
         name={props.name}
@@ -41,9 +56,9 @@ const SingleRadio: React.FC<SingleRadioProps> = (props) => {
         type="text"
         placeholder={props.placeholder}
         // @ts-ignore
-        value={props.customDistance ? null : ""}
+        value={props.customDistance ? null : ''}
       />
-    </div>
+    </Box>
   ) : null;
 };
 

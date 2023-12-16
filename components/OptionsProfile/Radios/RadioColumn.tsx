@@ -1,19 +1,42 @@
-import React from "react";
-import { RadioColumnProps } from "./RadioTypes";
-import SingleRadio from "./SingleRadio";
-import appStyles from "../../../styles/App.module.scss";
-const RadioColumn: React.FC<RadioColumnProps> = (props) => {
+import React from 'react';
+import { RadioColumnProps } from './RadioTypes';
+import SingleRadio from './SingleRadio';
+import appStyles from '../../../styles/App.module.scss';
+import { Box } from '@mui/material';
+const RadioColumn = (props: RadioColumnProps) => {
   return (
-    <div className={appStyles.chooseRadioContainer}>
-      <h4 className={appStyles.chooseTitle} id={props.title.split(" ").join("-").toLowerCase()}>
+    <Box
+      className={appStyles.chooseRadioContainer}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'center',
+        '&:first-child': {
+          borderRight: '1px solid coral',
+        },
+        '&:last-child': {
+          borderLeft: '1px solid coral',
+        },
+      }}
+    >
+      <h4
+        className={appStyles.chooseTitle}
+        id={props.title.split(' ').join('-').toLowerCase()}
+      >
         {props.title}
       </h4>
-      <div className={appStyles.multipleRadioButtonContainer}>
+      <Box
+        className={appStyles.multipleRadioButtonContainer}
+        sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+      >
         {props.radioValues.map((radio, index) => {
-          return <SingleRadio key={index} {...radio} {...props} index={index} />;
+          return (
+            <SingleRadio key={index} {...radio} {...props} index={index} />
+          );
         })}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
