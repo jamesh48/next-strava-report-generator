@@ -1,7 +1,7 @@
 import axios from 'axios';
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { withSession } from '../middleware';
+import withSession from './middleware/withSession';
 const handler = nextConnect();
 
 handler.use(withSession());
