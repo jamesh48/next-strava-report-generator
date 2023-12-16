@@ -1,7 +1,7 @@
 # Install dependencies only when needed
 FROM node:lts-alpine AS deps
 
-WORKDIR /opt/srg-app
+WORKDIR /opt/srgf-app
 COPY package*.json ./
 RUN npm ci
 
@@ -12,9 +12,9 @@ RUN npm ci
 FROM node:lts-alpine AS builder
 
 ENV NODE_ENV=production
-WORKDIR /opt/srg-app
+WORKDIR /opt/srgf-app
 COPY . .
-COPY --from=deps /opt/srg-app/node_modules ./node_modules
+COPY --from=deps /opt/srgf-app/node_modules ./node_modules
 RUN ls -ltr
 RUN npm run build
 
@@ -22,14 +22,14 @@ RUN npm run build
 FROM node:lts-alpine AS runner
 
 ARG X_TAG
-WORKDIR /opt/srg-app
+WORKDIR /opt/srgf-app
 ENV NODE_ENV=production
-COPY --from=builder /opt/srg-app/Data ./Data
-COPY --from=builder /opt/srg-app/next.config.js ./
-COPY --from=builder /opt/srg-app/public ./public
-COPY --from=builder /opt/srg-app/build ./build
-COPY --from=builder /opt/srg-app/package*.json ./
-COPY --from=builder /opt/srg-app/node_modules ./node_modules
+COPY --from=builder /opt/srgf-app/Data ./Data
+COPY --from=builder /opt/srgf-app/next.config.js ./
+COPY --from=builder /opt/srgf-app/public ./public
+COPY --from=builder /opt/srgf-app/build ./build
+COPY --from=builder /opt/srgf-app/package*.json ./
+COPY --from=builder /opt/srgf-app/node_modules ./node_modules
 
 
 EXPOSE 8000

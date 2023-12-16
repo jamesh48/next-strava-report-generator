@@ -31,7 +31,7 @@ jobs:
         run: |
           cd iac;
           npm install;
-          cdk synth --require-approval=never;
+          cdk deploy --require-approval=never;
         env:
           AWS_ACCOUNT_NUMBER: ${{ vars.AWS_ACCOUNT_NUMBER }}
           AWS_CLUSTER_ARN: ${{ vars.AWS_CLUSTER_ARN }}
