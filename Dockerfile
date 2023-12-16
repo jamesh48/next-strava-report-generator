@@ -24,7 +24,6 @@ FROM node:lts-alpine AS runner
 ARG X_TAG
 WORKDIR /opt/srg-app
 ENV NODE_ENV=production
-COPY --from=builder /opt/srg-app/Data ./Data
 COPY --from=builder /opt/srg-app/next.config.js ./
 COPY --from=builder /opt/srg-app/public ./public
 COPY --from=builder /opt/srg-app/build ./build
