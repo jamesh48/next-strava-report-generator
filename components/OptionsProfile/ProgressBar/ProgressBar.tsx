@@ -53,7 +53,7 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   };
 
   const destroyUser: React.MouseEventHandler<HTMLInputElement> = async () => {
-    await axios.get('/api/destroyUser');
+    await axios({ url: '/api/destroyUser', method: 'GET' });
   };
 
   return progressBarProgress === 0 ? (
