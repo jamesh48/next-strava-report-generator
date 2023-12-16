@@ -15,6 +15,8 @@ interface SRGFrontendStackProps extends cdk.StackProps {
   svc_env: {
     CLIENT_ID: string;
     DATA_BASE_URL: string;
+    EXPRESS_SESSION_COOKIE_NAME: string;
+    EXPRESS_SESSION_SECRET: string;
     REDIRECT_URI_HOST: string;
   };
 }
@@ -68,8 +70,7 @@ export class SRGFrontendStack extends cdk.Stack {
       'srgFrontend-container',
       {
         environment: {
-          DATA_BASE_URL: props.svc_env.DATA_BASE_URL,
-          CLIENT_ID: props.svc_env.CLIENT_ID,
+          ...props.svc_env,
         },
         image: ecs.ContainerImage.fromAsset('../'),
         logging: new ecs.AwsLogDriver({

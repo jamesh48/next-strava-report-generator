@@ -12,17 +12,23 @@ const {
   AWS_CLUSTER_ARN,
   AWS_DEFAULT_SG,
   AWS_VPC_ID,
-  DATA_BASE_URL,
-  REDIRECT_URI_HOST,
   CLIENT_ID,
+  DATA_BASE_URL,
+  EXPRESS_SESSION_COOKIE_NAME,
+  EXPRESS_SESSION_SECRET,
+  REDIRECT_URI_HOST,
 } = process.env;
 
 if (!AWS_CLUSTER_ARN) throw new Error('AWS_CLUSTER_ARN env is undefined!');
 if (!AWS_DEFAULT_SG) throw new Error('AWS_DEFAULT_SG env is undefined!');
 if (!AWS_VPC_ID) throw new Error('AWS_VPC_ID env is undefined');
-if (!DATA_BASE_URL) throw new Error('DATA_BASE_URL env is undefined!');
-if (!REDIRECT_URI_HOST) throw new Error('REDIRECT_URI_HOST env is undefined!');
 if (!CLIENT_ID) throw new Error('CLIENT_ID env is undefined!');
+if (!DATA_BASE_URL) throw new Error('DATA_BASE_URL env is undefined!');
+if (!EXPRESS_SESSION_COOKIE_NAME)
+  throw new Error('EXPRESS_SESSION_COOKIE_NAME env is undefined!');
+if (!EXPRESS_SESSION_SECRET)
+  throw new Error('EXPRESS_SESSION_SECRET env is undefined!');
+if (!REDIRECT_URI_HOST) throw new Error('REDIRECT_URI_HOST env is undefined!');
 
 new SRGFrontendStack(app, 'srg-fe-stack', {
   aws_env: {
@@ -33,6 +39,8 @@ new SRGFrontendStack(app, 'srg-fe-stack', {
   svc_env: {
     CLIENT_ID,
     DATA_BASE_URL,
+    EXPRESS_SESSION_COOKIE_NAME,
+    EXPRESS_SESSION_SECRET,
     REDIRECT_URI_HOST,
   },
   env: {
