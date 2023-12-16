@@ -1,10 +1,10 @@
 import axios from 'axios';
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
-import withSession from './middleware/withSession';
+// import withSession from './middleware/withSession';
 const handler = nextConnect();
 
-handler.use(withSession());
+// handler.use(withSession());
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
