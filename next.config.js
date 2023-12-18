@@ -1,7 +1,16 @@
 module.exports = {
   reactStrictMode: true,
-  distDir: "build",
+  distDir: 'build',
   images: {
-    domains: ["dgalywyr863hv.cloudfront.net", "dgtzuqphqg23d.cloudfront.net"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'dgalywyr863hv.cloudfront.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'dgtzuqphqg23d.cloudfront.net',
+      },
+    ],
   },
 };

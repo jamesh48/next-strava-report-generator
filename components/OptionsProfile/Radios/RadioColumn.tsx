@@ -12,7 +12,7 @@ const RadioColumn = (props: RadioColumnProps) => {
         flexDirection: 'column',
         flex: 1,
         alignItems: 'center',
-        '&:first-child': {
+        '&:first-of-type': {
           borderRight: '1px solid coral',
         },
         '&:last-child': {

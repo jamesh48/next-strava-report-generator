@@ -23,83 +23,13 @@
   margin-left: 5%;
 }
 
-#funStats {
-  display: grid;
-  margin-left: 2.5%;
-  grid-template-columns: 14% 20.5% 17.5% 2% auto;
-  grid-template-rows: auto;
-}
-
-#topActivityGear {
-  margin-left: 1.5%;
-}
-
-#goldenHeartRate,
-#kudosX,
-#trophyCase {
-  display: flex;
-  max-height: 3rem;
-  max-width: 10rem;
-  min-width: 100%;
-  & > span {
-    flex: 0.5;
-  }
-  .kudosDescriptors,
-  .heartRateDescriptors,
-  .achievementCountDescriptor {
-    padding-left: 2.5%;
-    flex: 1;
-  }
-}
-
-#heartRateImg,
-#kudos-img,
-#trophyImg {
-  height: 50px;
-  width: 50px;
-  grid-area: photo;
-}
-
-#maxHeartRate,
-#commentCount,
-#emptyCount {
-  grid-area: mhr;
-}
-
-#avgHeartRate,
-#kudosCount,
-#achievementCount {
-  grid-area: ahr;
-}
-
-.kudos,
-.heartRate,
-.achievements,
-#topActivityGear {
-  color: ivory;
-}
-
-.heartRate,
-.kudos,
-.achievements {
-  margin: 0;
-}
-.heartRate,
-.heartRate > p,
-.kudos,
-.kudos > p,
-.achievements,
-.achievements > p {
-  display: inline-block;
-}
-
 #rateLimitContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   .rate-limit-message {
-    &:first-child {
+    &:first-of-type {
       text-decoration: underline;
     }
     display: flex;

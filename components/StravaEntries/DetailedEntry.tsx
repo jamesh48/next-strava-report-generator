@@ -1,142 +1,324 @@
-import React from "react";
-import Image from "next/image";
-// import "StaticImages/heartrate.png";
-// import "StaticImages/kudos.jpeg";
-// import "StaticImages/trophy.jpeg";
-import { DetailedEntryProps } from "./EntryTypes";
-import appStyles from "../../styles/App.module.scss";
-import reportStyles from "../../styles/report.module.scss";
+import React from 'react';
+import Image from 'next/image';
 
-const DetailedEntry: React.FC<DetailedEntryProps> = ({
-  currentActivity,
-  editing,
-  editedDescription,
-  handleEditingChange,
-  handleDescriptionChange,
-  handleActivityUpdate,
-}) => {
+import { Box, Link, TextField, Typography } from '@mui/material';
+import { CurrentActivity } from './EntryTypes';
+
+interface DetailedEntryProps {
+  editing: boolean;
+  editedDescription: string;
+  currentActivity: CurrentActivity;
+  handleEditingChange: React.MouseEventHandler<HTMLAnchorElement>;
+  handleDescriptionChange: (e: { target: { value: string } }) => void;
+  handleActivityUpdate: () => void;
+}
+
+const DetailedEntry = (props: DetailedEntryProps) => {
   return (
-    <div className={reportStyles.detailedEntry}>
+    <Box
+      className="detailedEntry"
+      sx={{
+        backgroundColor: 'coral',
+        border: '2px solid orangered',
+        display: 'flex',
+        flexDirection: 'column',
+        textRendering: 'geometricPrecision',
+        '& > p': {
+          paddingLeft: '1.5%',
+        },
+      }}
+    >
       {/* Description */}
-      <div className={reportStyles.topActivityDescription}>
-        <h4>Activity Description:</h4>
-        {editing ? (
-          <textarea
-            className={reportStyles.editingActivityTextArea}
-            value={editedDescription}
-            onChange={handleDescriptionChange}
-          ></textarea>
+      <Box
+        className="topActivityDescription"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginLeft: '1%',
+          marginBottom: '1%',
+        }}
+      >
+        <Typography variant="h6" sx={{ color: 'ivory' }}>
+          Activity Description:
+        </Typography>
+        {props.editing ? (
+          <TextField
+            multiline
+            rows={4}
+            value={props.editedDescription}
+            onChange={props.handleDescriptionChange}
+            sx={{ width: '90%', alignSelf: 'center' }}
+            InputProps={{ sx: { color: 'ivory' } }}
+          />
         ) : (
-          <p className={reportStyles.topActivityDescription}>{currentActivity.description}</p>
+          <Typography
+            className="topActivityDescription"
+            sx={{
+              color: 'ivory',
+              display: 'flex',
+              flexDirection: 'column',
+              marginLeft: '1%',
+              marginBottom: '1%',
+              whiteSpace: 'pre-line',
+            }}
+          >
+            {props.currentActivity.description}
+          </Typography>
         )}
-      </div>
+      </Box>
       {/* Kudos & Comments */}
-      <div id={appStyles.funStats}>
-        <div id={appStyles.kudosX}>
+      <Box
+        id="funStats"
+        sx={{
+          display: 'grid',
+          marginLeft: '2.5%',
+          gridTemplateColumns: '14% 20.5% 17.5% 2% auto',
+          gridTemplateRows: 'auto',
+        }}
+      >
+        <Box
+          id="kudosX"
+          sx={{
+            display: 'flex',
+            alignItems: 'flex-start',
+          }}
+        >
           <Image
-            height={150}
-            width={150}
+            height={50}
+            width={50}
             alt="kudos-img"
-            layout="intrinsic"
+            layout="static"
             src="/images/kudos.jpeg"
           />
-          <div className={appStyles.kudosDescriptors}>
-            <h5 id={reportStyles.kudosCount} className={appStyles.kudos}>
-              Kudos- <p>{currentActivity.kudos_count}</p>
-            </h5>
-            <h5 id={appStyles.commentCount} className={appStyles.kudos}>
-              Comments- <p>{currentActivity.comment_count}</p>
-            </h5>
-          </div>
-        </div>
+          <Box
+            className="kudosDescriptors"
+            sx={{
+              paddingLeft: '2.5%',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography
+              variant="h6"
+              id="kudosCount"
+              className="kudos"
+              sx={{
+                margin: 0,
+                display: 'block',
+                color: 'ivory',
+              }}
+            >
+              Kudos-{' '}
+              <Typography sx={{ display: 'inline-block' }}>
+                {props.currentActivity.kudos_count}
+              </Typography>
+            </Typography>
+            <Typography
+              variant="h6"
+              id="commentCount"
+              className="kudos"
+              sx={{ margin: 0, display: 'block', color: 'ivory' }}
+            >
+              Comments-{' '}
+              <Typography sx={{ display: 'inline-block' }}>
+                {props.currentActivity.comment_count}
+              </Typography>
+            </Typography>
+          </Box>
+        </Box>
 
         {/* Heart Rate */}
-        {currentActivity.average_heartrate ? (
-          <div id={appStyles.goldenHeartRate}>
+        {props.currentActivity.average_heartrate ? (
+          <Box
+            id="goldenHeartRate"
+            sx={{
+              display: 'flex',
+            }}
+          >
             <Image
               alt="heart-rate"
-              height={150}
-              width={300}
-              layout="intrinsic"
+              height={50}
+              width={50}
+              layout="static"
               src="/images/heartrate.png"
             />
-            <div className={appStyles.heartRateDescriptors}>
-              <h5 id={appStyles.avgHeartRate} className={appStyles.heartRate}>
-                Avg- <p>{`${currentActivity.average_heartrate} bpm`}</p>
-              </h5>
-              <h5 id={appStyles.maxHeartRate} className={appStyles.heartRate}>
-                Max- <p>{`${currentActivity.max_heartrate} bpm`}</p>
-              </h5>
-            </div>
-          </div>
+            <Box
+              className="heartRateDescriptors"
+              sx={{ paddingLeft: '2.5%', flex: 1 }}
+            >
+              <Box sx={{ display: 'flex' }}>
+                <Typography
+                  id="avgHeartRate"
+                  className="heartRate"
+                  variant="h6"
+                  sx={{
+                    display: 'block',
+                    color: 'ivory',
+                    margin: 0,
+                    width: '3rem',
+                  }}
+                >
+                  Avg-{' '}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'ivory',
+                  }}
+                >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Typography
+                  id="maxHeartRate"
+                  className="heartRate"
+                  sx={{
+                    display: 'block',
+                    color: 'ivory',
+                    margin: 0,
+                    width: '3rem',
+                  }}
+                  variant="h6"
+                >
+                  Max-{' '}
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'ivory',
+                  }}
+                >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
+              </Box>
+            </Box>
+          </Box>
         ) : (
-          <div id={appStyles.goldenHeartRate}>
+          <Box
+            id="goldenHeartRate"
+            sx={{
+              display: 'flex',
+            }}
+          >
             <Image
               alt="heart-rate"
-              height={150}
-              width={150}
+              height={50}
+              width={50}
               src="/images/heartrate.png"
-              layout="intrinsic"
+              layout="static"
             />
-            <h5 className={appStyles.heartRate} id={appStyles.avgHeartRate}>
-              <p>No HR Info Available</p>
-            </h5>
-            <h5 className={appStyles.heartRate} id={appStyles.maxHeartRate}>
-              <p></p>
-            </h5>
-          </div>
+            <Typography
+              className="heartRate"
+              id="avgHeartRate"
+              variant="h6"
+              color="ivory"
+              sx={{ paddingLeft: '1.5%', margin: 0 }}
+            >
+              <Typography>No HR Info Available</Typography>
+            </Typography>
+            <Typography
+              variant="h6"
+              className="heartRate"
+              id="maxHeartRate"
+              sx={{ display: 'inline-block', margin: 0 }}
+            >
+              <Typography sx={{ display: 'inline-block' }}></Typography>
+            </Typography>
+          </Box>
         )}
 
         {/* Trophy Case */}
-        <div id={appStyles.trophyCase}>
+        <Box
+          id="trophyCase"
+          sx={{
+            display: 'flex',
+          }}
+        >
           <Image
             height={50}
             width={50}
             alt="trophy-img"
             src="/images/trophy.jpeg"
-            layout="intrinsic"
+            layout="static"
           />
-          <div className={appStyles.achievementCountDescriptor}>
-            <h5 className={appStyles.achievements} id={appStyles.achievementCount}>
-              Achievement Count-
-              <p>{currentActivity.achievement_count}</p>
-            </h5>
-          </div>
-          <h5 className={appStyles.achievements} id={appStyles.emptyCount}>
+          <Box
+            className="achievementCountDescriptor"
+            sx={{ paddingLeft: '2.5%', flex: 1, display: 'flex' }}
+          >
+            <Box sx={{ display: 'flex' }}>
+              <Typography
+                variant="h6"
+                className="achievements"
+                id="achievementCount"
+                sx={{ color: 'ivory', margin: 0 }}
+              >
+                Achievement Count-
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'ivory' }}>
+                {props.currentActivity.achievement_count}
+              </Typography>
+            </Box>
+          </Box>
+          <Typography className="achievements" id="emptyCount" variant="h6">
             <p></p>
-          </h5>
-        </div>
+          </Typography>
+        </Box>
 
         {/* Empty Div For Spacing */}
-        <div></div>
+        <Box />
 
-        {currentActivity.photos.primary ? (
+        {props.currentActivity.photos.primary ? (
           <Image
-            src={currentActivity.photos.primary.urls["600"]}
+            src={props.currentActivity.photos.primary.urls['600']}
             height={150}
             width={150}
             layout="fixed"
             alt="highlight-photo"
           />
         ) : null}
-      </div>
+      </Box>
       {/* Gear */}
-      <div id={appStyles.topActivityGear}>
-        <p>Gear: {currentActivity.device_name}</p>
-      </div>
+      <Box id="topActivityGear" sx={{ marginLeft: '1.5%', color: 'ivory' }}>
+        <Typography>Gear: {props.currentActivity.device_name}</Typography>
+      </Box>
       {
-        <div className={reportStyles.editingContainer}>
-          {editing && (
-            <a className={appStyles.editingLink} onClick={handleActivityUpdate}>
+        <Box
+          className="editingContainer"
+          sx={{ alignSelf: 'flex-end', padding: '0.5% 1.25%' }}
+        >
+          {props.editing && (
+            <Link
+              className="editingLink"
+              onClick={props.handleActivityUpdate}
+              sx={{
+                color: 'blue',
+                textDecoration: 'none',
+                marginRight: '10%',
+                cursor: 'pointer',
+                '&:hover': {
+                  color: 'ivory',
+                },
+              }}
+            >
               Submit!
-            </a>
+            </Link>
           )}
-          <a className={reportStyles.editingLink} onClick={handleEditingChange}>
-            {editing ? "Cancel" : "Edit"}
-          </a>
-        </div>
+          <Link
+            className="editingLink"
+            onClick={props.handleEditingChange}
+            sx={{
+              color: 'blue',
+              textDecoration: 'none',
+              marginRight: '10%',
+              cursor: 'pointer',
+              '&:hover': {
+                color: 'ivory',
+              },
+            }}
+          >
+            {props.editing ? 'Cancel' : 'Edit'}
+          </Link>
+        </Box>
       }
-    </div>
+    </Box>
   );
 };
 

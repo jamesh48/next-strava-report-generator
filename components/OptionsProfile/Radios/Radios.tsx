@@ -4,11 +4,24 @@ import InputJSON from './input.json';
 import RadioColumn from '../Radios/RadioColumn';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import { useGlobalContext } from '../../GlobalStore/globalStore.js';
-import { RadiosProps } from './RadioTypes';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box } from '@mui/material';
 
-const Radios: React.FC<RadiosProps> = (props) => {
+export interface RadiosProps {
+  setSport: React.MouseEventHandler<HTMLInputElement>;
+  setDistance: React.MouseEventHandler<HTMLInputElement>;
+  setFormat: React.MouseEventHandler<HTMLInputElement>;
+  setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
+  setFromDateQuery: React.ChangeEventHandler<HTMLInputElement>;
+  setToDateQuery: React.ChangeEventHandler<HTMLInputElement>;
+  titleQuery: string;
+  sport: string;
+  customDistance: boolean;
+  distance: number;
+  format: string;
+}
+
+const Radios = (props: RadiosProps) => {
   const [{ totalEntries }] = useGlobalContext();
 
   const initArr = [
