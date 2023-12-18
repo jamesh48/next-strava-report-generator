@@ -1,12 +1,44 @@
 import React from 'react';
 import axios from 'axios';
+import {
+  Box,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+  SxProps,
+} from '@mui/material';
 import { useProgressBarProgressStore } from './useProgressBarProgress';
 import { useInterval } from './useInterval';
 import { useGlobalContext } from '../../GlobalStore/globalStore.js';
-import { ProgressBarProps } from './ProgressBarTypes';
-import progressBarStyles from '../../../styles/progressBar.module.scss';
 
-const ProgressBar: React.FC<ProgressBarProps> = () => {
+const muiUpdateButtonContainerSx: SxProps = {
+  minHeight: '5vmax',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '95%',
+};
+
+const muiUpdateButtonSx: SxProps = {
+  cursor: 'pointer',
+  textRendering: 'geometricPrecision',
+  backgroundColor: '#52fff3',
+  color: 'orangered',
+  border: '2px solid coral',
+  boxShadow: '0 0 5px coral',
+  padding: '0.5vmax 1vmax',
+  minWidth: '10%',
+  margin: '0 0.5vmax',
+  height: '3rem',
+  '&:hover': {
+    backgroundColor: 'coral',
+    color: 'ivory',
+    border: '2px solid ivory',
+  },
+};
+
+const ProgressBar = () => {
   const [{ isLoaded }, globalDispatch] = useGlobalContext();
   const {
     progressBarProgress,
@@ -46,12 +78,10 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
     });
   };
 
-  const setSortCondition: React.ChangeEventHandler<HTMLSelectElement> = (
-    event
-  ) => {
+  const setSortCondition = (event: SelectChangeEvent) => {
     globalDispatch({
       type: 'SET SORT CONDITION',
-      payload: event.currentTarget.value,
+      payload: event.target.value,
     });
   };
 
@@ -69,45 +99,71 @@ const ProgressBar: React.FC<ProgressBarProps> = () => {
   };
 
   return progressBarProgress === 0 ? (
-    <div className={progressBarStyles.updateButtonContainer}>
-      <select
-        className={progressBarStyles.updateButton}
+    <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
+      <Select
+        className="updateButton"
         onChange={setSortCondition}
+        sx={muiUpdateButtonSx}
+        defaultValue="speedDesc"
       >
-        <option value="speedDesc">Speed: Fastest First</option>
-        <option value="dateDesc">Date: Most Recent</option>
-        <option value="dateAsc">Date: Least Recent</option>
-        <option value="movingTimeDesc">Moving Time: Longest First</option>
-        <option value="movingTimeAsc">Moving Time: Shortest First</option>
-        <option value="timeElapsedDesc">Time Elapsed: Longest First</option>
-        <option value="timeElapsedAsc">Time Elapsed: Shortest First</option>
-      </select>
-      <input
+        <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
+        <MenuItem value="dateDesc">Date: Most Recent</MenuItem>
+        <MenuItem value="dateAsc">Date: Least Recent</MenuItem>
+        <MenuItem value="movingTimeDesc">Moving Time: Longest First</MenuItem>
+        <MenuItem value="movingTimeAsc">Moving Time: Shortest First</MenuItem>
+        <MenuItem value="timeElapsedDesc">Time Elapsed: Longest First</MenuItem>
+        <MenuItem value="timeElapsedAsc">Time Elapsed: Shortest First</MenuItem>
+      </Select>
+      <OutlinedInput
         type="button"
-        className={progressBarStyles.updateButton}
+        className="updateButton"
         value="Update!"
         onClick={updateEntries}
+        sx={muiUpdateButtonSx}
       />
-      <input
+      <OutlinedInput
         type="button"
-        className={progressBarStyles.updateButton}
+        className="updateButton"
         value="Destroy!"
         onClick={destroyUser}
+        sx={muiUpdateButtonSx}
       />
-    </div>
+    </Box>
   ) : (
-    <div className={progressBarStyles.updateButtonContainer}>
-      <div id={progressBarStyles.progressBarContainer}>
-        <div
-          className={progressBarStyles.progressBarFiller}
+    <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
+      <Box
+        id="progressBarContainer"
+        sx={{
+          width: '95%',
+          border: '1px solid coral',
+          boxShadow: '0 0 5px ccoral',
+          backgroundColor: 'coral',
+          borderRadius: '50px',
+          margin: '1% 2.5%',
+        }}
+      >
+        <Box
+          className="progressBarFiller"
           style={fillerStyles}
+          sx={{
+            height: '100%',
+            background: `linear-gradient(
+              99deg,
+              rgba(73, 81, 255, 1) 15%,
+              rgba(0, 241, 255, 1) 42%,
+              rgba(21, 221, 51, 1) 100%)`,
+            borderRadius: 'inherit',
+            textAlign: 'right',
+            transition: 'width 0.1s ease-in-out',
+          }}
         >
-          <span
-            className={progressBarStyles.progressBarCounter}
-          >{`${progressBarProgress}%`}</span>
-        </div>
-      </div>
-    </div>
+          <Box
+            className="progressBarCounter"
+            sx={{ padding: 5, color: 'ivory', fontWeight: 900 }}
+          >{`${progressBarProgress}%`}</Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
