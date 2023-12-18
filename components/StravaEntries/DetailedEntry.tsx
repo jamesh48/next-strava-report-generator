@@ -51,28 +51,31 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     },
   };
 
-  let cumulativeDistance = 0;
+  let data;
+  if (props.currentActivity.laps) {
+    let cumulativeDistance = 0;
 
-  const data = {
-    labels: props.currentActivity.laps.map(
-      (increment) =>
-        (cumulativeDistance += increment.distance).toFixed() + ' yds'
-    ),
-    datasets: [
-      {
-        label: 'Max Heart Rate',
-        data: props.currentActivity.laps.map((x) => x.max_heartrate),
-        borderColor: 'red',
-        backgroundColor: 'red',
-      },
-      {
-        label: 'Average Heart Rate',
-        data: props.currentActivity.laps.map((x) => x.average_heartrate),
-        borderColor: 'darkturquoise',
-        backgroundColor: 'darkturquoise',
-      },
-    ],
-  };
+    data = {
+      labels: props.currentActivity.laps.map(
+        (increment) =>
+          (cumulativeDistance += increment.distance).toFixed() + ' yds'
+      ),
+      datasets: [
+        {
+          label: 'Max Heart Rate',
+          data: props.currentActivity.laps.map((x) => x.max_heartrate),
+          borderColor: 'red',
+          backgroundColor: 'red',
+        },
+        {
+          label: 'Average Heart Rate',
+          data: props.currentActivity.laps.map((x) => x.average_heartrate),
+          borderColor: 'darkturquoise',
+          backgroundColor: 'darkturquoise',
+        },
+      ],
+    };
+  }
 
   return (
     <Box
@@ -104,7 +107,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         {props.editing ? (
           <TextField
             multiline
-            rows={4}
+            rows={20}
             value={props.editedDescription}
             onChange={props.handleDescriptionChange}
             sx={{ width: '90%', alignSelf: 'center' }}
@@ -388,7 +391,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Link>
         </Box>
       }
-      {currentStat === 'heartRate' ? (
+      {currentStat === 'heartRate' && data ? (
         <Line options={options} data={data} />
       ) : null}
     </Box>
