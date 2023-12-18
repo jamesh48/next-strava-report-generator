@@ -56,6 +56,11 @@ export type CurrentActivity = {
   achievement_count: number;
   description: string;
   device_name: string;
+  laps: {
+    max_heartrate: number;
+    average_heartrate: number;
+    distance: number;
+  }[];
   photos: {
     primary: {
       urls: {

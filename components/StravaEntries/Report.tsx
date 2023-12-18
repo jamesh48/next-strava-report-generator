@@ -1,14 +1,22 @@
-import React from "react";
-import EntryUl from "./EntryUl";
-import PageNoUl from "../PaginationContainer/PageNoUl";
-import { getIndividualEntry } from "../../lib/AppUtils";
-import { useGlobalContext } from "../GlobalStore/globalStore.js";
-import { useEntriesStore } from "../../lib/useEntries.js";
-import { ReportProps } from "../BaseProps";
-import reportStyles from "../../styles/report.module.scss";
-import { Entry } from "./EntryTypes.js";
+import React from 'react';
+import EntryUl from './EntryUl';
+import PageNoUl from '../PaginationContainer/PageNoUl';
+import { getIndividualEntry } from '../../lib/AppUtils';
+import { useGlobalContext } from '../GlobalStore/globalStore.js';
+import { useEntriesStore } from '../../lib/useEntries.js';
+import reportStyles from '../../styles/report.module.scss';
+import { Entry } from './EntryTypes.js';
 
-const Report: React.FC<ReportProps> = (props) => {
+export interface ReportProps {
+  sport: string;
+  distance: number;
+  format: string;
+  titleQuery: string;
+  fromDateQuery: string;
+  toDateQuery: string;
+}
+
+const Report = (props: ReportProps) => {
   // Global Context
   const [{ totalEntries, sortCondition }, globalDispatch] = useGlobalContext();
   // Pagination
@@ -18,21 +26,22 @@ const Report: React.FC<ReportProps> = (props) => {
   const [invalidEntry, setInvalidEntry] = React.useState(false);
   const [currentActivity, setCurrentActivity] = React.useState({
     id: 0,
-    name: "",
+    name: '',
     kudos_count: 0,
     comment_count: 0,
     average_heartrate: 0,
     max_heartrate: 0,
     achievement_count: 0,
-    description: "",
-    device_name: "",
+    description: '',
+    device_name: '',
+    laps: [{ max_heartrate: 0, average_heartrate: 0, distance: 0 }],
     photos: {
       primary: {
         urls: {
-          "600": ""
-        }
-      }
-    }
+          '600': '',
+        },
+      },
+    },
   });
 
   const { entries, filterAndSortEntries } = useEntriesStore((state) => state);
@@ -42,7 +51,7 @@ const Report: React.FC<ReportProps> = (props) => {
   }, [props.sport]);
 
   React.useEffect(() => {
-    if (typeof Number(props.distance) !== "number") {
+    if (typeof Number(props.distance) !== 'number') {
       setInvalidEntry(true);
     } else {
       setInvalidEntry(false);
@@ -68,24 +77,25 @@ const Report: React.FC<ReportProps> = (props) => {
     props.titleQuery,
     props.fromDateQuery,
     props.toDateQuery,
-    totalEntries
+    totalEntries,
   ]);
 
   const handlePaginationClick: React.MouseEventHandler<HTMLLIElement> = (
     event
   ) => {
-    const actualId = event?.currentTarget.id.split("-");
+    const actualId = event?.currentTarget.id.split('-');
     setCurrentPage(Number(actualId[1]));
   };
 
-  const showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement> =
-    async (event) => {
-      event.preventDefault();
-      const individualEntry = await getIndividualEntry(
-        Number(event.currentTarget.dataset.indentry)
-      );
-      setCurrentActivity(individualEntry);
-    };
+  const showIndividualEntry: React.MouseEventHandler<
+    HTMLAnchorElement
+  > = async (event) => {
+    event.preventDefault();
+    const individualEntry = await getIndividualEntry(
+      Number(event.currentTarget.dataset.indentry)
+    );
+    setCurrentActivity(individualEntry);
+  };
 
   const updateIndividualEntry = async (
     entryId: number,
@@ -101,7 +111,7 @@ const Report: React.FC<ReportProps> = (props) => {
       },
       []
     );
-    globalDispatch({ type: "SET TOTAL ENTRIES", payload: updatedEntries });
+    globalDispatch({ type: 'SET TOTAL ENTRIES', payload: updatedEntries });
     const individualEntry = await getIndividualEntry(entryId);
     setCurrentActivity(individualEntry);
   };

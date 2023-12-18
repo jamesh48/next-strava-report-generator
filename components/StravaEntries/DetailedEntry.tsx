@@ -1,5 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
 import { CurrentActivity } from './EntryTypes';
@@ -13,7 +25,55 @@ interface DetailedEntryProps {
   handleActivityUpdate: () => void;
 }
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const DetailedEntry = (props: DetailedEntryProps) => {
+  const [currentStat, setCurrentStat] = useState<null | string>(null);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Heart Rate',
+      },
+    },
+  };
+
+  let cumulativeDistance = 0;
+
+  const data = {
+    labels: props.currentActivity.laps.map(
+      (increment) =>
+        (cumulativeDistance += increment.distance).toFixed() + ' yds'
+    ),
+    datasets: [
+      {
+        label: 'Max Heart Rate',
+        data: props.currentActivity.laps.map((x) => x.max_heartrate),
+        borderColor: 'red',
+        backgroundColor: 'red',
+      },
+      {
+        label: 'Average Heart Rate',
+        data: props.currentActivity.laps.map((x) => x.average_heartrate),
+        borderColor: 'darkturquoise',
+        backgroundColor: 'darkturquoise',
+      },
+    ],
+  };
+
   return (
     <Box
       className="detailedEntry"
@@ -60,6 +120,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               marginLeft: '1%',
               marginBottom: '1%',
               whiteSpace: 'pre-line',
+              border: '1px solid ivory',
+              padding: '1rem',
             }}
           >
             {props.currentActivity.description}
@@ -142,6 +204,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               width={50}
               layout="static"
               src="/images/heartrate.png"
+              onClick={() => {
+                setCurrentStat((x) => {
+                  if (x) {
+                    return null;
+                  }
+                  return 'heartRate';
+                });
+              }}
             />
             <Box
               className="heartRateDescriptors"
@@ -318,6 +388,9 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Link>
         </Box>
       }
+      {currentStat === 'heartRate' ? (
+        <Line options={options} data={data} />
+      ) : null}
     </Box>
   );
 };

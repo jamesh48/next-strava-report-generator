@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { CurrentActivity } from '../components/StravaEntries/EntryTypes';
 
 export const authorizeApp = async () => {
   const response: AxiosResponse = await axios('/api/authLink');
@@ -16,15 +17,15 @@ export const getUserActivities = async () => {
 
 export const getIndividualEntry = async (entryId: number) => {
   try {
-    const { data: individualEntryResponse }: AxiosResponse = await axios(
-      '/api/individualEntry',
-      {
-        params: { entryid: entryId },
-      }
-    );
-    console.log(individualEntryResponse);
+    const { data: individualEntryResponse } = await axios<
+      any,
+      AxiosResponse<CurrentActivity>
+    >('/api/individualEntry', {
+      params: { entryid: entryId },
+    });
     return individualEntryResponse;
   } catch (err: any) {
     console.log(err.message);
+    throw new Error('');
   }
 };
