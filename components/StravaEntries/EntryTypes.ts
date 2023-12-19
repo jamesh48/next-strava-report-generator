@@ -1,22 +1,15 @@
-import React from 'react';
-
-export interface StravaEntryProps {
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-  sport: string;
-  entry: Entry;
-  format: string | undefined;
-  no: number | undefined;
-  currentActivity: CurrentActivity;
-  updateIndividualEntry: (
-    entryId: number,
-    updatedName: string
-  ) => Promise<void>;
-}
-
 export interface EntryDescriptorProps {
   title: string;
   value: string;
 }
+
+export type Format =
+  | 'avgmpace'
+  | 'avgypace'
+  | 'mps'
+  | 'kph'
+  | 'mph'
+  | undefined;
 
 export type Entry = {
   activityId: number;
@@ -27,18 +20,6 @@ export type Entry = {
   moving_time: number;
   elapsed_time: number;
 };
-
-export interface GeneralEntryProps {
-  no: number | undefined;
-  editing: boolean;
-  editedName: string;
-  entry: Entry;
-  sport: string;
-  format: string | undefined;
-  currentActivity: CurrentActivity;
-  handleNameChange: (e: { target: { value: string } }) => void;
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-}
 
 export interface NestedEntryDescriptorProps {
   title: string;
@@ -69,18 +50,3 @@ export type CurrentActivity = {
     };
   };
 };
-
-export interface EntryUIProps {
-  entries: Entry[];
-  entriesPerPage: number;
-  currentPage: number;
-  currentActivity: CurrentActivity;
-  invalidEntry: boolean;
-  sport: string;
-  format?: string | undefined;
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-  updateIndividualEntry: (
-    entryId: number,
-    updatedName: string
-  ) => Promise<void>;
-}

@@ -5,12 +5,12 @@ import { getIndividualEntry } from '../../lib/AppUtils';
 import { useGlobalContext } from '../GlobalStore/globalStore.js';
 import { useEntriesStore } from '../../lib/useEntries.js';
 import reportStyles from '../../styles/report.module.scss';
-import { Entry } from './EntryTypes.js';
+import { Entry, Format } from './EntryTypes.js';
 
 export interface ReportProps {
   sport: string;
   distance: number;
-  format: string;
+  format: Format;
   titleQuery: string;
   fromDateQuery: string;
   toDateQuery: string;

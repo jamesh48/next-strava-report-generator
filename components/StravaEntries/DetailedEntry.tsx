@@ -14,7 +14,7 @@ import {
 import { Line } from 'react-chartjs-2';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
-import { CurrentActivity } from './EntryTypes';
+import { CurrentActivity, Format } from './EntryTypes';
 
 interface DetailedEntryProps {
   editing: boolean;
@@ -23,6 +23,7 @@ interface DetailedEntryProps {
   handleEditingChange: React.MouseEventHandler<HTMLAnchorElement>;
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   handleActivityUpdate: () => void;
+  format: Format;
 }
 
 ChartJS.register(
@@ -52,13 +53,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   };
 
   let data;
+  const currentMeasurement = (() => {
+    if (props.format === 'avgypace') {
+      return 'yds';
+    }
+    return 'mtrs';
+  })();
+
   if (props.currentActivity.laps) {
     let cumulativeDistance = 0;
 
     data = {
       labels: props.currentActivity.laps.map(
         (increment) =>
-          (cumulativeDistance += increment.distance).toFixed() + ' yds'
+          (cumulativeDistance +=
+            increment.distance *
+            (() => {
+              if (props.format === 'avgypace') {
+                return 1.094;
+              }
+              return 1;
+            })()).toFixed() + ` ${currentMeasurement}`
       ),
       datasets: [
         {
