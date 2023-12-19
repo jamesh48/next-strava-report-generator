@@ -6,6 +6,7 @@ import ProgressBar from '../ProgressBar/ProgressBar';
 import { useGlobalContext } from '../../GlobalStore/globalStore.js';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box } from '@mui/material';
+import { Format } from '../../StravaEntries/EntryTypes';
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLInputElement>;
@@ -18,7 +19,7 @@ export interface RadiosProps {
   sport: string;
   customDistance: boolean;
   distance: number;
-  format: string;
+  format: Format;
 }
 
 const Radios = (props: RadiosProps) => {

@@ -7,12 +7,13 @@ import { useGlobalContext } from '../GlobalStore/globalStore';
 import Report from '../StravaEntries/Report';
 import { getUserActivities } from '../../lib/AppUtils';
 import { Box } from '@mui/material';
+import { Format } from '../StravaEntries/EntryTypes';
 
 export default function App() {
   const [{}, globalDispatch] = useGlobalContext();
   // Radios
   const [sport, setSport] = React.useState('Run');
-  const [format, setFormat] = React.useState('kph');
+  const [format, setFormat] = React.useState<Format>('kph');
   const [titleQuery, setTitleQuery] = React.useState('');
   const [fromDateQuery, setFromDateQuery] = React.useState('');
   const [toDateQuery, setToDateQuery] = React.useState('');
@@ -50,10 +51,11 @@ export default function App() {
     setSport(value);
   };
 
-  const setFormatCallback: React.MouseEventHandler<HTMLInputElement> = ({
-    currentTarget: { value },
-  }) => {
-    setFormat(value);
+  const setFormatCallback: React.MouseEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const typedValue = event.currentTarget.value as Format;
+    setFormat(typedValue);
   };
 
   const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
