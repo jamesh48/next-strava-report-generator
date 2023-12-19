@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import {
@@ -15,6 +15,7 @@ import { Line } from 'react-chartjs-2';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
+import axios from 'axios';
 
 interface DetailedEntryProps {
   editing: boolean;
@@ -38,6 +39,45 @@ ChartJS.register(
 
 const DetailedEntry = (props: DetailedEntryProps) => {
   const [currentStat, setCurrentStat] = useState<null | string>(null);
+  const [currentKudoers, setCurrentKudoers] = useState<
+    { firstname: string; lastname: string }[]
+  >([]);
+  const [currentComments, setCurrentComments] = useState<
+    {
+      text: string;
+      athlete: { firstname: string; lastname: string };
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const asyncKudosCall = async () => {
+      const { data } = await axios({
+        url: '/api/kudoers',
+        method: 'GET',
+        params: {
+          entryid: props.currentActivity.id,
+        },
+      });
+      setCurrentKudoers(data);
+    };
+
+    asyncKudosCall();
+  }, [props.currentActivity.id]);
+
+  useEffect(() => {
+    const asyncCommentsCall = async () => {
+      const { data } = await axios({
+        url: '/api/comments',
+        method: 'GET',
+        params: {
+          entryid: props.currentActivity.id,
+        },
+      });
+      setCurrentComments(data);
+    };
+
+    asyncCommentsCall();
+  }, [props.currentActivity.id]);
 
   const options = {
     responsive: true,
@@ -169,6 +209,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             alt="kudos-img"
             layout="static"
             src="/images/kudos.jpeg"
+            onClick={() => {
+              setCurrentStat((prevStat) => {
+                if (prevStat === 'kudosComments') {
+                  return null;
+                }
+                return 'kudosComments';
+              });
+            }}
           />
           <Box
             className="kudosDescriptors"
@@ -179,32 +227,36 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               flexDirection: 'column',
             }}
           >
-            <Typography
-              variant="h6"
-              id="kudosCount"
-              className="kudos"
-              sx={{
-                margin: 0,
-                display: 'block',
-                color: 'ivory',
-              }}
-            >
-              Kudos-{' '}
-              <Typography sx={{ display: 'inline-block' }}>
+            <Box sx={{ display: 'flex' }}>
+              <Typography
+                variant="h6"
+                id="kudosCount"
+                className="kudos"
+                sx={{
+                  margin: 0,
+                  display: 'block',
+                  color: 'ivory',
+                }}
+              >
+                Kudos-{' '}
+              </Typography>
+              <Typography sx={{ color: 'ivory' }} variant="h6">
                 {props.currentActivity.kudos_count}
               </Typography>
-            </Typography>
-            <Typography
-              variant="h6"
-              id="commentCount"
-              className="kudos"
-              sx={{ margin: 0, display: 'block', color: 'ivory' }}
-            >
-              Comments-{' '}
-              <Typography sx={{ display: 'inline-block' }}>
+            </Box>
+            <Box sx={{ display: 'flex' }}>
+              <Typography
+                variant="h6"
+                id="commentCount"
+                className="kudos"
+                sx={{ margin: 0, display: 'block', color: 'ivory' }}
+              >
+                Comments-{' '}
+              </Typography>
+              <Typography variant="h6" sx={{ color: 'ivory' }}>
                 {props.currentActivity.comment_count}
               </Typography>
-            </Typography>
+            </Box>
           </Box>
         </Box>
 
@@ -223,8 +275,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               layout="static"
               src="/images/heartrate.png"
               onClick={() => {
-                setCurrentStat((x) => {
-                  if (x) {
+                setCurrentStat((prevStat) => {
+                  if (prevStat === 'heartRate') {
                     return null;
                   }
                   return 'heartRate';
@@ -408,6 +460,38 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       }
       {currentStat === 'heartRate' && data ? (
         <Line options={options} data={data} />
+      ) : currentStat === 'kudosComments' ? (
+        <Box sx={{ paddingLeft: '2.5%', color: 'ivory', display: 'flex' }}>
+          {currentKudoers.length ? (
+            <Box>
+              <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
+                Kudoers
+              </Typography>
+              <Box>
+                {currentKudoers.map((x, index) => (
+                  <Typography key={index}>
+                    {x.firstname} {x.lastname}
+                  </Typography>
+                ))}
+              </Box>
+            </Box>
+          ) : null}
+          {currentComments.length ? (
+            <Box sx={{ paddingLeft: '2.5%' }}>
+              <Typography variant="h5">Comments</Typography>
+              <Box>
+                {currentComments.map((x, index) => (
+                  <Box key={index} sx={{ display: 'flex' }}>
+                    <Typography>
+                      {x.athlete.firstname} {x.athlete.lastname}:
+                    </Typography>
+                    <Typography>{x.text}</Typography>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          ) : null}
+        </Box>
       ) : null}
     </Box>
   );
