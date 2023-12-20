@@ -115,7 +115,10 @@ export class SRGFrontendStack extends cdk.Stack {
       targetGroups: [targetGroup],
       priority: 25,
       conditions: [
-        elbv2.ListenerCondition.hostHeaders(['stravareportgenerator.com']),
+        elbv2.ListenerCondition.hostHeaders([
+          'www.stravareportgenerator.com',
+          'stravareportgenerator.com',
+        ]),
         // elbv2.ListenerCondition.pathPatterns(['/', '/srg/*']),
       ],
     });
