@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Input, Radio } from '@mui/material';
+import { Box, Input } from '@mui/material';
 
 export interface SingleRadioProps {
   id: string;
