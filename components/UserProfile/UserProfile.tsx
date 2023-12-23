@@ -9,7 +9,7 @@ import style from '../../styles/App.module.scss';
 import { Box } from '@mui/material';
 import { useCSX } from '../GlobalStore/globalUtils';
 
-const Profile: React.FC<{}> = () => {
+const Profile = () => {
   const [rateLimit, setRateLimit] = React.useState(false);
   const [userProfile, setUserProfile] = React.useState({
     profile: '',

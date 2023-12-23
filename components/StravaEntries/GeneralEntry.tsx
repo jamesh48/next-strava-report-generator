@@ -17,27 +17,18 @@ interface GeneralEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
-const GeneralEntry = ({
-  no,
-  entry,
-  sport,
-  format,
-  editing,
-  editedName,
-  showIndividualEntry,
-  handleNameChange,
-}: GeneralEntryProps) => {
+const GeneralEntry = (props: GeneralEntryProps) => {
   const m2y = 1.094;
   const mps2kph = 3.6;
 
   const pastTense =
-    sport === 'Walk'
+    props.sport === 'Walk'
       ? 'Walked-'
-      : sport === 'Swim'
+      : props.sport === 'Swim'
       ? 'Swam-'
-      : sport === 'Ride'
+      : props.sport === 'Ride'
       ? 'Rode-'
-      : sport === 'Run'
+      : props.sport === 'Run'
       ? 'Ran'
       : 'traveled-';
 
@@ -58,11 +49,11 @@ const GeneralEntry = ({
   return (
     <div
       id={
-        Number(no) === 0
+        Number(props.no) === 0
           ? reportStyles.entry1
-          : Number(no) === 1
+          : Number(props.no) === 1
           ? reportStyles.entry2
-          : Number(no) === 2
+          : Number(props.no) === 2
           ? reportStyles.entry3
           : ''
       }
@@ -70,81 +61,91 @@ const GeneralEntry = ({
     >
       <div
         className={
-          Number(no) >= 0 && Number(no) <= 2
+          Number(props.no) >= 0 && Number(props.no) <= 2
             ? `${reportStyles.generalEntry} ${reportStyles.specialEntry}`
             : reportStyles.generalEntry
         }
       >
-        {editing ? (
-          <input type="text" value={editedName} onChange={handleNameChange} />
+        {props.editing ? (
+          <input
+            type="text"
+            value={props.editedName}
+            onChange={props.handleNameChange}
+          />
         ) : (
           <a
             className={reportStyles.entryTitle}
-            data-indentry={entry.activityId}
+            data-indentry={props.entry.activityId}
             href=""
-            onClick={showIndividualEntry}
+            onClick={props.showIndividualEntry}
           >
-            {entry.name}
+            {props.entry.name}
           </a>
         )}
-        {format !== 'avgypace' ? (
+        {props.format !== 'avgypace' ? (
           <EntryDescriptor
             title={`Distance ${pastTense}`}
-            value={`${entry.distance} Meters`}
+            value={`${props.entry.distance} Meters`}
           />
         ) : (
           <EntryDescriptor
             title={`Distance ${pastTense}`}
-            value={`${(entry.distance * 1.094).toFixed()} Yards`}
+            value={`${(props.entry.distance * 1.094).toFixed()} Yards`}
           />
         )}
 
         <EntryDescriptor
           title="Time Elapsed- "
-          value={handleTime(entry.elapsed_time)}
+          value={handleTime(props.entry.elapsed_time)}
         />
 
         <EntryDescriptor
           title="Moving Time- "
-          value={handleTime(entry.moving_time)}
+          value={handleTime(props.entry.moving_time)}
         />
 
         {/* For Debugging  */}
         {/* <p className="entry-descriptor">id = {entry.activityId}</p> */}
 
         {/* Format */}
-        {format === 'kph' ? (
+        {props.format === 'kph' ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
-            value={((entry.distance / entry.moving_time) * mps2kph).toFixed(2)}
+            value={(
+              (props.entry.distance / props.entry.moving_time) *
+              mps2kph
+            ).toFixed(2)}
             extra="kph"
           />
-        ) : format === 'mph' ? (
+        ) : props.format === 'mph' ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
-            value={((entry.distance / entry.moving_time) * 2.237).toFixed(2)}
+            value={(
+              (props.entry.distance / props.entry.moving_time) *
+              2.237
+            ).toFixed(2)}
             extra="mph"
           />
-        ) : format === 'mps' ? (
+        ) : props.format === 'mps' ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
-            value={(entry.distance / entry.moving_time).toFixed(2)}
+            value={(props.entry.distance / props.entry.moving_time).toFixed(2)}
             extra="mps"
           />
-        ) : format === 'avgypace' ? (
+        ) : props.format === 'avgypace' ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
             value={handleTime(
-              entry.moving_time / ((entry.distance * 1.094) / 100),
+              props.entry.moving_time / ((props.entry.distance * 1.094) / 100),
               'pace'
             )}
             extra="/100 Yards"
           />
-        ) : format === 'avgmpace' ? (
+        ) : props.format === 'avgmpace' ? (
           <NestedEntryDescriptor
             title="Avg Pace- "
             value={handleTime(
-              entry.moving_time / (entry.distance / 100),
+              props.entry.moving_time / (props.entry.distance / 100),
               'pace'
             )}
             extra="/100 Meters"
@@ -152,40 +153,43 @@ const GeneralEntry = ({
         ) : null}
         {/* Max Speed Format  */}
 
-        {format === 'kph' ? (
+        {props.format === 'kph' ? (
           <NestedEntryDescriptor
             title="Max Speed-"
-            value={(entry.max_speed * mps2kph).toFixed(2)}
+            value={(Number(props.entry.max_speed) * mps2kph).toFixed(2)}
             extra="kph"
           />
-        ) : format === 'mph' ? (
+        ) : props.format === 'mph' ? (
           <NestedEntryDescriptor
             title="Max Speed- "
-            value={(entry.max_speed * 2.237).toFixed(2)}
+            value={(Number(props.entry.max_speed) * 2.237).toFixed(2)}
             extra="mph"
           />
-        ) : format === 'mps' ? (
+        ) : props.format === 'mps' ? (
           <NestedEntryDescriptor
             title="Max Speed- "
-            value={entry.max_speed.toFixed(2)}
+            value={Number(props.entry.max_speed).toFixed(2)}
             extra="mps"
           />
-        ) : format === 'avgypace' ? (
+        ) : props.format === 'avgypace' ? (
           <NestedEntryDescriptor
             title="Max Speed- "
-            value={handleTime(100 / (entry.max_speed * m2y), 'pace')}
+            value={handleTime(
+              100 / (Number(props.entry.max_speed) * m2y),
+              'pace'
+            )}
             extra="/100 yards"
           />
-        ) : format === 'avgmpace' ? (
+        ) : props.format === 'avgmpace' ? (
           <NestedEntryDescriptor
             title="Max Speed- "
-            value={handleTime(100 / entry.max_speed, 'pace')}
+            value={handleTime(100 / Number(props.entry.max_speed), 'pace')}
             extra="/100 Meters"
           />
         ) : null}
 
         <p className={appStyles.entryEDescriptor}>
-          {new Date(entry.start_date).toLocaleString()}
+          {new Date(props.entry.start_date).toLocaleString()}
         </p>
       </div>
     </div>

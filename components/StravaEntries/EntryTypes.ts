@@ -15,7 +15,7 @@ export type Entry = {
   activityId: number;
   name: string;
   start_date: string;
-  max_speed: number;
+  max_speed: string;
   distance: number;
   moving_time: number;
   elapsed_time: number;

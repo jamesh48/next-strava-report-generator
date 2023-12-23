@@ -45,12 +45,14 @@ export default function App() {
     setCustomDistance(false);
   }, [sport]);
 
-  const setSportCallback: React.MouseEventHandler<HTMLInputElement> = (e) => {
+  const setSportCallback: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const value = (e.target as HTMLInputElement).value;
     setSport(value);
   };
 
-  const setFormatCallback: React.MouseEventHandler<HTMLInputElement> = (e) => {
+  const setFormatCallback: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const value = (e.target as HTMLInputElement).value;
     setFormat(value as Format);
   };
@@ -73,11 +75,13 @@ export default function App() {
     setToDateQuery(event.currentTarget.value);
   };
 
-  const setDistanceCallback: React.MouseEventHandler<HTMLInputElement> = (
-    e
-  ) => {
-    const value = (e.target as HTMLInputElement).value;
+  const setDistanceCallback: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const placeholder = (e.target as HTMLInputElement).placeholder;
+    let value = (e.currentTarget as HTMLInputElement).value;
+    if (!value) {
+      value = (e.target as HTMLInputElement).value;
+    }
 
     setDistance(Number(value));
 

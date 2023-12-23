@@ -10,9 +10,12 @@ import { Format } from '../../StravaEntries/EntryTypes';
 import { useCSX } from '../../GlobalStore/globalUtils';
 
 export interface RadiosProps {
-  setSport: React.MouseEventHandler<HTMLDivElement>;
-  setDistance: React.MouseEventHandler<HTMLDivElement>;
-  setFormat: React.MouseEventHandler<HTMLDivElement>;
+  setSport: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  setDistance: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  setFormat: React.MouseEventHandler<HTMLLabelElement> &
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
   setFromDateQuery: React.ChangeEventHandler<HTMLInputElement>;
   setToDateQuery: React.ChangeEventHandler<HTMLInputElement>;

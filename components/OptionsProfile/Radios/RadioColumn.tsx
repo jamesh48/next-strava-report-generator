@@ -1,7 +1,14 @@
 import React from 'react';
-import SingleRadio from './SingleRadio';
 import appStyles from '../../../styles/App.module.scss';
-import { Box, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Typography,
+  OutlinedInput,
+} from '@mui/material';
 
 export type RadioValueProps = {
   type: string;
@@ -19,7 +26,9 @@ interface RadioColumnProps {
   distance?: number;
   customDistance?: boolean;
   placeholder?: string;
-  setCallback: React.MouseEventHandler<HTMLDivElement>;
+  setCallback:
+    | React.MouseEventHandler<HTMLLabelElement> &
+        React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }
 
 const RadioColumn = (props: RadioColumnProps) => {
@@ -51,11 +60,69 @@ const RadioColumn = (props: RadioColumnProps) => {
         className={appStyles.multipleRadioButtonContainer}
         sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       >
-        {props.radioValues.map((radio, index) => {
-          return (
-            <SingleRadio key={index} {...radio} {...props} index={index} />
-          );
-        })}
+        <FormControl>
+          <RadioGroup defaultValue={props.radioValues[0]?.value}>
+            {props.radioValues.map((radio, index) => {
+              if (radio.type === 'radioAndText') {
+                return (
+                  <Box key={index}>
+                    <FormControlLabel
+                      value="x"
+                      label=""
+                      control={<Radio checked={props.customDistance} />}
+                      onClick={props.setCallback}
+                    />
+                    <FormControlLabel
+                      disabled={!props.isLoaded ? true : false}
+                      id={radio.id}
+                      name=""
+                      label=""
+                      control={
+                        <OutlinedInput
+                          onChange={props.setCallback}
+                          value={props.customDistance ? null : ''}
+                          placeholder={'Custom Distance'}
+                          sx={{ height: '3rem' }}
+                          label=""
+                        />
+                      }
+                    />
+                  </Box>
+                );
+              }
+              return (
+                <FormControlLabel
+                  key={index}
+                  value={radio.value}
+                  control={
+                    <Radio
+                      checked={(() => {
+                        if (radio.name.indexOf('distance') > -1) {
+                          if (props.customDistance) {
+                            return false;
+                          }
+                          if (radio.value === '0' && props.distance === 0) {
+                            return true;
+                          }
+                          if (
+                            radio.value !== '0' &&
+                            props.distance === Number(radio.value)
+                          ) {
+                            return true;
+                          }
+                          return false;
+                        }
+                        return undefined;
+                      })()}
+                    />
+                  }
+                  label={radio.labelText}
+                  onClick={props.setCallback}
+                />
+              );
+            })}
+          </RadioGroup>
+        </FormControl>
       </Box>
     </Box>
   );
