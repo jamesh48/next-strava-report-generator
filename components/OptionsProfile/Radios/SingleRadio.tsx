@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Input, Radio } from '@mui/material';
 
 export interface SingleRadioProps {
   id: string;
@@ -12,13 +12,13 @@ export interface SingleRadioProps {
   placeholder?: string;
   labelText?: string | undefined;
   value?: string | undefined;
-  setCallback: React.MouseEventHandler<HTMLInputElement>;
+  setCallback: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const SingleRadio = (props: SingleRadioProps) => {
   return props.type === 'radio' ? (
     <Box className="singleRadioButtonContainer" sx={{ flex: 1 }}>
-      <input
+      <Input
         defaultChecked={props.index === 0}
         disabled={!props.isLoaded ? true : false}
         type={props.type}
@@ -35,6 +35,7 @@ const SingleRadio = (props: SingleRadioProps) => {
         }
         onClick={props.setCallback}
       />
+
       <label htmlFor="allresults">{props.labelText}</label>
       <br />
     </Box>

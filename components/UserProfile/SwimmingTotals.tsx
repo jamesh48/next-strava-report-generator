@@ -2,6 +2,7 @@ import React from 'react';
 import style from '../../styles/App.module.scss';
 import { SwimmingTotalsSection } from './UserProfileTypes';
 import { Box } from '@mui/material';
+import { useCSX } from '../GlobalStore/globalUtils';
 
 const SwimmingTotals: React.FC<SwimmingTotalsSection> = ({
   profile: { ytd_swim_totals },
@@ -17,7 +18,7 @@ const SwimmingTotals: React.FC<SwimmingTotalsSection> = ({
         flex: 1,
         backgroundColor: '#52fff3',
         paddingLeft: '5px',
-        borderLeft: '1px solid coral',
+        ...useCSX('1px solid coral', 'none', 'borderLeft'),
       }}
     >
       <h4 className={style.ytdTotalsTitle}>Year-To-Date Swim Totals</h4>

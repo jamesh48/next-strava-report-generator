@@ -3,7 +3,7 @@ import { CurrentActivity } from '../components/StravaEntries/EntryTypes';
 
 export const authorizeApp = async () => {
   const response: AxiosResponse = await axios('/api/authLink');
-  location = response.data;
+  // location = response.data;
 };
 
 export const getUserActivities = async () => {

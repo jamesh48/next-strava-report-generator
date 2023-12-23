@@ -1,8 +1,27 @@
 import React from 'react';
-import { RadioColumnProps } from './RadioTypes';
 import SingleRadio from './SingleRadio';
 import appStyles from '../../../styles/App.module.scss';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+
+export type RadioValueProps = {
+  type: string;
+  id: string;
+  name: string;
+  value?: string | undefined;
+  labelText?: string | undefined;
+};
+
+interface RadioColumnProps {
+  title: string;
+  radioValues: RadioValueProps[];
+  isLoaded: boolean;
+  format?: string;
+  distance?: number;
+  customDistance?: boolean;
+  placeholder?: string;
+  setCallback: React.MouseEventHandler<HTMLDivElement>;
+}
+
 const RadioColumn = (props: RadioColumnProps) => {
   return (
     <Box
@@ -20,12 +39,14 @@ const RadioColumn = (props: RadioColumnProps) => {
         },
       }}
     >
-      <h4
-        className={appStyles.chooseTitle}
+      <Typography
+        variant="h6"
+        className="chooseTitle"
         id={props.title.split(' ').join('-').toLowerCase()}
+        sx={{ color: 'orangered' }}
       >
         {props.title}
-      </h4>
+      </Typography>
       <Box
         className={appStyles.multipleRadioButtonContainer}
         sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}

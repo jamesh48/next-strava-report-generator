@@ -1,13 +1,13 @@
 import React from 'react';
 import Radios from '../OptionsProfile/Radios/Radios';
 import UserProfile from '../UserProfile/UserProfile';
-import styles from '../../styles/App.module.scss';
 import { useGlobalContext } from '../GlobalStore/globalStore';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '../StravaEntries/Report';
 import { getUserActivities } from '../../lib/AppUtils';
 import { Box } from '@mui/material';
 import { Format } from '../StravaEntries/EntryTypes';
+import { useCSX } from '../GlobalStore/globalUtils';
 
 export default function App() {
   const [{}, globalDispatch] = useGlobalContext();
@@ -45,17 +45,14 @@ export default function App() {
     setCustomDistance(false);
   }, [sport]);
 
-  const setSportCallback: React.MouseEventHandler<HTMLInputElement> = ({
-    currentTarget: { value },
-  }) => {
+  const setSportCallback: React.MouseEventHandler<HTMLInputElement> = (e) => {
+    const value = (e.target as HTMLInputElement).value;
     setSport(value);
   };
 
-  const setFormatCallback: React.MouseEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    const typedValue = event.currentTarget.value as Format;
-    setFormat(typedValue);
+  const setFormatCallback: React.MouseEventHandler<HTMLInputElement> = (e) => {
+    const value = (e.target as HTMLInputElement).value;
+    setFormat(value as Format);
   };
 
   const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
@@ -76,9 +73,12 @@ export default function App() {
     setToDateQuery(event.currentTarget.value);
   };
 
-  const setDistanceCallback: React.MouseEventHandler<HTMLInputElement> = ({
-    currentTarget: { value, placeholder },
-  }) => {
+  const setDistanceCallback: React.MouseEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    const value = (e.target as HTMLInputElement).value;
+    const placeholder = (e.target as HTMLInputElement).placeholder;
+
     setDistance(Number(value));
 
     if (placeholder === 'Custom Distance' && Number(value) !== 0) {
@@ -88,10 +88,12 @@ export default function App() {
     }
   };
 
+  const mainStyles = useCSX('100%', 'unset', 'width');
+
   return (
-    <main id="mainContainer" style={{ backgroundColor: 'darkslategray' }}>
+    <Box id="mainContainer" sx={{ ...mainStyles }}>
       <Box
-        id={styles.upperSection}
+        id="upperSection"
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -128,6 +130,6 @@ export default function App() {
           toDateQuery={toDateQuery}
         />
       </Box>
-    </main>
+    </Box>
   );
 }

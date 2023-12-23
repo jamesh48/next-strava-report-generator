@@ -6,7 +6,6 @@ const handler = nextConnect();
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const srg_athlete_id = req.cookies.athleteId;
-    console.log(srg_athlete_id, req.query);
     const { activityId: entry_id, name, description } = req.query;
     await axios({
       url: `${process.env.DATA_BASE_URL}/srg/activityUpdate`,

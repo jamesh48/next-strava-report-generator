@@ -2,12 +2,15 @@
 
 html {
   text-rendering: geometricPrecision;
-  font-family: "Raleway";
+  font-family: 'Raleway';
   background-color: darkslategray;
+  display: flex;
+  width: 100%;
 }
 
 body {
   margin: 0;
+  width: 100%;
 }
 
 ul,

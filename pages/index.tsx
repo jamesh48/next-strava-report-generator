@@ -3,7 +3,7 @@ import App from '../components/App/App';
 import { GlobalStoreProvider } from '../components/GlobalStore/globalStore';
 export default function Home() {
   return (
-    <div>
+    <div style={{ width: '100%', display: 'flex' }}>
       <Head>
         <title>Strava Report Generator</title>
         <meta name="description" content="A ordered list of strava activites" />

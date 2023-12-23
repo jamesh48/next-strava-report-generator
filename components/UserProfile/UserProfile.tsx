@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { fetchUserData } from '../../lib/FetchUser';
 import style from '../../styles/App.module.scss';
 import { Box } from '@mui/material';
+import { useCSX } from '../GlobalStore/globalUtils';
 
 const Profile: React.FC<{}> = () => {
   const [rateLimit, setRateLimit] = React.useState(false);
@@ -39,8 +40,13 @@ const Profile: React.FC<{}> = () => {
     }
     fetchUser();
   }, []);
+
+  const userProfileCSX = useCSX(
+    { flexDirection: 'row' },
+    { flexDirection: 'column', alignItems: 'center' }
+  );
+
   return (
-    //@ts-ignore
     (!rateLimit && userProfile?.profile && (
       <Box
         id={style.userProfile}
@@ -54,6 +60,7 @@ const Profile: React.FC<{}> = () => {
           borderTop: 'none',
           borderLeft: 'none',
           boxShadow: '2.5px 2.5px 5px 0px orangered',
+          ...userProfileCSX,
         }}
       >
         <Image
@@ -79,14 +86,49 @@ const Profile: React.FC<{}> = () => {
           borderTop: 'none',
           borderLeft: 'none',
           boxShadow: '2.5px 2.5px 5px 0px orangered',
+          ...userProfileCSX,
         }}
       >
-        <div id={style.rateLimitContainer}>
-          <span className="rate-limit-message">
+        <Box
+          id={style.rateLimitContainer}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+          }}
+        >
+          <Box
+            className="rate-limit-message"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              color: 'orangered',
+              width: '100%',
+              padding: '0.5% 0',
+              '&:first-of-type': {
+                textDecoration: 'underline',
+              },
+            }}
+          >
             Collective Rate Limit Exceeded
-          </span>
-          <span className="rate-limit-message">Come again tomorrow champ</span>
-        </div>
+          </Box>
+          <Box
+            className="rate-limit-message"
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              color: 'orangered',
+              width: '100%',
+              padding: '0.5% 0',
+              '&:first-of-type': {
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            Come again tomorrow champ
+          </Box>
+        </Box>
       </Box>
     )
   );

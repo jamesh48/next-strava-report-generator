@@ -7,11 +7,12 @@ import { useGlobalContext } from '../../GlobalStore/globalStore.js';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box } from '@mui/material';
 import { Format } from '../../StravaEntries/EntryTypes';
+import { useCSX } from '../../GlobalStore/globalUtils';
 
 export interface RadiosProps {
-  setSport: React.MouseEventHandler<HTMLInputElement>;
-  setDistance: React.MouseEventHandler<HTMLInputElement>;
-  setFormat: React.MouseEventHandler<HTMLInputElement>;
+  setSport: React.MouseEventHandler<HTMLDivElement>;
+  setDistance: React.MouseEventHandler<HTMLDivElement>;
+  setFormat: React.MouseEventHandler<HTMLDivElement>;
   setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
   setFromDateQuery: React.ChangeEventHandler<HTMLInputElement>;
   setToDateQuery: React.ChangeEventHandler<HTMLInputElement>;
@@ -59,7 +60,6 @@ const Radios = (props: RadiosProps) => {
       format: props.format,
     },
   ];
-
   return (
     <Box
       id="buttonsAndBar"
@@ -74,6 +74,7 @@ const Radios = (props: RadiosProps) => {
         id="buttonLayout"
         sx={{
           display: 'flex',
+          ...useCSX('row', 'column', 'flexDirection'),
           justifyContent: 'center',
           width: '95%',
           margin: '2.5% auto 0 auto',
