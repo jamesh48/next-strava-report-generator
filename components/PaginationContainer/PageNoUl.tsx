@@ -1,7 +1,7 @@
-import React from "react";
-import { Entry } from "../StravaEntries/EntryTypes";
-import PageNo from "./PageNoLi";
-import reportStyles from "../../styles/report.module.scss";
+import React from 'react';
+import { Entry } from '../StravaEntries/EntryTypes';
+import PageNo from './PageNoLi';
+import { List } from '@mui/material';
 
 interface PageNoUlProps {
   handleClick: React.MouseEventHandler<HTMLLIElement>;
@@ -13,7 +13,7 @@ const PageNoUl: React.FC<PageNoUlProps> = ({
   entries,
   entriesPerPage,
   currentPage,
-  handleClick
+  handleClick,
 }) => {
   const renderPageNumbers = () => {
     return [...new Array(Math.ceil(entries.length / entriesPerPage))]
@@ -33,9 +33,19 @@ const PageNoUl: React.FC<PageNoUlProps> = ({
   };
 
   return (
-    <ul className={reportStyles.pageNoUls} id={reportStyles.pageNumbers}>
+    <List
+      className="pageNoUls"
+      id="pageNumbers"
+      disablePadding={true}
+      sx={{
+        listStyleType: 'none',
+        marginBottom: '1%',
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
       {renderPageNumbers()}
-    </ul>
+    </List>
   );
 };
 

@@ -3,8 +3,7 @@ import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { useGlobalContext } from '../GlobalStore/globalStore.js';
 import { CurrentActivity, Entry, Format } from './EntryTypes.js';
-import reportStyles from '../../styles/report.module.scss';
-import { ListItem } from '@mui/material';
+import { List, ListItem } from '@mui/material';
 
 interface EntryUIProps {
   entries: Entry[];
@@ -49,14 +48,22 @@ const EntryUI = (props: EntryUIProps) => {
   });
 
   return (
-    <ul className={reportStyles.entryUls}>
+    <List
+      className="entryUls"
+      disablePadding={true}
+      sx={{
+        listStyleType: 'none',
+        marginBottom: '1%',
+        boxShadow: '0 0 10px coral',
+      }}
+    >
       {(currentEntries?.length === 0 && totalEntries?.length) ||
       props.invalidEntry === true ? (
         <EmptyEntry />
       ) : (
         renderEntries
       )}
-    </ul>
+    </List>
   );
 };
 

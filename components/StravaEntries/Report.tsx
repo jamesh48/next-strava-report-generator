@@ -4,8 +4,8 @@ import PageNoUl from '../PaginationContainer/PageNoUl';
 import { getIndividualEntry } from '../../lib/AppUtils';
 import { useGlobalContext } from '../GlobalStore/globalStore.js';
 import { useEntriesStore } from '../../lib/useEntries.js';
-import reportStyles from '../../styles/report.module.scss';
 import { Entry, Format } from './EntryTypes.js';
+import { Box } from '@mui/material';
 
 export interface ReportProps {
   sport: string;
@@ -117,7 +117,7 @@ const Report = (props: ReportProps) => {
   };
 
   return (
-    <div id={reportStyles.report}>
+    <Box id="report" sx={{ margin: '2.5% auto', width: '95%' }}>
       <EntryUl
         {...props}
         invalidEntry={invalidEntry}
@@ -135,7 +135,7 @@ const Report = (props: ReportProps) => {
         handleClick={handlePaginationClick}
         currentPage={currentPage}
       />
-    </div>
+    </Box>
   );
 };
 
