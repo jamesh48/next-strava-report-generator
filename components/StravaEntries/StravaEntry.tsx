@@ -3,6 +3,7 @@ import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
 import axios, { AxiosResponse } from 'axios';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
+import { Box } from '@mui/material';
 
 interface StravaEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
@@ -64,7 +65,7 @@ const StravaEntry = (props: StravaEntryProps) => {
   };
 
   return (
-    <div>
+    <Box sx={{ width: '100%' }}>
       <GeneralEntry
         sport={props.sport}
         no={props.no}
@@ -87,7 +88,7 @@ const StravaEntry = (props: StravaEntryProps) => {
           format={props.format}
         />
       )}
-    </div>
+    </Box>
   );
 };
 

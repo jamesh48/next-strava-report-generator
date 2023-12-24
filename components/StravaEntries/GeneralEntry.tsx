@@ -1,9 +1,9 @@
 import React from 'react';
 import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
-import reportStyles from '../../styles/report.module.scss';
 import appStyles from '../../styles/App.module.scss';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
+import { Box, Link, Typography } from '@mui/material';
 
 interface GeneralEntryProps {
   no: number | undefined;
@@ -46,25 +46,66 @@ const GeneralEntry = (props: GeneralEntryProps) => {
     }
   };
 
+  const isTopThreeEntry = Number(props.no) >= 0 && Number(props.no) <= 2;
   return (
-    <div
+    <Box
       id={
         Number(props.no) === 0
-          ? reportStyles.entry1
+          ? 'entry1'
           : Number(props.no) === 1
-          ? reportStyles.entry2
+          ? 'entry2'
           : Number(props.no) === 2
-          ? reportStyles.entry3
+          ? 'entry3'
           : ''
       }
-      className={reportStyles.innerEntry}
+      className="innerEntry"
+      sx={{
+        border: '1px solid coral',
+        backgroundColor: 'paleturquoise',
+        '&:hover': {
+          backgroundColor: !isTopThreeEntry ? 'darkturquoise' : null,
+          p: {
+            color: 'ivory',
+          },
+        },
+        ...(() => {
+          if (Number(props.no) === 0) {
+            return { backgroundColor: 'goldenrod' };
+          }
+          if (Number(props.no) === 1) {
+            return { backgroundColor: 'silver' };
+          }
+
+          if (Number(props.no) === 2) {
+            return { backgroundColor: '#cd7f32' };
+          }
+          return {};
+        })(),
+      }}
     >
-      <div
+      <Box
         className={
-          Number(props.no) >= 0 && Number(props.no) <= 2
-            ? `${reportStyles.generalEntry} ${reportStyles.specialEntry}`
-            : reportStyles.generalEntry
+          isTopThreeEntry ? 'generalEntry specialEntry' : 'generalEntry'
         }
+        sx={{
+          ...(() => {
+            if (isTopThreeEntry) {
+              return {
+                color: 'ivory',
+                padding: '10px',
+                '& > p': {
+                  paddingLeft: '1.5%',
+                },
+              };
+            }
+            return {
+              padding: '10px',
+              '& > p': {
+                paddingLeft: '1.5%',
+              },
+            };
+          })(),
+        }}
       >
         {props.editing ? (
           <input
@@ -73,14 +114,18 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             onChange={props.handleNameChange}
           />
         ) : (
-          <a
-            className={reportStyles.entryTitle}
+          <Link
+            className="entryTitle"
             data-indentry={props.entry.activityId}
             href=""
             onClick={props.showIndividualEntry}
+            sx={{
+              color: isTopThreeEntry ? 'ivory' : 'orangered',
+              textDecorationColor: isTopThreeEntry ? 'ivory' : 'orangered',
+            }}
           >
             {props.entry.name}
-          </a>
+          </Link>
         )}
         {props.format !== 'avgypace' ? (
           <EntryDescriptor
@@ -188,11 +233,11 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           />
         ) : null}
 
-        <p className={appStyles.entryEDescriptor}>
+        <Typography className={appStyles.entryEDescriptor} sx={{}}>
           {new Date(props.entry.start_date).toLocaleString()}
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Box>
+    </Box>
   );
 };
 

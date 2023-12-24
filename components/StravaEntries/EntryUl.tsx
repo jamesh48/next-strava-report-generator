@@ -4,6 +4,7 @@ import EmptyEntry from './EmptyEntry';
 import { useGlobalContext } from '../GlobalStore/globalStore.js';
 import { CurrentActivity, Entry, Format } from './EntryTypes.js';
 import reportStyles from '../../styles/report.module.scss';
+import { ListItem } from '@mui/material';
 
 interface EntryUIProps {
   entries: Entry[];
@@ -29,7 +30,7 @@ const EntryUI = (props: EntryUIProps) => {
 
   const renderEntries = currentEntries.map((entry, index) => {
     return (
-      <li key={index}>
+      <ListItem key={index} sx={{ display: 'flex', padding: 0 }}>
         <StravaEntry
           currentActivity={props.currentActivity}
           showIndividualEntry={props.showIndividualEntry}
@@ -43,7 +44,7 @@ const EntryUI = (props: EntryUIProps) => {
           entry={entry}
           format={props.format}
         />
-      </li>
+      </ListItem>
     );
   });
 
