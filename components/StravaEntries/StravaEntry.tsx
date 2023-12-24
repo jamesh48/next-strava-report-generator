@@ -1,9 +1,9 @@
 import React from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
-import axios, { AxiosResponse } from 'axios';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
-import { Box } from '@mui/material';
 
 interface StravaEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
