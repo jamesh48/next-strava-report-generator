@@ -21,12 +21,6 @@ export type Entry = {
   elapsed_time: number;
 };
 
-export interface NestedEntryDescriptorProps {
-  title: string;
-  value: string;
-  extra: string;
-}
-
 export type CurrentActivity = {
   id: number;
   name: string;

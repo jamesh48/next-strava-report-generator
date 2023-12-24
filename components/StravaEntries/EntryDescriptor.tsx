@@ -1,12 +1,12 @@
-import React from "react";
-import { EntryDescriptorProps } from "./EntryTypes";
-import appStyles from "../../styles/App.module.scss";
+import React from 'react';
+import { Typography } from '@mui/material';
+import { EntryDescriptorProps } from './EntryTypes';
 
-const EntryDescriptor: React.FC<EntryDescriptorProps> = ({ title, value }) => {
+const EntryDescriptor = (props: EntryDescriptorProps) => {
   return (
-    <p className={appStyles.entryDescriptor}>
-      {title} {value}
-    </p>
+    <Typography className="entryDescriptor" sx={{ cursor: 'default' }}>
+      {props.title} {props.value}
+    </Typography>
   );
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
-import appStyles from '../../styles/App.module.scss';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
 import { Box, Link, Typography } from '@mui/material';
 
@@ -233,7 +232,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           />
         ) : null}
 
-        <Typography className={appStyles.entryEDescriptor} sx={{}}>
+        <Typography className="entryDescriptor" sx={{ cursor: 'default' }}>
           {new Date(props.entry.start_date).toLocaleString()}
         </Typography>
       </Box>

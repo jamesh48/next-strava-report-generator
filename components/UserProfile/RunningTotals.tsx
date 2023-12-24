@@ -1,13 +1,18 @@
 import React from 'react';
-import style from '../../styles/App.module.scss';
-import { RunningTotalsSection as RunningTotalsProps } from './UserProfileTypes';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useCSX } from '../GlobalStore/globalUtils';
+import { YTDRunTotals } from './UserProfileTypes';
 
-const RunningTotals = ({ profile: { ytd_run_totals } }: RunningTotalsProps) => {
+export interface RunningTotalsProps {
+  profile: {
+    ytd_run_totals: YTDRunTotals;
+  };
+}
+
+const RunningTotals = (props: RunningTotalsProps) => {
   return (
     <Box
-      className={`${style.ytdTotals} ${style.profileBoxes}`}
+      className="ytdTotals profileBoxes"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -19,22 +24,33 @@ const RunningTotals = ({ profile: { ytd_run_totals } }: RunningTotalsProps) => {
         ...useCSX('1px solid coral', 'none', 'borderLeft'),
       }}
     >
-      <h4 className={style.ytdTotalsTitle}>Year To Date Run Totals</h4>
-      <p className={style.ytdDescriptor}>
-        Number of Runs: {ytd_run_totals.count}
-      </p>
-      <p className={style.ytdDescriptor}>
-        Total Distance: {ytd_run_totals.distance} Meters
-      </p>
-      <p className={style.ytdDescriptor}>
+      <Typography
+        variant="h6"
+        className="ytdTotalsTitle"
+        sx={{
+          color: 'orangered',
+          textDecoration: 'underline',
+          cursor: 'default',
+        }}
+      >
+        Year To Date Run Totals
+      </Typography>
+      <Typography className="ytdDescriptor" sx={{ cursor: 'default' }}>
+        Number of Runs: {props.profile.ytd_run_totals.count}
+      </Typography>
+      <Typography className="ytdDescriptor" sx={{ cursor: 'default' }}>
+        Total Distance: {props.profile.ytd_run_totals.distance} Meters
+      </Typography>
+      <Typography className="ytdDescriptor" sx={{ cursor: 'default' }}>
         {`Average Speed: `}
-        {ytd_run_totals.count === 0
+        {props.profile.ytd_run_totals.count === 0
           ? 0
-          : (ytd_run_totals.distance / ytd_run_totals.elapsed_time).toFixed(
-              2
-            )}{' '}
+          : (
+              props.profile.ytd_run_totals.distance /
+              props.profile.ytd_run_totals.elapsed_time
+            ).toFixed(2)}{' '}
         Meters per Second
-      </p>
+      </Typography>
     </Box>
   );
 };

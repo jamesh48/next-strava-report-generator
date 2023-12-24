@@ -1,15 +1,21 @@
-import React from "react";
-import { NestedEntryDescriptorProps } from "./EntryTypes";
-import appStyles from "../../styles/App.module.scss";
-const NestedEntryDescriptor: React.FC<NestedEntryDescriptorProps> = ({
-  title,
-  value,
-  extra
-}) => {
+import React from 'react';
+import { Typography } from '@mui/material';
+
+interface NestedEntryDescriptorProps {
+  title: string;
+  value: string;
+  extra: string;
+}
+
+const NestedEntryDescriptor = (props: NestedEntryDescriptorProps) => {
   return (
-    <p className={appStyles.entryDescriptor}>
-      {title} <p className={appStyles.speed}>{value}</p> {extra}
-    </p>
+    <Typography className="entryDescriptor" style={{ cursor: 'default' }}>
+      {props.title}{' '}
+      <Typography className="speed" sx={{ display: 'inline', padding: 'none' }}>
+        {props.value}
+      </Typography>{' '}
+      {props.extra}
+    </Typography>
   );
 };
 

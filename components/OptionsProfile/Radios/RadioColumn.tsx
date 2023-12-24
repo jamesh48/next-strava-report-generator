@@ -1,5 +1,4 @@
 import React from 'react';
-import appStyles from '../../../styles/App.module.scss';
 import {
   Box,
   FormControl,
@@ -34,7 +33,7 @@ interface RadioColumnProps {
 const RadioColumn = (props: RadioColumnProps) => {
   return (
     <Box
-      className={appStyles.chooseRadioContainer}
+      className="chooseRadioContainer"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -57,7 +56,7 @@ const RadioColumn = (props: RadioColumnProps) => {
         {props.title}
       </Typography>
       <Box
-        className={appStyles.multipleRadioButtonContainer}
+        className="multipleRadioButtonContainer"
         sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       >
         <FormControl>

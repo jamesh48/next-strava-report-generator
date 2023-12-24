@@ -10,18 +10,6 @@ export interface YTDSwimTotals {
   elapsed_time: number;
 }
 
-export interface SwimmingTotalsSection {
-  profile: {
-    ytd_swim_totals: YTDSwimTotals;
-  };
-}
-
-export interface RunningTotalsSection {
-  profile: {
-    ytd_run_totals: YTDRunTotals;
-  };
-}
-
 export interface ProfileData {
   profile: string;
   firstname: string;

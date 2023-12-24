@@ -1,12 +1,11 @@
 import React from 'react';
+import { Box } from '@mui/material';
 import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
 import SwimmingTotals from './SwimmingTotals';
 import { ProfileData } from './UserProfileTypes';
 import Image from 'next/image';
 import { fetchUserData } from '../../lib/FetchUser';
-import style from '../../styles/App.module.scss';
-import { Box } from '@mui/material';
 import { useCSX } from '../GlobalStore/globalUtils';
 
 const Profile = () => {
@@ -49,7 +48,7 @@ const Profile = () => {
   return (
     (!rateLimit && userProfile?.profile && (
       <Box
-        id={style.userProfile}
+        id="userProfile"
         sx={{
           textRendering: 'geometricPrecision',
           display: 'flex',
@@ -75,7 +74,7 @@ const Profile = () => {
       </Box>
     )) || (
       <Box
-        id={style.userProfile}
+        id="userProfile"
         sx={{
           textRendering: 'geometricPrecision',
           display: 'flex',
@@ -90,7 +89,7 @@ const Profile = () => {
         }}
       >
         <Box
-          id={style.rateLimitContainer}
+          id="rateLimitContainer"
           sx={{
             width: '100%',
             display: 'flex',
