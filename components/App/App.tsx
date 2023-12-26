@@ -4,13 +4,12 @@ import UserProfile from '../UserProfile/UserProfile';
 import { useGlobalContext } from '../GlobalStore/globalStore';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '../StravaEntries/Report';
-import { getUserActivities } from '../../lib/AppUtils';
 import { Box } from '@mui/material';
 import { Format } from '../StravaEntries/EntryTypes';
 import { useCSX } from '../GlobalStore/globalUtils';
+import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
 
 export default function App() {
-  const [{}, globalDispatch] = useGlobalContext();
   // Radios
   const [sport, setSport] = React.useState('Run');
   const [format, setFormat] = React.useState<Format>('kph');
@@ -22,16 +21,9 @@ export default function App() {
 
   componentDidMount: React.useEffect(() => {
     document.title = 'Strava Report Generator';
-    const fetchEntries = async () => {
-      const returningEntries = await getUserActivities();
-      // const returningEntries = reportTestData;
-      globalDispatch({
-        type: 'SET TOTAL ENTRIES',
-        payload: returningEntries,
-      });
-    };
-    fetchEntries();
   }, []);
+
+  useGetAllEntriesQuery(null);
 
   reset_distance_on_sport_change: React.useEffect(() => {
     setDistance(0);

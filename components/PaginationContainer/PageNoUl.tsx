@@ -44,7 +44,7 @@ const PageNoUl: React.FC<PageNoUlProps> = ({
         justifyContent: 'center',
       }}
     >
-      {renderPageNumbers()}
+      {entries?.length ? renderPageNumbers() : null}
     </List>
   );
 };

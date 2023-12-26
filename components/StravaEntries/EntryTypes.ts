@@ -19,6 +19,7 @@ export type Entry = {
   distance: number;
   moving_time: number;
   elapsed_time: number;
+  type: string;
 };
 
 export type CurrentActivity = {
