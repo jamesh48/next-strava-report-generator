@@ -7,19 +7,17 @@ import {
   SelectChangeEvent,
   SxProps,
 } from '@mui/material';
-import { useInterval } from './useInterval';
-import { useDispatch, useSelector } from '../../../redux/reduxHooks';
-import { setSortCondition } from '../../../redux/slices/appSlice';
+import { useInterval } from '@lib';
+import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
+  setSortCondition,
   useAddAllActivitiesMutation,
   useDestroyUserAndActivitiesMutation,
-} from '../../../redux/slices';
-import {
   completeProgressBarProgress,
   getProgressBarProgress,
   incrementProgressBarProgress,
   resetProgressBarProgress,
-} from '../../../redux/slices/progressBarSlice';
+} from '@redux/slices';
 
 const muiUpdateButtonContainerSx: SxProps = {
   minHeight: '5vmax',

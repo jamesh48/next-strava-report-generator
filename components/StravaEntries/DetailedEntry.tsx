@@ -15,7 +15,7 @@ import { Line } from 'react-chartjs-2';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
-import { useLazyGetKudoersQuery } from '../../redux/slices';
+import { useLazyGetKudoersQuery } from '@redux/slices';
 
 interface DetailedEntryProps {
   editing: boolean;

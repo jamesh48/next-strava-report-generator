@@ -1,8 +1,9 @@
 // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-import React from "react";
+import React from 'react';
+type UseIntervalFunc = (callback: () => void, delay: number | null) => void;
 
-const useInterval = (callback, delay) => {
-  const savedCallback = React.useRef();
+export const useInterval: UseIntervalFunc = (callback, delay) => {
+  const savedCallback: React.MutableRefObject<any> = React.useRef();
   // Remember the latest callback.
   React.useEffect(() => {
     savedCallback.current = callback;
@@ -17,7 +18,7 @@ const useInterval = (callback, delay) => {
     // If victory is declared or bomb stop the timer...
     if (delay === -1) {
       // Tick one more time do set at 100;
-      tick()
+      tick();
       return;
     }
 
@@ -26,7 +27,6 @@ const useInterval = (callback, delay) => {
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
+    return;
   }, [delay]);
 };
-
-export { useInterval };

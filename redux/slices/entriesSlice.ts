@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { Entry } from '../../components/StravaEntries/EntryTypes';
+import { Entry } from '@components/StravaEntries/EntryTypes';
 
 export const entriesApi = createApi({
   reducerPath: 'entriesApi',

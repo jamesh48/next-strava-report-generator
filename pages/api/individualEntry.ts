@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CurrentActivity } from '../../components/StravaEntries/EntryTypes';
+import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
 const handler = nextConnect();
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {

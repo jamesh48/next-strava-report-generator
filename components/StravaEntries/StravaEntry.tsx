@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
-import { useUpdateIndividualEntryMutation } from '../../redux/slices';
+import { useUpdateIndividualEntryMutation } from '@redux/slices';
 
 interface StravaEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;

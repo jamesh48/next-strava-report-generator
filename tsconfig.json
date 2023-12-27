@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "target": "es2017",
     "lib": ["dom", "dom.iterable", "es6", "esnext", "es2017"],

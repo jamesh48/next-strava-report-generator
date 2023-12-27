@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { CurrentActivity } from '../../components/StravaEntries/EntryTypes';
+import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
 
 type Athlete = { firstname: string; lastname: string };
 export const individualEntrySlice = createApi({

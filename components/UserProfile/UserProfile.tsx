@@ -1,12 +1,12 @@
 import React from 'react';
+import Image from 'next/image';
 import { Box } from '@mui/material';
+//
 import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
 import SwimmingTotals from './SwimmingTotals';
 import { ProfileData } from './UserProfileTypes';
-import Image from 'next/image';
-import { fetchUserData } from '../../lib/FetchUser';
-import { useCSX } from '../../lib/globalUtils';
+import { fetchUserData, useCSX } from '@lib';
 
 const Profile = () => {
   const [rateLimit, setRateLimit] = React.useState(false);

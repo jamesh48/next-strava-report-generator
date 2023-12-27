@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import EntryUl from './EntryUl';
-import PageNoUl from '../PaginationContainer/PageNoUl';
-import { Entry, Format } from './EntryTypes.js';
 import { Box } from '@mui/material';
-import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
-import { useLazyGetIndividualEntryQuery } from '../../redux/slices';
-import { useSelector } from '../../redux/reduxHooks';
-import { getSortCondition } from '../../redux/slices/appSlice';
+import EntryUl from './EntryUl';
+import PageNoUl from '@components/PaginationContainer/PageNoUl';
+import { Entry, Format } from './EntryTypes.js';
+import {
+  useGetAllEntriesQuery,
+  useLazyGetIndividualEntryQuery,
+  getSortCondition,
+} from '@redux/slices';
+import { useSelector } from '@redux/reduxHooks';
 
 export interface ReportProps {
   sport: string;

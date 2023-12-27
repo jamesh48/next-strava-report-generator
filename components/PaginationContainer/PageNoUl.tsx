@@ -1,7 +1,8 @@
 import React from 'react';
-import { Entry } from '../StravaEntries/EntryTypes';
-import PageNo from './PageNoLi';
 import { List } from '@mui/material';
+//
+import { Entry } from '@components/StravaEntries/EntryTypes';
+import PageNo from './PageNoLi';
 
 interface PageNoUlProps {
   handleClick: React.MouseEventHandler<HTMLLIElement>;

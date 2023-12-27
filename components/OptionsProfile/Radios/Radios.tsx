@@ -1,12 +1,12 @@
 import React from 'react';
 import InputJSON from './input.json';
-import RadioColumn from '../Radios/RadioColumn';
-import ProgressBar from '../ProgressBar/ProgressBar';
+import RadioColumn from '@components/OptionsProfile/Radios/RadioColumn';
+import ProgressBar from '@components/OptionsProfile/ProgressBar/ProgressBar';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box } from '@mui/material';
-import { Format } from '../../StravaEntries/EntryTypes';
-import { useCSX } from '../../../lib/globalUtils';
-import { useGetAllEntriesQuery } from '../../../redux/slices';
+import { Format } from '@components/StravaEntries/EntryTypes';
+import { useCSX } from '@lib';
+import { useGetAllEntriesQuery } from '@redux/slices';
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLLabelElement> &

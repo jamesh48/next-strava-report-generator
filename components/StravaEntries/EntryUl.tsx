@@ -3,7 +3,7 @@ import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { CurrentActivity, Entry, Format } from './EntryTypes.js';
 import { List, ListItem } from '@mui/material';
-import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
+import { useGetAllEntriesQuery } from '@redux/slices';
 
 interface EntryUIProps {
   entries: Entry[];

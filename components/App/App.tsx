@@ -1,12 +1,13 @@
 import React from 'react';
-import Radios from '../OptionsProfile/Radios/Radios';
-import UserProfile from '../UserProfile/UserProfile';
-// import reportTestData from "../../backend/testData/entryTestData";
-import Report from '../StravaEntries/Report';
 import { Box } from '@mui/material';
-import { Format } from '../StravaEntries/EntryTypes';
-import { useCSX } from '../../lib/globalUtils';
-import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
+//
+import UserProfile from '@components/UserProfile/UserProfile';
+// import reportTestData from "../../backend/testData/entryTestData";
+import Report from '@components/StravaEntries/Report';
+import { Format } from '@components/StravaEntries/EntryTypes';
+import { useCSX } from '@lib';
+import { useGetAllEntriesQuery } from '@redux/slices';
+import Radios from '@components/OptionsProfile/Radios/Radios';
 
 export default function App() {
   // Radios

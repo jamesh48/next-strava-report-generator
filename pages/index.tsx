@@ -1,8 +1,10 @@
+import React from 'react';
 import Head from 'next/head';
-import { Box } from '@mui/material';
-import App from '../components/App/App';
 import { Provider } from 'react-redux';
-import GlobalStore from '../redux/store';
+import { Box } from '@mui/material';
+//
+import App from '@components/App/App';
+import GlobalStore from '@redux/store';
 
 export default function Home() {
   return (
