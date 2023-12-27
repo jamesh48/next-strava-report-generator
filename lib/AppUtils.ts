@@ -15,17 +15,17 @@ export const getUserActivities = async () => {
   }
 };
 
-export const getIndividualEntry = async (entryId: number) => {
-  try {
-    const { data: individualEntryResponse } = await axios<
-      any,
-      AxiosResponse<CurrentActivity>
-    >('/api/individualEntry', {
-      params: { entryid: entryId },
-    });
-    return individualEntryResponse;
-  } catch (err: any) {
-    console.log(err.message);
-    throw new Error('');
-  }
-};
+// export const getIndividualEntry = async (entryId: number) => {
+//   try {
+//     const { data: individualEntryResponse } = await axios<
+//       any,
+//       AxiosResponse<CurrentActivity>
+//     >('/api/individualEntry', {
+//       params: { entryid: entryId },
+//     });
+//     return individualEntryResponse;
+//   } catch (err: any) {
+//     console.log(err.message);
+//     throw new Error('');
+//   }
+// };

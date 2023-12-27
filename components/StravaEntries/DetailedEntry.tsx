@@ -15,7 +15,7 @@ import { Line } from 'react-chartjs-2';
 
 import { Box, Link, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
-import axios from 'axios';
+import { useLazyGetKudoersQuery } from '../../redux/slices';
 
 interface DetailedEntryProps {
   editing: boolean;
@@ -38,6 +38,7 @@ ChartJS.register(
 );
 
 const DetailedEntry = (props: DetailedEntryProps) => {
+  const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
   const [currentStat, setCurrentStat] = useState<null | string>(null);
   const [currentKudoers, setCurrentKudoers] = useState<
     { firstname: string; lastname: string }[]
@@ -50,34 +51,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   >([]);
 
   useEffect(() => {
-    const asyncKudosCall = async () => {
-      const { data } = await axios({
-        url: '/api/kudoers',
-        method: 'GET',
-        params: {
-          entryid: props.currentActivity.id,
-        },
-      });
-      setCurrentKudoers(data);
-    };
-
-    asyncKudosCall();
-  }, [props.currentActivity.id]);
-
-  useEffect(() => {
-    const asyncCommentsCall = async () => {
-      const { data } = await axios({
-        url: '/api/comments',
-        method: 'GET',
-        params: {
-          entryid: props.currentActivity.id,
-        },
-      });
-      setCurrentComments(data);
-    };
-
-    asyncCommentsCall();
-  }, [props.currentActivity.id]);
+    if (kudoersResults && kudoersResults.data) {
+      setCurrentKudoers(kudoersResults.data.kudos);
+      setCurrentComments(kudoersResults.data.comments);
+    }
+  }, [kudoersResults]);
 
   const options = {
     responsive: true,
@@ -131,6 +109,16 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       ],
     };
   }
+
+  const handleKudosClick = () => {
+    getKudoers(props.currentActivity.id);
+    setCurrentStat((prevStat) => {
+      if (prevStat === 'kudosComments') {
+        return null;
+      }
+      return 'kudosComments';
+    });
+  };
 
   return (
     <Box
@@ -209,14 +197,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             alt="kudos-img"
             layout="static"
             src="/images/kudos.jpeg"
-            onClick={() => {
-              setCurrentStat((prevStat) => {
-                if (prevStat === 'kudosComments') {
-                  return null;
-                }
-                return 'kudosComments';
-              });
-            }}
+            onClick={handleKudosClick}
           />
           <Box
             className="kudosDescriptors"

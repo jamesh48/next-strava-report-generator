@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EntryUl from './EntryUl';
 import PageNoUl from '../PaginationContainer/PageNoUl';
-import { getIndividualEntry } from '../../lib/AppUtils';
 import { useGlobalContext } from '../GlobalStore/globalStore.js';
-// import { useEntriesStore } from '../../lib/useEntries.js';
 import { Entry, Format } from './EntryTypes.js';
 import { Box } from '@mui/material';
 import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
+import { useLazyGetIndividualEntryQuery } from '../../redux/slices';
 
 export interface ReportProps {
   sport: string;
@@ -18,8 +17,10 @@ export interface ReportProps {
 }
 
 const Report = (props: ReportProps) => {
+  const [getIndividualEntry, individualEntryResults] =
+    useLazyGetIndividualEntryQuery();
   // Global Context
-  const [{ sortCondition }, globalDispatch] = useGlobalContext();
+  const [{ sortCondition }] = useGlobalContext();
   // Pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const [entriesPerPage] = React.useState(7);
@@ -120,33 +121,17 @@ const Report = (props: ReportProps) => {
     setCurrentPage(Number(actualId[1]));
   };
 
+  useEffect(() => {
+    if (individualEntryResults && individualEntryResults.data) {
+      setCurrentActivity(individualEntryResults.data);
+    }
+  }, [individualEntryResults]);
+
   const showIndividualEntry: React.MouseEventHandler<
     HTMLAnchorElement
   > = async (event) => {
     event.preventDefault();
-    const individualEntry = await getIndividualEntry(
-      Number(event.currentTarget.dataset.indentry)
-    );
-    setCurrentActivity(individualEntry);
-  };
-
-  const updateIndividualEntry = async (
-    entryId: number,
-    updatingName: string
-  ) => {
-    const updatedEntries = totalEntries?.reduce(
-      (total: Entry[], entry: Entry) => {
-        if (Number(entry.activityId) === entryId) {
-          entry.name = updatingName;
-        }
-        total.push(entry);
-        return total;
-      },
-      []
-    );
-    globalDispatch({ type: 'SET TOTAL ENTRIES', payload: updatedEntries });
-    const individualEntry = await getIndividualEntry(entryId);
-    setCurrentActivity(individualEntry);
+    getIndividualEntry(Number(event.currentTarget.dataset.indentry));
   };
 
   return (
@@ -159,7 +144,6 @@ const Report = (props: ReportProps) => {
         entriesPerPage={entriesPerPage}
         currentActivity={currentActivity}
         showIndividualEntry={showIndividualEntry}
-        updateIndividualEntry={updateIndividualEntry}
       />
       <PageNoUl
         {...props}

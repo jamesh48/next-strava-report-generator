@@ -1,7 +1,6 @@
 import React from 'react';
 import Radios from '../OptionsProfile/Radios/Radios';
 import UserProfile from '../UserProfile/UserProfile';
-import { useGlobalContext } from '../GlobalStore/globalStore';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '../StravaEntries/Report';
 import { Box } from '@mui/material';

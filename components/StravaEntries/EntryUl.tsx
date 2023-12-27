@@ -14,10 +14,6 @@ interface EntryUIProps {
   sport: string;
   format?: Format;
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-  updateIndividualEntry: (
-    entryId: number,
-    updatedName: string
-  ) => Promise<void>;
 }
 
 const EntryUI = (props: EntryUIProps) => {
@@ -33,7 +29,6 @@ const EntryUI = (props: EntryUIProps) => {
         <StravaEntry
           currentActivity={props.currentActivity}
           showIndividualEntry={props.showIndividualEntry}
-          updateIndividualEntry={props.updateIndividualEntry}
           no={
             props.currentPage === 1 && index >= 0 && index <= 3
               ? index
