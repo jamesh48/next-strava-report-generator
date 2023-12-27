@@ -1,14 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 //
 import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
 import SwimmingTotals from './SwimmingTotals';
 import { ProfileData } from './UserProfileTypes';
 import { fetchUserData, useCSX } from '@lib';
+import { useGetAllEntriesQuery } from '@redux/slices';
 
 const Profile = () => {
+  const { isLoading } = useGetAllEntriesQuery(null);
   const [rateLimit, setRateLimit] = React.useState(false);
   const [userProfile, setUserProfile] = React.useState({
     profile: '',
@@ -45,91 +47,118 @@ const Profile = () => {
     { flexDirection: 'column', alignItems: 'center' }
   );
 
-  return (
-    (!rateLimit && userProfile?.profile && (
-      <Box
-        id="userProfile"
+  return !rateLimit && userProfile?.profile ? (
+    <Box
+      id="userProfile"
+      sx={{
+        textRendering: 'geometricPrecision',
+        display: 'flex',
+        margin: '2.5% 0',
+        width: '95%',
+        backgroundColor: '#52fff3',
+        border: '1px solid orangered',
+        borderTop: 'none',
+        borderLeft: 'none',
+        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        ...userProfileCSX,
+      }}
+    >
+      <Image
+        height="250"
+        width="250"
+        alt="profile-picture"
+        src={userProfile.profile}
+      ></Image>
+      <UserNameSection profile={userProfile} />
+      <RunningTotals profile={userProfile} />
+      <SwimmingTotals profile={userProfile} />
+    </Box>
+  ) : isLoading ? (
+    <Box
+      id="userProfile"
+      sx={{
+        textRendering: 'geometricPrecision',
+        display: 'flex',
+        margin: '2.5% 0',
+        width: '95%',
+        backgroundColor: '#52fff3',
+        border: '1px solid orangered',
+        borderTop: 'none',
+        borderLeft: 'none',
+        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        ...userProfileCSX,
+      }}
+    >
+      <Typography
+        variant="h5"
         sx={{
-          textRendering: 'geometricPrecision',
           display: 'flex',
-          margin: '2.5% 0',
-          width: '95%',
-          backgroundColor: '#52fff3',
-          border: '1px solid orangered',
-          borderTop: 'none',
-          borderLeft: 'none',
-          boxShadow: '2.5px 2.5px 5px 0px orangered',
-          ...userProfileCSX,
+          justifyContent: 'center',
+          color: 'orangered',
+          width: '100%',
+          paddingY: '6rem',
         }}
       >
-        <Image
-          height="250"
-          width="250"
-          alt="profile-picture"
-          src={userProfile.profile}
-        ></Image>
-        <UserNameSection profile={userProfile} />
-        <RunningTotals profile={userProfile} />
-        <SwimmingTotals profile={userProfile} />
-      </Box>
-    )) || (
+        Loading...
+      </Typography>
+    </Box>
+  ) : (
+    <Box
+      id="userProfile"
+      sx={{
+        textRendering: 'geometricPrecision',
+        display: 'flex',
+        margin: '2.5% 0',
+        width: '95%',
+        backgroundColor: '#52fff3',
+        border: '1px solid orangered',
+        borderTop: 'none',
+        borderLeft: 'none',
+        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        ...userProfileCSX,
+      }}
+    >
       <Box
-        id="userProfile"
+        id="rateLimitContainer"
         sx={{
-          textRendering: 'geometricPrecision',
+          width: '100%',
           display: 'flex',
-          margin: '2.5% 0',
-          width: '95%',
-          backgroundColor: '#52fff3',
-          border: '1px solid orangered',
-          borderTop: 'none',
-          borderLeft: 'none',
-          boxShadow: '2.5px 2.5px 5px 0px orangered',
-          ...userProfileCSX,
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
         <Box
-          id="rateLimitContainer"
+          className="rate-limit-message"
           sx={{
-            width: '100%',
             display: 'flex',
-            flexDirection: 'column',
             justifyContent: 'center',
+            color: 'orangered',
+            width: '100%',
+            padding: '0.5% 0',
+            '&:first-of-type': {
+              textDecoration: 'underline',
+            },
           }}
         >
-          <Box
-            className="rate-limit-message"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              color: 'orangered',
-              width: '100%',
-              padding: '0.5% 0',
-              '&:first-of-type': {
-                textDecoration: 'underline',
-              },
-            }}
-          >
-            Collective Rate Limit Exceeded
-          </Box>
-          <Box
-            className="rate-limit-message"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              color: 'orangered',
-              width: '100%',
-              padding: '0.5% 0',
-              '&:first-of-type': {
-                textDecoration: 'underline',
-              },
-            }}
-          >
-            Come again tomorrow champ
-          </Box>
+          Collective Rate Limit Exceeded
+        </Box>
+        <Box
+          className="rate-limit-message"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            color: 'orangered',
+            width: '100%',
+            padding: '0.5% 0',
+            '&:first-of-type': {
+              textDecoration: 'underline',
+            },
+          }}
+        >
+          Come again tomorrow champ
         </Box>
       </Box>
-    )
+    </Box>
   );
 };
 export default Profile;
