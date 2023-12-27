@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import {
   Box,
   MenuItem,
@@ -8,9 +7,19 @@ import {
   SelectChangeEvent,
   SxProps,
 } from '@mui/material';
-import { useProgressBarProgressStore } from './useProgressBarProgress';
 import { useInterval } from './useInterval';
-import { useGlobalContext } from '../../GlobalStore/globalStore.js';
+import { useDispatch, useSelector } from '../../../redux/reduxHooks';
+import { setSortCondition } from '../../../redux/slices/appSlice';
+import {
+  useAddAllActivitiesMutation,
+  useDestroyUserAndActivitiesMutation,
+} from '../../../redux/slices';
+import {
+  completeProgressBarProgress,
+  getProgressBarProgress,
+  incrementProgressBarProgress,
+  resetProgressBarProgress,
+} from '../../../redux/slices/progressBarSlice';
 
 const muiUpdateButtonContainerSx: SxProps = {
   minHeight: '5vmax',
@@ -35,30 +44,57 @@ const muiUpdateButtonSx: SxProps = {
     backgroundColor: 'coral',
     color: 'ivory',
     border: '2px solid ivory',
+    cursor: 'pointer',
   },
 };
 
 const ProgressBar = () => {
-  const [{ isLoaded }, globalDispatch] = useGlobalContext();
-  const {
-    progressBarProgress,
-    incrementProgressBarProgress,
-    completeProgressBarProgress,
-    resetProgressBarProgress,
-  } = useProgressBarProgressStore((state) => state);
+  const dispatch = useDispatch();
+  const progressBarProgress = useSelector(getProgressBarProgress);
+  const [
+    addAllActivities,
+    {
+      isSuccess: isSuccessAdd,
+      isLoading: isLoadingAdd,
+      isUninitialized: isUninitializedAdd,
+    },
+  ] = useAddAllActivitiesMutation();
+  const [
+    destroyUserAndActivities,
+    {
+      isSuccess: isSuccessDestroy,
+      isLoading: isLoadingDestroy,
+      isUninitialized: isUninitializedDestroy,
+    },
+  ] = useDestroyUserAndActivitiesMutation();
 
   useInterval(
     () => {
-      if (isLoaded) {
-        completeProgressBarProgress();
+      if (isSuccessAdd) {
+        dispatch(completeProgressBarProgress());
         setTimeout(() => {
-          resetProgressBarProgress();
+          dispatch(resetProgressBarProgress());
         }, 750);
-      } else if (isLoaded === false) {
-        incrementProgressBarProgress();
+      } else if (isLoadingAdd) {
+        dispatch(incrementProgressBarProgress(progressBarProgress));
       }
     },
-    isLoaded === true || isLoaded === null ? -1 : 75
+    isSuccessAdd || isUninitializedAdd ? -1 : 75
+  );
+
+  useInterval(
+    () => {
+      if (isSuccessDestroy) {
+        dispatch(completeProgressBarProgress());
+        setTimeout(() => {
+          dispatch(resetProgressBarProgress());
+          window.location.reload();
+        }, 1000);
+      } else if (isLoadingDestroy) {
+        dispatch(incrementProgressBarProgress(progressBarProgress));
+      }
+    },
+    isSuccessDestroy || isUninitializedDestroy ? -1 : 75
   );
 
   const fillerStyles = {
@@ -66,43 +102,22 @@ const ProgressBar = () => {
   };
 
   const updateEntries: () => Promise<void> = async () => {
-    globalDispatch({ type: 'TOGGLE LOADED OFF' });
-    const { data: allActivities } = await axios({
-      url: '/api/addAllActivities',
-      method: 'POST',
-    });
-    globalDispatch({ type: 'TOGGLE LOADED ON' });
-    globalDispatch({
-      type: 'SET TOTAL ENTRIES',
-      payload: allActivities,
-    });
+    await addAllActivities(null);
   };
 
-  const setSortCondition = (event: SelectChangeEvent) => {
-    globalDispatch({
-      type: 'SET SORT CONDITION',
-      payload: event.target.value,
-    });
+  const setSortConditionCallback = (event: SelectChangeEvent) => {
+    dispatch(setSortCondition(event.target.value));
   };
 
   const destroyUser: React.MouseEventHandler<HTMLInputElement> = async () => {
-    globalDispatch({ type: 'TOGGLE LOADED OFF' });
-    const { data } = await axios({ url: '/api/destroyUser', method: 'GET' });
-
-    globalDispatch({ type: 'TOGGLE LOADED ON' });
-    if (data === 'deleted') {
-      globalDispatch({
-        type: 'SET TOTAL ENTRIES',
-        payload: [],
-      });
-    }
+    await destroyUserAndActivities(null);
   };
 
   return progressBarProgress === 0 ? (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
       <Select
         className="updateButton"
-        onChange={setSortCondition}
+        onChange={setSortConditionCallback}
         sx={muiUpdateButtonSx}
         defaultValue="speedDesc"
       >
@@ -120,6 +135,7 @@ const ProgressBar = () => {
         value="Update!"
         onClick={updateEntries}
         sx={muiUpdateButtonSx}
+        inputProps={{ sx: { cursor: 'pointer' } }}
       />
       <OutlinedInput
         type="button"
@@ -127,6 +143,7 @@ const ProgressBar = () => {
         value="Destroy!"
         onClick={destroyUser}
         sx={muiUpdateButtonSx}
+        inputProps={{ sx: { cursor: 'pointer' } }}
       />
     </Box>
   ) : (

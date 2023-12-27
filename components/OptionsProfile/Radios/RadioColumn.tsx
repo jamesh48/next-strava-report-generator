@@ -68,6 +68,7 @@ const RadioColumn = (props: RadioColumnProps) => {
                     <FormControlLabel
                       value="x"
                       label=""
+                      disabled={!props.isLoaded ? true : false}
                       control={<Radio checked={props.customDistance} />}
                       onClick={props.setCallback}
                     />
@@ -93,6 +94,7 @@ const RadioColumn = (props: RadioColumnProps) => {
                 <FormControlLabel
                   key={index}
                   value={radio.value}
+                  disabled={!props.isLoaded ? true : false}
                   control={
                     <Radio
                       checked={(() => {

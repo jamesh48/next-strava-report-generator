@@ -6,7 +6,7 @@ import SwimmingTotals from './SwimmingTotals';
 import { ProfileData } from './UserProfileTypes';
 import Image from 'next/image';
 import { fetchUserData } from '../../lib/FetchUser';
-import { useCSX } from '../GlobalStore/globalUtils';
+import { useCSX } from '../../lib/globalUtils';
 
 const Profile = () => {
   const [rateLimit, setRateLimit] = React.useState(false);

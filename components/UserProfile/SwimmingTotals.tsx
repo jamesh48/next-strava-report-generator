@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { useCSX } from '../GlobalStore/globalUtils';
+import { useCSX } from '../../lib/globalUtils';
 import { YTDSwimTotals } from './UserProfileTypes';
 
 interface SwimmingTotalsSection {

@@ -1,9 +1,9 @@
 import React from 'react';
-import axios, { AxiosResponse } from 'axios';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
+import { useUpdateIndividualEntryMutation } from '../../redux/slices';
 
 interface StravaEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
@@ -12,16 +12,13 @@ interface StravaEntryProps {
   format: Format;
   no: number | undefined;
   currentActivity: CurrentActivity;
-  updateIndividualEntry: (
-    entryId: number,
-    updatedName: string
-  ) => Promise<void>;
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
   const [editing, toggleEditing] = React.useState(false);
   const [editedName, setEditedName] = React.useState('');
   const [editedDescription, setEditedDescription] = React.useState('');
+  const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation();
 
   React.useEffect(() => {
     if (props.currentActivity.id === Number(props.entry.activityId)) {
@@ -32,17 +29,11 @@ const StravaEntry = (props: StravaEntryProps) => {
 
   const handleActivityUpdate = async () => {
     toggleEditing(false);
-    const { data: _updatedActivity }: AxiosResponse = await axios({
-      url: '/api/putActivityUpdate',
-      params: {
-        activityId: props.currentActivity.id,
-        name: editedName,
-        description: editedDescription,
-      },
+    handleActivityUpdateMutation({
+      activityId: props.currentActivity.id,
+      name: editedName,
+      description: editedDescription,
     });
-
-    // Update the entry
-    props.updateIndividualEntry(props.currentActivity.id, editedName);
   };
 
   const handleDescriptionChange: (e: { target: { value: string } }) => void = (

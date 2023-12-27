@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EntryUl from './EntryUl';
 import PageNoUl from '../PaginationContainer/PageNoUl';
-import { getIndividualEntry } from '../../lib/AppUtils';
-import { useGlobalContext } from '../GlobalStore/globalStore.js';
-import { useEntriesStore } from '../../lib/useEntries.js';
 import { Entry, Format } from './EntryTypes.js';
 import { Box } from '@mui/material';
+import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
+import { useLazyGetIndividualEntryQuery } from '../../redux/slices';
+import { useSelector } from '../../redux/reduxHooks';
+import { getSortCondition } from '../../redux/slices/appSlice';
 
 export interface ReportProps {
   sport: string;
@@ -17,8 +18,10 @@ export interface ReportProps {
 }
 
 const Report = (props: ReportProps) => {
-  // Global Context
-  const [{ totalEntries, sortCondition }, globalDispatch] = useGlobalContext();
+  const [getIndividualEntry, individualEntryResults] =
+    useLazyGetIndividualEntryQuery();
+
+  const sortCondition = useSelector(getSortCondition);
   // Pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const [entriesPerPage] = React.useState(7);
@@ -43,8 +46,7 @@ const Report = (props: ReportProps) => {
       },
     },
   });
-
-  const { entries, filterAndSortEntries } = useEntriesStore((state) => state);
+  let { data: totalEntries } = useGetAllEntriesQuery(null);
 
   React.useEffect(() => {
     setCurrentPage(1);
@@ -58,27 +60,60 @@ const Report = (props: ReportProps) => {
     }
   }, [props.distance]);
 
-  React.useEffect(() => {
-    if (totalEntries?.length) {
-      filterAndSortEntries(
-        totalEntries,
-        sortCondition,
-        props.distance,
-        props.sport,
-        props.titleQuery,
-        props.fromDateQuery,
-        props.toDateQuery
-      );
-    }
-  }, [
-    sortCondition,
-    props.distance,
-    props.sport,
-    props.titleQuery,
-    props.fromDateQuery,
-    props.toDateQuery,
-    totalEntries,
-  ]);
+  totalEntries = totalEntries
+    ?.filter((entry: Entry) => Number(props.distance) <= Number(entry.distance))
+    .filter((remainingEntry: Entry) => props.sport === remainingEntry.type)
+    .filter(
+      (remainingEntry: Entry) =>
+        remainingEntry.name.indexOf(props.titleQuery) > -1
+    )
+    .filter((remainingEntry: Entry) => {
+      if (props.fromDateQuery === '' && props.toDateQuery === '') {
+        return remainingEntry;
+      }
+
+      const candidateDate = new Date(remainingEntry.start_date.slice(0, 10));
+      // If Only From Date is specified
+      if (props.toDateQuery === '') {
+        const filterFrom = new Date(props.fromDateQuery);
+        return filterFrom <= candidateDate;
+      }
+
+      // If Only 'to Date' is specified
+      if (props.fromDateQuery === '') {
+        const filterTo = new Date(props.toDateQuery);
+        return filterTo >= candidateDate;
+      }
+
+      // If both From and To Dates are specified
+      const filterFrom = new Date(props.fromDateQuery);
+      const filterTo = new Date(props.toDateQuery);
+      return filterFrom <= candidateDate && filterTo >= candidateDate;
+    })
+    .slice()
+    .sort(
+      sortCondition === 'speedDesc'
+        ? (a, b) => b.distance / b.moving_time - a.distance / a.moving_time
+        : sortCondition === 'startDate'
+        ? (a, b) => {
+            return Number(b.start_date) - Number(a.start_date);
+          }
+        : sortCondition === 'timeElapsedDesc'
+        ? (a, b) => {
+            return b.elapsed_time - a.elapsed_time;
+          }
+        : sortCondition === 'timeElapsedAsc'
+        ? (a, b) => a.elapsed_time - b.elapsed_time
+        : sortCondition === 'movingTimeDesc'
+        ? (a, b) => b.moving_time - a.moving_time
+        : sortCondition === 'movingTimeAsc'
+        ? (a, b) => a.moving_time - b.moving_time
+        : sortCondition === 'dateDesc'
+        ? (a, b) => (new Date(b.start_date) > new Date(a.start_date) && 1) || -1
+        : sortCondition === 'dateAsc'
+        ? (a, b) => (new Date(a.start_date) > new Date(b.start_date) && 1) || -1
+        : undefined
+    );
 
   const handlePaginationClick: React.MouseEventHandler<HTMLLIElement> = (
     event
@@ -87,33 +122,17 @@ const Report = (props: ReportProps) => {
     setCurrentPage(Number(actualId[1]));
   };
 
+  useEffect(() => {
+    if (individualEntryResults && individualEntryResults.data) {
+      setCurrentActivity(individualEntryResults.data);
+    }
+  }, [individualEntryResults]);
+
   const showIndividualEntry: React.MouseEventHandler<
     HTMLAnchorElement
   > = async (event) => {
     event.preventDefault();
-    const individualEntry = await getIndividualEntry(
-      Number(event.currentTarget.dataset.indentry)
-    );
-    setCurrentActivity(individualEntry);
-  };
-
-  const updateIndividualEntry = async (
-    entryId: number,
-    updatingName: string
-  ) => {
-    const updatedEntries = totalEntries.reduce(
-      (total: Entry[], entry: Entry) => {
-        if (Number(entry.activityId) === entryId) {
-          entry.name = updatingName;
-        }
-        total.push(entry);
-        return total;
-      },
-      []
-    );
-    globalDispatch({ type: 'SET TOTAL ENTRIES', payload: updatedEntries });
-    const individualEntry = await getIndividualEntry(entryId);
-    setCurrentActivity(individualEntry);
+    getIndividualEntry(Number(event.currentTarget.dataset.indentry));
   };
 
   return (
@@ -122,16 +141,15 @@ const Report = (props: ReportProps) => {
         {...props}
         invalidEntry={invalidEntry}
         currentPage={currentPage}
-        entries={entries}
+        entries={totalEntries!}
         entriesPerPage={entriesPerPage}
         currentActivity={currentActivity}
         showIndividualEntry={showIndividualEntry}
-        updateIndividualEntry={updateIndividualEntry}
       />
       <PageNoUl
         {...props}
         entriesPerPage={entriesPerPage}
-        entries={entries}
+        entries={totalEntries!}
         handleClick={handlePaginationClick}
         currentPage={currentPage}
       />
