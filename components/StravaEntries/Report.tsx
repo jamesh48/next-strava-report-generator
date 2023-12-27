@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import EntryUl from './EntryUl';
 import PageNoUl from '../PaginationContainer/PageNoUl';
-import { useGlobalContext } from '../GlobalStore/globalStore.js';
 import { Entry, Format } from './EntryTypes.js';
 import { Box } from '@mui/material';
 import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
 import { useLazyGetIndividualEntryQuery } from '../../redux/slices';
+import { useSelector } from '../../redux/reduxHooks';
+import { getSortCondition } from '../../redux/slices/appSlice';
 
 export interface ReportProps {
   sport: string;
@@ -19,8 +20,8 @@ export interface ReportProps {
 const Report = (props: ReportProps) => {
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
-  // Global Context
-  const [{ sortCondition }] = useGlobalContext();
+
+  const sortCondition = useSelector(getSortCondition);
   // Pagination
   const [currentPage, setCurrentPage] = React.useState(1);
   const [entriesPerPage] = React.useState(7);

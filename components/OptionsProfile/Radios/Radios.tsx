@@ -1,13 +1,12 @@
 import React from 'react';
-// @ts-ignore
 import InputJSON from './input.json';
 import RadioColumn from '../Radios/RadioColumn';
 import ProgressBar from '../ProgressBar/ProgressBar';
-import { useGlobalContext } from '../../GlobalStore/globalStore.js';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box } from '@mui/material';
 import { Format } from '../../StravaEntries/EntryTypes';
-import { useCSX } from '../../GlobalStore/globalUtils';
+import { useCSX } from '../../../lib/globalUtils';
+import { useGetAllEntriesQuery } from '../../../redux/slices';
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLLabelElement> &
@@ -27,7 +26,7 @@ export interface RadiosProps {
 }
 
 const Radios = (props: RadiosProps) => {
-  const [{ totalEntries }] = useGlobalContext();
+  const { data: totalEntries } = useGetAllEntriesQuery(null);
 
   const initArr = [
     {

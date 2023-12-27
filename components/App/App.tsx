@@ -5,7 +5,7 @@ import UserProfile from '../UserProfile/UserProfile';
 import Report from '../StravaEntries/Report';
 import { Box } from '@mui/material';
 import { Format } from '../StravaEntries/EntryTypes';
-import { useCSX } from '../GlobalStore/globalUtils';
+import { useCSX } from '../../lib/globalUtils';
 import { useGetAllEntriesQuery } from '../../redux/slices/entriesSlice';
 
 export default function App() {
