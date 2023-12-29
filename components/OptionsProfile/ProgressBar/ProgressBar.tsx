@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   MenuItem,
@@ -17,6 +17,7 @@ import {
   getProgressBarProgress,
   incrementProgressBarProgress,
   resetProgressBarProgress,
+  useGetAllEntriesQuery,
 } from '@redux/slices';
 
 const muiUpdateButtonContainerSx: SxProps = {
@@ -46,8 +47,23 @@ const muiUpdateButtonSx: SxProps = {
   },
 };
 
+// time it takes to delete one dynamodb record in ms
+const dynamoDBDeletionRatePerRecord = 110;
+
 const ProgressBar = () => {
+  const [deletionRate, setDeletionRate] = useState(75);
   const dispatch = useDispatch();
+  const { data: allEntries } = useGetAllEntriesQuery(null);
+
+  useEffect(() => {
+    const numberOfEntries = allEntries?.length;
+    if (numberOfEntries) {
+      const currentDeletionRate =
+        (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100;
+      setDeletionRate(currentDeletionRate);
+    }
+  }, [allEntries?.length]);
+
   const progressBarProgress = useSelector(getProgressBarProgress);
   const [
     addAllActivities,
@@ -92,7 +108,7 @@ const ProgressBar = () => {
         dispatch(incrementProgressBarProgress(progressBarProgress));
       }
     },
-    isSuccessDestroy || isUninitializedDestroy ? -1 : 75
+    isSuccessDestroy || isUninitializedDestroy ? -1 : deletionRate
   );
 
   const fillerStyles = {
