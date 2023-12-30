@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+import UserSettings from './UserSettings';
 
 interface UserNameSectionProps {
   profile: {
@@ -12,6 +13,14 @@ interface UserNameSectionProps {
 }
 
 const UserNameSection = (props: UserNameSectionProps) => {
+  const [showPreferencesButton, setShowPreferencesButton] =
+    React.useState(false);
+  const [showPreferences, setShowPreferences] = React.useState(false);
+
+  const closeUserSettingsCB = () => {
+    setShowPreferences(false);
+  };
+
   return (
     <Box
       className="profileBoxes"
@@ -25,13 +34,67 @@ const UserNameSection = (props: UserNameSectionProps) => {
         color: 'orangered',
         borderLeft: 'none',
       }}
+      onMouseOver={() => setShowPreferencesButton(true)}
+      onMouseLeave={() => setShowPreferencesButton(false)}
     >
-      <Typography variant="h4" id="userName" sx={{ cursor: 'default' }}>
+      <Typography
+        variant="h4"
+        id="userName"
+        sx={{
+          cursor: 'default',
+          textAlign: 'center',
+        }}
+      >
         {props.profile.firstname} {props.profile.lastname}
       </Typography>
-      <Typography id="userLocation" variant="h5" sx={{ cursor: 'default' }}>
+      <Typography
+        id="userLocation"
+        variant="h5"
+        sx={{ cursor: 'default', textAlign: 'center' }}
+      >
         {props.profile.city}, {props.profile.state} {props.profile.country}
       </Typography>
+      {showPreferencesButton ? (
+        <Box
+          sx={{
+            mt: '1rem',
+            bottom: '1.5rem',
+          }}
+        >
+          <Button
+            sx={{
+              height: '1.5rem',
+              transition: 'right 2s ease-in-out',
+              right: '0rem',
+              zIndex: 4,
+            }}
+            onClick={() => setShowPreferences(true)}
+          >
+            User Preferences
+          </Button>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            mt: '1rem',
+            bottom: '1.5rem',
+          }}
+        >
+          <Button
+            sx={{
+              height: '1.5rem',
+              transition: 'right 2s ease-in-out',
+              right: '12.5rem',
+              zIndex: 4,
+            }}
+          >
+            User Preferences
+          </Button>
+        </Box>
+      )}
+      {showPreferences && (
+        <UserSettings closeUserSettingsCB={closeUserSettingsCB} />
+      )}
     </Box>
   );
 };

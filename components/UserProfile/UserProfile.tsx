@@ -68,7 +68,8 @@ const Profile = () => {
         width="250"
         alt="profile-picture"
         src={userProfile.profile}
-      ></Image>
+        style={{ zIndex: 5 }}
+      />
       <UserNameSection profile={userProfile} />
       <RunningTotals profile={userProfile} />
       <SwimmingTotals profile={userProfile} />
