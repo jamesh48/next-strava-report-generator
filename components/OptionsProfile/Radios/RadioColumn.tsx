@@ -8,6 +8,8 @@ import {
   Typography,
   OutlinedInput,
 } from '@mui/material';
+import { useSelector } from '@redux/reduxHooks';
+import { getSportCondition } from '@redux/slices';
 
 export type RadioValueProps = {
   type: string;
@@ -31,6 +33,8 @@ interface RadioColumnProps {
 }
 
 const RadioColumn = (props: RadioColumnProps) => {
+  const sportCondition = useSelector(getSportCondition);
+
   return (
     <Box
       className="chooseRadioContainer"
@@ -60,7 +64,16 @@ const RadioColumn = (props: RadioColumnProps) => {
         sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       >
         <FormControl>
-          <RadioGroup defaultValue={props.radioValues[0]?.value}>
+          {/* <RadioGroup value={props.radioValues[0]?.value}>
+           */}
+          <RadioGroup
+            value={(() => {
+              if (props.title === 'Choose Sport' && sportCondition) {
+                return sportCondition;
+              }
+              return props.radioValues[0]?.value;
+            })()}
+          >
             {props.radioValues.map((radio, index) => {
               if (radio.type === 'radioAndText') {
                 return (

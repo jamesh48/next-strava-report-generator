@@ -6,6 +6,13 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import { useDispatch, useSelector } from '@redux/reduxHooks';
+import {
+  getSortCondition,
+  getSportCondition,
+  setSortCondition,
+  setSportCondition,
+} from '@redux/slices';
 import axios from 'axios';
 import { useState } from 'react';
 
@@ -13,8 +20,11 @@ interface UserSettingsProps {
   closeUserSettingsCB: () => void;
 }
 const UserSettings = (props: UserSettingsProps) => {
-  const [selectedFormat, setSelectedFormat] = useState('speedDesc');
-  const [selectedSport, setSelectedSport] = useState('running');
+  const dispatch = useDispatch();
+  const defaultSortCondition = useSelector(getSortCondition);
+  const defaultSportCondition = useSelector(getSportCondition);
+  const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
+  const [selectedSport, setSelectedSport] = useState(defaultSportCondition);
 
   return (
     <Dialog open={true}>
@@ -80,14 +90,15 @@ const UserSettings = (props: UserSettingsProps) => {
             </Typography>
             <Select
               sx={{ height: '2rem', width: '15rem' }}
-              defaultValue="running"
+              defaultValue={defaultSportCondition}
               inputProps={{ sx: { color: 'coral' } }}
               onChange={(event) => setSelectedSport(event.target.value)}
             >
-              <MenuItem value="running">Running</MenuItem>
-              <MenuItem value="swimming">Swimming</MenuItem>
-              <MenuItem value="cycling">Cycling</MenuItem>
-              <MenuItem value="walking">Walking</MenuItem>
+              {/* Values correspond with radio values */}
+              <MenuItem value="Run">Running</MenuItem>
+              <MenuItem value="Swim">Swimming</MenuItem>
+              <MenuItem value="Ride">Cycling</MenuItem>
+              <MenuItem value="Walk">Walking</MenuItem>
             </Select>
           </Box>
         </Box>
@@ -107,7 +118,7 @@ const UserSettings = (props: UserSettingsProps) => {
             </Typography>
             <Select
               sx={{ height: '2rem', width: '15rem' }}
-              defaultValue="speedDesc"
+              defaultValue={defaultSortCondition}
               inputProps={{ sx: { color: 'coral' } }}
               onChange={(event) => setSelectedFormat(event.target.value)}
             >
@@ -149,6 +160,8 @@ const UserSettings = (props: UserSettingsProps) => {
                       'Content-Type': 'application/json',
                     },
                   });
+                  dispatch(setSportCondition(selectedSport));
+                  dispatch(setSortCondition(selectedFormat));
                   props.closeUserSettingsCB();
                 };
 

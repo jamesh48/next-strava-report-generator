@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import UserSettings from './UserSettings';
 
@@ -13,9 +13,8 @@ interface UserNameSectionProps {
 }
 
 const UserNameSection = (props: UserNameSectionProps) => {
-  const [showPreferencesButton, setShowPreferencesButton] =
-    React.useState(false);
-  const [showPreferences, setShowPreferences] = React.useState(false);
+  const [showPreferencesButton, setShowPreferencesButton] = useState(false);
+  const [showPreferences, setShowPreferences] = useState(false);
 
   const closeUserSettingsCB = () => {
     setShowPreferences(false);
@@ -70,7 +69,13 @@ const UserNameSection = (props: UserNameSectionProps) => {
             }}
             onClick={() => setShowPreferences(true)}
           >
-            User Preferences
+            <Typography
+              sx={{
+                transition: 'font-style 2s ease-in-out',
+              }}
+            >
+              User Preferences
+            </Typography>
           </Button>
         </Box>
       ) : (
@@ -84,11 +89,18 @@ const UserNameSection = (props: UserNameSectionProps) => {
             sx={{
               height: '1.5rem',
               transition: 'right 2s ease-in-out',
-              right: '12.5rem',
+              right: '200%',
               zIndex: 4,
             }}
           >
-            User Preferences
+            <Typography
+              sx={{
+                transition: 'font-style 2s ease-in-out',
+                fontStyle: 'italic',
+              }}
+            >
+              User Preferences
+            </Typography>
           </Button>
         </Box>
       )}

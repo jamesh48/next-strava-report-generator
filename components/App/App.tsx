@@ -6,12 +6,18 @@ import UserProfile from '@components/UserProfile/UserProfile';
 import Report from '@components/StravaEntries/Report';
 import { Format } from '@components/StravaEntries/EntryTypes';
 import { useCSX } from '@lib';
-import { useGetAllEntriesQuery } from '@redux/slices';
+import {
+  getSportCondition,
+  setSportCondition,
+  useGetAllEntriesQuery,
+} from '@redux/slices';
 import Radios from '@components/OptionsProfile/Radios/Radios';
+import { useDispatch, useSelector } from '@redux/reduxHooks';
 
 export default function App() {
   // Radios
-  const [sport, setSport] = React.useState('Run');
+  const sport = useSelector(getSportCondition);
+  const dispatch = useDispatch();
   const [format, setFormat] = React.useState<Format>('kph');
   const [titleQuery, setTitleQuery] = React.useState('');
   const [fromDateQuery, setFromDateQuery] = React.useState('');
@@ -40,7 +46,7 @@ export default function App() {
   const setSportCallback: React.MouseEventHandler<HTMLLabelElement> &
     React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const value = (e.target as HTMLInputElement).value;
-    setSport(value);
+    dispatch(setSportCondition(value));
   };
 
   const setFormatCallback: React.MouseEventHandler<HTMLLabelElement> &

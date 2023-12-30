@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
@@ -15,12 +15,12 @@ interface StravaEntryProps {
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
-  const [editing, toggleEditing] = React.useState(false);
-  const [editedName, setEditedName] = React.useState('');
-  const [editedDescription, setEditedDescription] = React.useState('');
+  const [editing, toggleEditing] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
   const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.currentActivity.id === Number(props.entry.activityId)) {
       setEditedName(props.currentActivity.name);
       setEditedDescription(props.currentActivity.description);

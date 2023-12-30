@@ -9,9 +9,9 @@ interface SwimmingTotalsSection {
   };
 }
 
-const SwimmingTotals: React.FC<SwimmingTotalsSection> = ({
+const SwimmingTotals = ({
   profile: { ytd_swim_totals },
-}) => {
+}: SwimmingTotalsSection) => {
   return (
     <Box
       className="ytdTotals profileBoxes"

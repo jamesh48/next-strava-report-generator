@@ -11,6 +11,7 @@ import { useInterval } from '@lib';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   setSortCondition,
+  getSortCondition,
   useAddAllActivitiesMutation,
   useDestroyUserAndActivitiesMutation,
   completeProgressBarProgress,
@@ -54,7 +55,7 @@ const ProgressBar = () => {
   const [deletionRate, setDeletionRate] = useState(75);
   const dispatch = useDispatch();
   const { data: allEntries } = useGetAllEntriesQuery(null);
-
+  const sortCondition = useSelector(getSortCondition);
   useEffect(() => {
     const numberOfEntries = allEntries?.length;
     if (numberOfEntries) {
@@ -129,20 +130,28 @@ const ProgressBar = () => {
 
   return progressBarProgress === 0 ? (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
-      <Select
-        className="updateButton"
-        onChange={setSortConditionCallback}
-        sx={muiUpdateButtonSx}
-        defaultValue="speedDesc"
-      >
-        <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
-        <MenuItem value="dateDesc">Date: Most Recent</MenuItem>
-        <MenuItem value="dateAsc">Date: Least Recent</MenuItem>
-        <MenuItem value="movingTimeDesc">Moving Time: Longest First</MenuItem>
-        <MenuItem value="movingTimeAsc">Moving Time: Shortest First</MenuItem>
-        <MenuItem value="timeElapsedDesc">Time Elapsed: Longest First</MenuItem>
-        <MenuItem value="timeElapsedAsc">Time Elapsed: Shortest First</MenuItem>
-      </Select>
+      {sortCondition ? (
+        <Select
+          className="updateButton"
+          onChange={setSortConditionCallback}
+          sx={muiUpdateButtonSx}
+          value={sortCondition || 'speedDesc'}
+        >
+          <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
+          <MenuItem value="dateDesc">Date: Most Recent</MenuItem>
+          <MenuItem value="dateAsc">Date: Least Recent</MenuItem>
+          <MenuItem value="movingTimeDesc">Moving Time: Longest First</MenuItem>
+          <MenuItem value="movingTimeAsc">Moving Time: Shortest First</MenuItem>
+          <MenuItem value="timeElapsedDesc">
+            Time Elapsed: Longest First
+          </MenuItem>
+          <MenuItem value="timeElapsedAsc">
+            Time Elapsed: Shortest First
+          </MenuItem>
+        </Select>
+      ) : (
+        <Box sx={{ ...muiUpdateButtonSx, height: '1rem', width: '1rem' }} />
+      )}
       <OutlinedInput
         type="button"
         className="updateButton"

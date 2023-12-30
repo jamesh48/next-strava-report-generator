@@ -9,7 +9,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     const { data } = await axios(
       `${process.env.DATA_BASE_URL}/srg/exchange_token?code=${code}`
     );
-    res.setHeader('Set-Cookie', `athleteId=${data};`);
+    res.setHeader('Set-Cookie', `athleteId=${data}; HttpOnly`);
     return res.redirect(process.env.REDIRECT_URI_HOST!);
   } catch (err: any) {
     return res.send(err);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
@@ -25,11 +25,11 @@ const Report = (props: ReportProps) => {
 
   const sortCondition = useSelector(getSortCondition);
   // Pagination
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [entriesPerPage] = React.useState(7);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesPerPage] = useState(7);
   // Entries
-  const [invalidEntry, setInvalidEntry] = React.useState(false);
-  const [currentActivity, setCurrentActivity] = React.useState({
+  const [invalidEntry, setInvalidEntry] = useState(false);
+  const [currentActivity, setCurrentActivity] = useState({
     id: 0,
     name: '',
     kudos_count: 0,
@@ -50,11 +50,11 @@ const Report = (props: ReportProps) => {
   });
   let { data: totalEntries } = useGetAllEntriesQuery(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [props.sport]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof Number(props.distance) !== 'number') {
       setInvalidEntry(true);
     } else {
