@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, SelectChangeEvent } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
 import { Entry, Format } from './EntryTypes.js';
@@ -9,6 +9,7 @@ import {
   getSortCondition,
 } from '@redux/slices';
 import { useSelector } from '@redux/reduxHooks';
+import { useMobileBrowserCheck } from '@lib';
 
 export interface ReportProps {
   sport: string;
@@ -20,6 +21,7 @@ export interface ReportProps {
 }
 
 const Report = (props: ReportProps) => {
+  const isMobile = useMobileBrowserCheck();
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
 
@@ -117,11 +119,9 @@ const Report = (props: ReportProps) => {
         : undefined
     );
 
-  const handlePaginationClick: React.MouseEventHandler<HTMLLIElement> = (
-    event
-  ) => {
-    const actualId = event?.currentTarget.id.split('-');
-    setCurrentPage(Number(actualId[1]));
+  const handlePaginationClick: ((event: SelectChangeEvent<string>) => void) &
+    React.MouseEventHandler<HTMLLIElement> = (event) => {
+    setCurrentPage(Number((event.target as HTMLSelectElement).value));
   };
 
   useEffect(() => {
@@ -139,6 +139,15 @@ const Report = (props: ReportProps) => {
 
   return (
     <Box id="report" sx={{ margin: '2.5% auto', width: '95%' }}>
+      {isMobile ? (
+        <PageNoUl
+          {...props}
+          entriesPerPage={entriesPerPage}
+          entries={totalEntries!}
+          handleClick={handlePaginationClick}
+          currentPage={currentPage}
+        />
+      ) : null}
       <EntryUl
         {...props}
         invalidEntry={invalidEntry}
@@ -148,13 +157,15 @@ const Report = (props: ReportProps) => {
         currentActivity={currentActivity}
         showIndividualEntry={showIndividualEntry}
       />
-      <PageNoUl
-        {...props}
-        entriesPerPage={entriesPerPage}
-        entries={totalEntries!}
-        handleClick={handlePaginationClick}
-        currentPage={currentPage}
-      />
+      {!isMobile ? (
+        <PageNoUl
+          {...props}
+          entriesPerPage={entriesPerPage}
+          entries={totalEntries!}
+          handleClick={handlePaginationClick}
+          currentPage={currentPage}
+        />
+      ) : null}
     </Box>
   );
 };
