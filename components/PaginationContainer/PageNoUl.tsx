@@ -10,14 +10,11 @@ interface PageNoUlProps {
   entriesPerPage: number;
   entries: Entry[];
 }
-const PageNoUl: React.FC<PageNoUlProps> = ({
-  entries,
-  entriesPerPage,
-  currentPage,
-  handleClick,
-}) => {
+const PageNoUl = (props: PageNoUlProps) => {
   const renderPageNumbers = () => {
-    return [...new Array(Math.ceil(entries.length / entriesPerPage))]
+    return [
+      ...new Array(Math.ceil(props.entries.length / props.entriesPerPage)),
+    ]
       .map((_x, index) => {
         return index + 1;
       })
@@ -26,8 +23,8 @@ const PageNoUl: React.FC<PageNoUlProps> = ({
           <PageNo
             key={number}
             number={number}
-            page={currentPage}
-            handleClick={handleClick}
+            page={props.currentPage}
+            handleClick={props.handleClick}
           />
         );
       });
@@ -42,10 +39,19 @@ const PageNoUl: React.FC<PageNoUlProps> = ({
         listStyleType: 'none',
         marginBottom: '1%',
         display: 'flex',
-        justifyContent: 'center',
+        overflowX: 'scroll',
+        '&::-webkit-scrollbar': {
+          width: '0', // Hide the scrollbar
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'transparent', // Transparent color for the thumb
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: 'transparent', // Transparent color for the track
+        },
       }}
     >
-      {entries?.length ? renderPageNumbers() : null}
+      {props.entries?.length ? renderPageNumbers() : null}
     </List>
   );
 };
