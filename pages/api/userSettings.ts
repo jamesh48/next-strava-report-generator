@@ -16,7 +16,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     return res.send(data);
   } catch (err) {
     console.log((err as { message: string }).message);
-    res.send({ defaultSport: 'running', defaultFormat: 'speedDesc' });
+    return res.send({ defaultSport: 'Run', defaultFormat: 'speedDesc' });
   }
 });
 
