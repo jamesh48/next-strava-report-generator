@@ -13,6 +13,7 @@ import {
 } from '@redux/slices';
 import Radios from '@components/OptionsProfile/Radios/Radios';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
+import PopupModal from './PopupModal';
 
 export default function App() {
   // Radios
@@ -132,6 +133,7 @@ export default function App() {
           toDateQuery={toDateQuery}
         />
       </Box>
+      <PopupModal />
     </Box>
   );
 }

@@ -75,13 +75,15 @@ const ProgressBar = () => {
     },
   ] = useAddAllActivitiesMutation();
   const [
-    destroyUserAndActivities,
+    _,
     {
       isSuccess: isSuccessDestroy,
       isLoading: isLoadingDestroy,
       isUninitialized: isUninitializedDestroy,
     },
-  ] = useDestroyUserAndActivitiesMutation();
+  ] = useDestroyUserAndActivitiesMutation({
+    fixedCacheKey: 'destroy-user-key',
+  });
 
   useInterval(
     () => {
@@ -124,10 +126,6 @@ const ProgressBar = () => {
     dispatch(setSortCondition(event.target.value));
   };
 
-  const destroyUser: React.MouseEventHandler<HTMLInputElement> = async () => {
-    await destroyUserAndActivities(null);
-  };
-
   return progressBarProgress === 0 ? (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
       {sortCondition ? (
@@ -157,14 +155,6 @@ const ProgressBar = () => {
         className="updateButton"
         value="Update!"
         onClick={updateEntries}
-        sx={muiUpdateButtonSx}
-        inputProps={{ sx: { cursor: 'pointer' } }}
-      />
-      <OutlinedInput
-        type="button"
-        className="updateButton"
-        value="Destroy!"
-        onClick={destroyUser}
         sx={muiUpdateButtonSx}
         inputProps={{ sx: { cursor: 'pointer' } }}
       />

@@ -13,7 +13,7 @@ interface UserNameSectionProps {
 }
 
 const UserNameSection = (props: UserNameSectionProps) => {
-  const [showPreferencesButton, setShowPreferencesButton] = useState(false);
+  // const [showPreferencesButton, setShowPreferencesButton] = useState(false);
   const [showPreferences, setShowPreferences] = useState(false);
 
   const closeUserSettingsCB = () => {
@@ -33,8 +33,8 @@ const UserNameSection = (props: UserNameSectionProps) => {
         color: 'orangered',
         borderLeft: 'none',
       }}
-      onMouseOver={() => setShowPreferencesButton(true)}
-      onMouseLeave={() => setShowPreferencesButton(false)}
+      // onMouseOver={() => setShowPreferencesButton(true)}
+      // onMouseLeave={() => setShowPreferencesButton(false)}
     >
       <Typography
         variant="h4"
@@ -53,32 +53,33 @@ const UserNameSection = (props: UserNameSectionProps) => {
       >
         {props.profile.city}, {props.profile.state} {props.profile.country}
       </Typography>
-      {showPreferencesButton ? (
-        <Box
+      {/* {showPreferencesButton ? ( */}
+      <Box
+        sx={{
+          mt: '1rem',
+          bottom: '1.5rem',
+        }}
+      >
+        <Button
           sx={{
-            mt: '1rem',
-            bottom: '1.5rem',
+            height: '1.5rem',
+            transition: 'right 2s ease-in-out',
+            right: '0rem',
+            zIndex: 4,
           }}
+          onClick={() => setShowPreferences(true)}
         >
-          <Button
+          <Typography
             sx={{
-              height: '1.5rem',
-              transition: 'right 2s ease-in-out',
-              right: '0rem',
-              zIndex: 4,
+              transition: 'font-style 2s ease-in-out',
+              fontSize: '.75rem',
             }}
-            onClick={() => setShowPreferences(true)}
           >
-            <Typography
-              sx={{
-                transition: 'font-style 2s ease-in-out',
-              }}
-            >
-              User Preferences
-            </Typography>
-          </Button>
-        </Box>
-      ) : (
+            User Preferences
+          </Typography>
+        </Button>
+      </Box>
+      {/* ) : (
         <Box
           sx={{
             mt: '1rem',
@@ -103,7 +104,7 @@ const UserNameSection = (props: UserNameSectionProps) => {
             </Typography>
           </Button>
         </Box>
-      )}
+      )} */}
       {showPreferences && (
         <UserSettings closeUserSettingsCB={closeUserSettingsCB} />
       )}

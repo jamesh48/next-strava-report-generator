@@ -5,26 +5,41 @@ import {
   Button,
   Select,
   MenuItem,
+  Divider,
+  Collapse,
 } from '@mui/material';
+import { Close, Warning } from '@mui/icons-material';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   getSortCondition,
   getSportCondition,
   setSortCondition,
   setSportCondition,
+  useDestroyUserAndActivitiesMutation,
 } from '@redux/slices';
 import axios from 'axios';
 import { useState } from 'react';
+import usePopupModal from 'lib/usePopupModal';
 
 interface UserSettingsProps {
   closeUserSettingsCB: () => void;
 }
 const UserSettings = (props: UserSettingsProps) => {
   const dispatch = useDispatch();
+  const [destroyUserAndActivities] = useDestroyUserAndActivitiesMutation({
+    fixedCacheKey: 'destroy-user-key',
+  });
   const defaultSortCondition = useSelector(getSortCondition);
   const defaultSportCondition = useSelector(getSportCondition);
   const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
   const [selectedSport, setSelectedSport] = useState(defaultSportCondition);
+  const [dangerArea, setDangerArea] = useState(false);
+
+  const destroyUser = async () => {
+    await destroyUserAndActivities(null);
+  };
+
+  const [open] = usePopupModal();
 
   return (
     <Dialog open={true}>
@@ -66,12 +81,12 @@ const UserSettings = (props: UserSettingsProps) => {
               display: 'flex',
               height: '1.5rem',
               outline: '1px solid orangered',
-              padding: '.5rem',
+              padding: '1rem .5rem',
               margin: '.5rem',
               color: 'turquoise',
             }}
           >
-            X
+            <Close />
           </Button>
         </Box>
         <Box>
@@ -172,6 +187,54 @@ const UserSettings = (props: UserSettingsProps) => {
             </Button>
           </Box>
         </Box>
+        <Divider color="white" />
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            cursor: 'pointer',
+            paddingY: '.5rem',
+          }}
+          onClick={() => setDangerArea((ex) => !ex)}
+        >
+          <Warning sx={{ color: 'orangered', paddingX: '.25rem' }} />
+          <Typography sx={{ color: 'darkturquoise' }}>Danger Zone</Typography>
+        </Box>
+        <Collapse in={dangerArea} collapsedSize={'0'} orientation="vertical">
+          <Box
+            sx={{
+              padding: '.75rem',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              sx={{
+                color: 'darkturquoise',
+                border: '1px solid white',
+                width: '75%',
+                display: 'flex',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+              onClick={() =>
+                open({
+                  body: 'This will destroy all saved user information including cached activities, api tokens, and user profile and settings, This may take some time, but when completed you will be redirected to the auth page, continue?',
+                  title: 'Destroy User Information?',
+                  severity: 'warning',
+                  onConfirm: () => {
+                    props.closeUserSettingsCB();
+                    destroyUser();
+                  },
+                })
+              }
+            >
+              Destroy All User Information
+            </Button>
+          </Box>
+        </Collapse>
       </Box>
     </Dialog>
   );

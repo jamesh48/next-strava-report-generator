@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 import App from '@components/App/App';
 import GlobalStore from '@redux/store';
 import useFetchData from 'lib/useFetch';
+import { appInitialState } from '@redux/slices';
 
 export default function Home() {
   const { data: userSettings } = useFetchData<{
@@ -23,6 +24,7 @@ export default function Home() {
       <Provider
         store={GlobalStore.prototype.configureGlobalStore({
           app: {
+            ...appInitialState,
             sortCondition: userSettings?.defaultFormat,
             sportCondition: userSettings?.defaultSport,
           },
