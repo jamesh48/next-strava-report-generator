@@ -15,7 +15,7 @@ export default function Home() {
   }>('/api/userSettings');
 
   return (
-    <Box style={{ width: '100%', display: 'flex' }}>
+    <Box>
       <Head>
         <title>Strava Report Generator</title>
         <meta name="description" content="A ordered list of strava activites" />
