@@ -19,7 +19,19 @@ const PageNoUl = (props: PageNoUlProps) => {
       <Select
         className="pageNoUls"
         id="pageNumbers"
-        sx={{ marginBottom: '1%', display: 'flex', textAlign: 'center' }}
+        sx={{
+          marginBottom: '1%',
+          display: 'flex',
+          textAlign: 'center',
+          color: 'coral',
+        }}
+        inputProps={{
+          sx: {
+            bgcolor: 'paleturquoise',
+            border: '2px solid orangered',
+            fontSize: '1.25rem',
+          },
+        }}
         value={props.currentPage.toString()}
         onChange={props.handleClick}
       >
@@ -35,7 +47,20 @@ const PageNoUl = (props: PageNoUlProps) => {
               })
               .map((number) => {
                 return (
-                  <MenuItem key={number} value={number}>
+                  <MenuItem
+                    key={number}
+                    value={number}
+                    sx={{
+                      textAlign: 'center !important',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      bgcolor:
+                        props.currentPage === number
+                          ? 'turquoise !important'
+                          : 'paleturquoise',
+                      color: props.currentPage === number ? 'coral' : 'black',
+                    }}
+                  >
                     {number}
                   </MenuItem>
                 );
