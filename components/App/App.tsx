@@ -5,7 +5,6 @@ import UserProfile from '@components/UserProfile/UserProfile';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '@components/StravaEntries/Report';
 import { Format } from '@components/StravaEntries/EntryTypes';
-import { useCSX } from '@lib';
 import {
   getSportCondition,
   setSportCondition,
@@ -91,10 +90,8 @@ export default function App() {
     }
   };
 
-  const mainStyles = useCSX('100%', 'unset', 'width');
-
   return (
-    <Box id="mainContainer" sx={{ ...mainStyles }}>
+    <Box id="mainContainer">
       <Box
         id="upperSection"
         sx={{
