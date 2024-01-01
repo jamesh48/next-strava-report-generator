@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@redux/store';
 
 export type ModalSeverities = 'success' | 'info' | 'warning' | 'error';
@@ -11,13 +11,23 @@ interface PopupModalDetails {
   state: ModalStates;
 }
 
+export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
+
 export const appInitialState: {
   sortCondition: string;
   sportCondition: string;
+  customDateCondition: boolean;
+  dateCondition: DateCondition;
+  fromDate: string;
+  toDate: string;
   popupModalDetails: PopupModalDetails;
 } = {
   sortCondition: 'speedDesc',
   sportCondition: 'running',
+  customDateCondition: false,
+  dateCondition: 'allTime',
+  fromDate: '',
+  toDate: '',
   popupModalDetails: {
     title: '',
     body: '',
@@ -50,18 +60,92 @@ export const appSlice = createSlice({
     setSportCondition: (state, action: PayloadAction<string>) => {
       state.sportCondition = action.payload;
     },
+    setDateCondition: (state, action: PayloadAction<DateCondition>) => {
+      state.dateCondition = action.payload;
+      state.customDateCondition = false;
+    },
+    setFromDateQuery: (state, action: PayloadAction<string>) => {
+      state.fromDate = action.payload;
+      state.customDateCondition = true;
+    },
+    setToDateQuery: (state, action: PayloadAction<string>) => {
+      state.toDate = action.payload;
+      state.customDateCondition = true;
+    },
   },
 });
 
 export const {
   setSortCondition,
   setSportCondition,
+  setToDateQuery,
+  setFromDateQuery,
+  setDateCondition,
   setModalState,
   setPopupModalDetails,
 } = appSlice.actions;
 
 export const getSortCondition = (state: RootState) => state.app.sortCondition;
 export const getSportCondition = (state: RootState) => state.app.sportCondition;
+
+// Date Selectors
+
+const getCustomDateConditionSelector = (state: RootState) =>
+  state.app.customDateCondition;
+const getDateConditionSelector = (state: RootState) => state.app.dateCondition;
+const getFromDateQuerySelector = (state: RootState) => state.app.fromDate;
+const getToDateQuerySelector = (state: RootState) => state.app.toDate;
+
+export const getDateCondition = createSelector(
+  [
+    getCustomDateConditionSelector,
+    getDateConditionSelector,
+    getFromDateQuerySelector,
+    getToDateQuerySelector,
+  ],
+  (customDateCondition, dateCondition, fromDateResult, toDateResult) => {
+    if (customDateCondition) {
+      return [fromDateResult, toDateResult, dateCondition];
+    }
+
+    if (dateCondition === 'allTime') {
+      return ['', '', dateCondition];
+    }
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear().toString();
+
+    if (dateCondition === 'thisYear') {
+      const beginningOfYear = `${currentYear}-01-01`;
+      return [beginningOfYear, '', dateCondition];
+    }
+    const currentMonth = (currentDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0'); // Adding 1 because months are zero-indexed
+
+    if (dateCondition === 'thisMonth') {
+      const beginningOfMonth = `${currentYear}-${currentMonth}-01`;
+      return [beginningOfMonth, '', dateCondition];
+    }
+
+    if (dateCondition === 'thisWeek') {
+      const dayOfWeek = currentDate.getDay();
+      const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust for Monday as the start of the week
+      const startOfWeek = new Date(currentDate);
+      startOfWeek.setDate(currentDate.getDate() - daysToSubtract);
+
+      const startOfWeekYear = startOfWeek.getFullYear().toString();
+      const startOfWeekMonth = (startOfWeek.getMonth() + 1)
+        .toString()
+        .padStart(2, '0');
+      const startOfWeekDay = startOfWeek.getDate().toString().padStart(2, '0');
+
+      const beginningOfWeek = `${startOfWeekYear}-${startOfWeekMonth}-${startOfWeekDay}`;
+      return [beginningOfWeek, '', dateCondition];
+    }
+    return ['', '', 'allTime'];
+  }
+);
+
 export const getPopupModalDetails = (state: RootState) =>
   state.app.popupModalDetails;
 export const getModalState = (state: RootState) =>

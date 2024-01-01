@@ -13,10 +13,15 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         srg_athlete_id,
       },
     });
+    console.log(data);
     return res.send(data);
   } catch (err) {
     console.log((err as { message: string }).message);
-    return res.send({ defaultSport: 'Run', defaultFormat: 'speedDesc' });
+    return res.send({
+      defaultSport: 'Run',
+      defaultFormat: 'speedDesc',
+      defaultDate: 'allTime',
+    });
   }
 });
 
@@ -32,6 +37,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         defaultSport: req.body.selectedSport,
         defaultFormat: req.body.selectedFormat,
+        defaultDate: req.body.selectedDate,
       },
     });
     return res.send('ok');

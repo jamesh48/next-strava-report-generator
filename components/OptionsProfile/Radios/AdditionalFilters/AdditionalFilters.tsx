@@ -2,6 +2,12 @@ import React from 'react';
 
 import { Box, OutlinedInput, SxProps } from '@mui/material';
 import { useCSX } from '@lib';
+import { useDispatch, useSelector } from '@redux/reduxHooks';
+import {
+  getDateCondition,
+  setFromDateQuery,
+  setToDateQuery,
+} from '@redux/slices';
 
 const muiAdditionalFilterContainerSx: (sxProps: SxProps) => SxProps = (
   sxProps
@@ -44,14 +50,26 @@ const muiDateFilterSx: (sxProps: SxProps) => SxProps = (sxProps) => ({
 
 interface AdditionalFilterProps {
   setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
-  setFromDateQuery: React.ChangeEventHandler<HTMLInputElement>;
-  setToDateQuery: React.ChangeEventHandler<HTMLInputElement>;
   titleQuery: string;
 }
 
 const AdditionalFilters = (props: AdditionalFilterProps) => {
+  const dispatch = useDispatch();
   const mobileStyleContainer = useCSX('row', 'column', 'flexDirection');
   const mobileStyleInput = useCSX('unset', '.5rem', 'padding');
+  const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
+
+  const handleFromDateQueryChange: React.ChangeEventHandler<
+    HTMLTextAreaElement | HTMLInputElement
+  > = (event) => {
+    dispatch(setFromDateQuery(event.currentTarget.value));
+  };
+
+  const handleToDateQueryChange: React.ChangeEventHandler<
+    HTMLTextAreaElement | HTMLInputElement
+  > = (event) => {
+    dispatch(setToDateQuery(event.currentTarget.value));
+  };
 
   return (
     <Box
@@ -80,7 +98,8 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
           <OutlinedInput
             className="additionalFilter"
             type="date"
-            onChange={props.setFromDateQuery}
+            value={fromDateQuery}
+            onChange={handleFromDateQueryChange}
             sx={muiAdditionalFilterSx}
           />
         </Box>
@@ -89,7 +108,8 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
           <OutlinedInput
             className="additionalFilter"
             type="date"
-            onChange={props.setToDateQuery}
+            value={toDateQuery}
+            onChange={handleToDateQueryChange}
             sx={muiAdditionalFilterSx}
           />
         </Box>

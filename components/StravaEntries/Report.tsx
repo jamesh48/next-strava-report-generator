@@ -7,6 +7,7 @@ import {
   useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
   getSortCondition,
+  getDateCondition,
 } from '@redux/slices';
 import { useSelector } from '@redux/reduxHooks';
 import { useMobileBrowserCheck } from '@lib';
@@ -16,15 +17,13 @@ export interface ReportProps {
   distance: number;
   format: Format;
   titleQuery: string;
-  fromDateQuery: string;
-  toDateQuery: string;
 }
 
 const Report = (props: ReportProps) => {
   const isMobile = useMobileBrowserCheck();
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
-
+  const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
   const sortCondition = useSelector(getSortCondition);
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -72,26 +71,26 @@ const Report = (props: ReportProps) => {
         remainingEntry.name.indexOf(props.titleQuery) > -1
     )
     .filter((remainingEntry: Entry) => {
-      if (props.fromDateQuery === '' && props.toDateQuery === '') {
+      if (fromDateQuery === '' && toDateQuery === '') {
         return remainingEntry;
       }
 
       const candidateDate = new Date(remainingEntry.start_date.slice(0, 10));
       // If Only From Date is specified
-      if (props.toDateQuery === '') {
-        const filterFrom = new Date(props.fromDateQuery);
+      if (toDateQuery === '') {
+        const filterFrom = new Date(fromDateQuery);
         return filterFrom <= candidateDate;
       }
 
       // If Only 'to Date' is specified
-      if (props.fromDateQuery === '') {
-        const filterTo = new Date(props.toDateQuery);
+      if (fromDateQuery === '') {
+        const filterTo = new Date(toDateQuery);
         return filterTo >= candidateDate;
       }
 
       // If both From and To Dates are specified
-      const filterFrom = new Date(props.fromDateQuery);
-      const filterTo = new Date(props.toDateQuery);
+      const filterFrom = new Date(fromDateQuery);
+      const filterTo = new Date(toDateQuery);
       return filterFrom <= candidateDate && filterTo >= candidateDate;
     })
     .slice()

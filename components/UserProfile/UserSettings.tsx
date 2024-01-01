@@ -13,9 +13,12 @@ import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   getSortCondition,
   getSportCondition,
+  getDateCondition,
   setSortCondition,
   setSportCondition,
+  setDateCondition,
   useDestroyUserAndActivitiesMutation,
+  DateCondition,
 } from '@redux/slices';
 import axios from 'axios';
 import { useState } from 'react';
@@ -31,8 +34,14 @@ const UserSettings = (props: UserSettingsProps) => {
   });
   const defaultSortCondition = useSelector(getSortCondition);
   const defaultSportCondition = useSelector(getSportCondition);
+  const [_fromDate, _toDate, defaultDateCondition] =
+    useSelector(getDateCondition);
+
   const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
   const [selectedSport, setSelectedSport] = useState(defaultSportCondition);
+  const [selectedDate, setSelectedDate] = useState<DateCondition>(
+    defaultDateCondition as DateCondition
+  );
   const [dangerArea, setDangerArea] = useState(false);
 
   const destroyUser = async () => {
@@ -117,6 +126,7 @@ const UserSettings = (props: UserSettingsProps) => {
             </Select>
           </Box>
         </Box>
+        {/* Default Sort */}
         <Box>
           <Box
             sx={{
@@ -155,6 +165,36 @@ const UserSettings = (props: UserSettingsProps) => {
             </Select>
           </Box>
         </Box>
+        {/* Default Date */}
+        <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              paddingX: '1.5rem',
+              paddingY: '.75rem',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Typography
+              sx={{ color: 'darkturquoise', cursor: 'default', flex: 1 }}
+            >
+              Default Date
+            </Typography>
+            <Select
+              sx={{ height: '2rem', width: '15rem' }}
+              defaultValue={defaultDateCondition}
+              inputProps={{ sx: { color: 'coral' } }}
+              onChange={(event) =>
+                setSelectedDate(event.target.value as DateCondition)
+              }
+            >
+              <MenuItem value="allTime">All Time</MenuItem>
+              <MenuItem value="thisYear">This Year</MenuItem>
+              <MenuItem value="thisMonth">This Month</MenuItem>
+              <MenuItem value="thisWeek">This Week</MenuItem>
+            </Select>
+          </Box>
+        </Box>
         <Box>
           <Box
             sx={{
@@ -170,13 +210,18 @@ const UserSettings = (props: UserSettingsProps) => {
                   await axios({
                     url: '/api/userSettings',
                     method: 'POST',
-                    data: { selectedFormat, selectedSport },
+                    data: {
+                      selectedFormat,
+                      selectedSport,
+                      selectedDate,
+                    },
                     headers: {
                       'Content-Type': 'application/json',
                     },
                   });
                   dispatch(setSportCondition(selectedSport));
                   dispatch(setSortCondition(selectedFormat));
+                  dispatch(setDateCondition(selectedDate));
                   props.closeUserSettingsCB();
                 };
 

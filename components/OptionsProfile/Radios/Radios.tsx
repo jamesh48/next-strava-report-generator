@@ -16,8 +16,6 @@ export interface RadiosProps {
   setFormat: React.MouseEventHandler<HTMLLabelElement> &
     React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
-  setFromDateQuery: React.ChangeEventHandler<HTMLInputElement>;
-  setToDateQuery: React.ChangeEventHandler<HTMLInputElement>;
   titleQuery: string;
   sport: string;
   customDistance: boolean;
@@ -100,8 +98,6 @@ const Radios = (props: RadiosProps) => {
       <AdditionalFilters
         setTitleQuery={props.setTitleQuery}
         titleQuery={props.titleQuery}
-        setFromDateQuery={props.setFromDateQuery}
-        setToDateQuery={props.setToDateQuery}
       />
       <ProgressBar />
     </Box>

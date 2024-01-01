@@ -12,6 +12,7 @@ export default function Home() {
   const { data: userSettings } = useFetchData<{
     defaultFormat: string;
     defaultSport: string;
+    defaultDate: string;
   }>('/api/userSettings');
 
   return (
@@ -27,6 +28,7 @@ export default function Home() {
             ...appInitialState,
             sortCondition: userSettings?.defaultFormat,
             sportCondition: userSettings?.defaultSport,
+            dateCondition: userSettings?.defaultDate,
           },
         })}
       >

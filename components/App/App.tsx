@@ -20,8 +20,7 @@ export default function App() {
   const dispatch = useDispatch();
   const [format, setFormat] = React.useState<Format>('kph');
   const [titleQuery, setTitleQuery] = React.useState('');
-  const [fromDateQuery, setFromDateQuery] = React.useState('');
-  const [toDateQuery, setToDateQuery] = React.useState('');
+
   const [distance, setDistance] = React.useState(0);
   const [customDistance, setCustomDistance] = React.useState(false);
 
@@ -55,18 +54,6 @@ export default function App() {
     event
   ) => {
     setTitleQuery(event.currentTarget.value);
-  };
-
-  const setFromDateQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setFromDateQuery(event.currentTarget.value);
-  };
-
-  const setToDateQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setToDateQuery(event.currentTarget.value);
   };
 
   const setDistanceCallback: React.MouseEventHandler<HTMLLabelElement> &
@@ -109,8 +96,6 @@ export default function App() {
           setDistance={setDistanceCallback}
           setFormat={setFormatCallback}
           setTitleQuery={setTitleQueryCallback}
-          setFromDateQuery={setFromDateQueryCallback}
-          setToDateQuery={setToDateQueryCallback}
           titleQuery={titleQuery}
           sport={sport}
           customDistance={customDistance}
@@ -122,8 +107,6 @@ export default function App() {
           format={format}
           distance={distance}
           titleQuery={titleQuery}
-          fromDateQuery={fromDateQuery}
-          toDateQuery={toDateQuery}
         />
       </Box>
       <PopupModal />
