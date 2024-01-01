@@ -25,10 +25,6 @@ export default function App() {
   const [distance, setDistance] = React.useState(0);
   const [customDistance, setCustomDistance] = React.useState(false);
 
-  componentDidMount: React.useEffect(() => {
-    document.title = 'Strava Report Generator';
-  }, []);
-
   useGetAllEntriesQuery(null);
 
   reset_distance_on_sport_change: React.useEffect(() => {
