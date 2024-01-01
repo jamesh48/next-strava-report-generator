@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useCSX } from '@lib';
 import { YTDRunTotals } from './UserProfileTypes';
+import ActivityChart from './ActivityChart';
 
 export interface RunningTotalsProps {
   profile: {
@@ -51,6 +52,7 @@ const RunningTotals = (props: RunningTotalsProps) => {
             ).toFixed(2)}{' '}
         Meters per Second
       </Typography>
+      <ActivityChart activityType="Run" />
     </Box>
   );
 };

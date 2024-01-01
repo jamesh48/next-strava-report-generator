@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { useCSX } from '@lib';
 import { YTDSwimTotals } from './UserProfileTypes';
+import ActivityChart from './ActivityChart';
 
 interface SwimmingTotalsSection {
   profile: {
@@ -50,6 +51,7 @@ const SwimmingTotals = ({
           : 0}{' '}
         Meters per Second
       </Typography>
+      <ActivityChart activityType="Swim" />
     </Box>
   );
 };
