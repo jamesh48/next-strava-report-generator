@@ -1,17 +1,21 @@
 import React from 'react';
 
 import { Box, OutlinedInput, SxProps } from '@mui/material';
+import { useCSX } from '@lib';
 
-const muiAdditionalFilterContainerSx: SxProps = {
+const muiAdditionalFilterContainerSx: (sxProps: SxProps) => SxProps = (
+  sxProps
+) => ({
   display: 'flex',
   flex: 1,
   justifyContent: 'center',
   '&:first-of-type': {
     borderRight: '1px solid orangered',
   },
-};
+  ...sxProps,
+});
 
-const muiAdditionalFilterSx: SxProps = {
+const muiAdditionalFilterSx = {
   backgroundColor: 'deepskyblue',
   color: 'ivory',
   border: '1px solid orangered',
@@ -24,7 +28,7 @@ const muiAdditionalFilterSx: SxProps = {
   },
 };
 
-const muiDateFilterSx: SxProps = {
+const muiDateFilterSx: (sxProps: SxProps) => SxProps = (sxProps) => ({
   display: 'flex',
   flex: 0.25,
   label: {
@@ -34,7 +38,9 @@ const muiDateFilterSx: SxProps = {
     flex: 1,
     alignItems: 'center',
   },
-};
+  justifyContent: 'flex-end',
+  ...sxProps,
+});
 
 interface AdditionalFilterProps {
   setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
@@ -44,6 +50,9 @@ interface AdditionalFilterProps {
 }
 
 const AdditionalFilters = (props: AdditionalFilterProps) => {
+  const mobileStyleContainer = useCSX('row', 'column', 'flexDirection');
+  const mobileStyleInput = useCSX('unset', '.5rem', 'padding');
+
   return (
     <Box
       className="additionalFilters"
@@ -59,13 +68,14 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
         borderTop: 'none',
         borderLeft: 'none',
         boxShadow: '2.5px 2.5px 5px 0px orangered',
+        ...mobileStyleContainer,
       }}
     >
       <Box
         className="additionalFilterContainer"
-        sx={muiAdditionalFilterContainerSx}
+        sx={muiAdditionalFilterContainerSx(mobileStyleContainer)}
       >
-        <Box className="dateFilter" sx={muiDateFilterSx}>
+        <Box className="dateFilter" sx={muiDateFilterSx(mobileStyleInput)}>
           <label>From...</label>
           <OutlinedInput
             className="additionalFilter"
@@ -74,7 +84,7 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
             sx={muiAdditionalFilterSx}
           />
         </Box>
-        <Box className="dateFilter" sx={muiDateFilterSx}>
+        <Box className="dateFilter" sx={muiDateFilterSx(mobileStyleInput)}>
           <label>To...</label>
           <OutlinedInput
             className="additionalFilter"
@@ -86,16 +96,18 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
       </Box>
       <Box
         className="additionalFilterContainer"
-        sx={muiAdditionalFilterContainerSx}
+        sx={muiAdditionalFilterContainerSx(mobileStyleContainer)}
       >
-        <OutlinedInput
-          className="additionalFilter"
-          placeholder="Title Includes..."
-          onChange={props.setTitleQuery}
-          value={props.titleQuery}
-          type="text"
-          sx={muiAdditionalFilterSx}
-        />
+        <Box className="dateFilter" sx={muiDateFilterSx(mobileStyleInput)}>
+          <OutlinedInput
+            className="additionalFilter"
+            placeholder="Title Includes..."
+            onChange={props.setTitleQuery}
+            value={props.titleQuery}
+            type="text"
+            sx={muiAdditionalFilterSx}
+          />
+        </Box>
       </Box>
     </Box>
   );

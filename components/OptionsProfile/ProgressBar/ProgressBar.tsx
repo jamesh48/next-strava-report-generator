@@ -7,7 +7,7 @@ import {
   SelectChangeEvent,
   SxProps,
 } from '@mui/material';
-import { useInterval } from '@lib';
+import { useCSX, useInterval } from '@lib';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   setSortCondition,
@@ -38,7 +38,7 @@ const muiUpdateButtonSx: SxProps = {
   boxShadow: '0 0 5px coral',
   padding: '0.5vmax 1vmax',
   minWidth: '10%',
-  margin: '0 0.5vmax',
+  margin: '1rem 0.5rem',
   height: '3rem',
   '&:hover': {
     backgroundColor: 'coral',
@@ -47,6 +47,14 @@ const muiUpdateButtonSx: SxProps = {
     cursor: 'pointer',
   },
 };
+
+const menuItemStyles = (indicator: boolean) => ({
+  textAlign: 'center !important',
+  display: 'flex',
+  justifyContent: 'center',
+  bgcolor: indicator ? 'turquoise !important' : 'paleturquoise !important',
+  color: indicator ? 'orangered' : 'black',
+});
 
 // time it takes to delete one dynamodb record in ms
 const dynamoDBDeletionRatePerRecord = 110;
@@ -125,6 +133,8 @@ const ProgressBar = () => {
   const setSortConditionCallback = (event: SelectChangeEvent) => {
     dispatch(setSortCondition(event.target.value));
   };
+  const mobileStyleSelect = useCSX('unset', '1', 'flex');
+  const mobileStyleUpdateButton = useCSX('unset', '.5', 'flex');
 
   return progressBarProgress === 0 ? (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
@@ -132,30 +142,73 @@ const ProgressBar = () => {
         <Select
           className="updateButton"
           onChange={setSortConditionCallback}
-          sx={muiUpdateButtonSx}
+          sx={{
+            ...muiUpdateButtonSx,
+            ...mobileStyleSelect,
+          }}
           value={sortCondition || 'speedDesc'}
         >
-          <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
-          <MenuItem value="dateDesc">Date: Most Recent</MenuItem>
-          <MenuItem value="dateAsc">Date: Least Recent</MenuItem>
-          <MenuItem value="movingTimeDesc">Moving Time: Longest First</MenuItem>
-          <MenuItem value="movingTimeAsc">Moving Time: Shortest First</MenuItem>
-          <MenuItem value="timeElapsedDesc">
+          <MenuItem
+            value="speedDesc"
+            sx={menuItemStyles(sortCondition === 'speedDesc')}
+          >
+            Speed: Fastest First
+          </MenuItem>
+          <MenuItem
+            value="dateDesc"
+            sx={menuItemStyles(sortCondition === 'dateDesc')}
+          >
+            Date: Most Recent
+          </MenuItem>
+          <MenuItem
+            value="dateAsc"
+            sx={menuItemStyles(sortCondition === 'dateAsc')}
+          >
+            Date: Least Recent
+          </MenuItem>
+          <MenuItem
+            value="movingTimeDesc"
+            sx={menuItemStyles(sortCondition === 'movingTimeDesc')}
+          >
+            Moving Time: Longest First
+          </MenuItem>
+          <MenuItem
+            value="movingTimeAsc"
+            sx={menuItemStyles(sortCondition === 'movingTimeAsc')}
+          >
+            Moving Time: Shortest First
+          </MenuItem>
+          <MenuItem
+            value="timeElapsedDesc"
+            sx={menuItemStyles(sortCondition === 'timeElaspedDesc')}
+          >
             Time Elapsed: Longest First
           </MenuItem>
-          <MenuItem value="timeElapsedAsc">
+          <MenuItem
+            value="timeElapsedAsc"
+            sx={menuItemStyles(sortCondition === 'timeElaspedAsc')}
+          >
             Time Elapsed: Shortest First
           </MenuItem>
         </Select>
       ) : (
-        <Box sx={{ ...muiUpdateButtonSx, height: '1rem', width: '1rem' }} />
+        <Box
+          sx={{
+            ...muiUpdateButtonSx,
+            height: '1rem',
+            width: '1rem',
+          }}
+        />
       )}
       <OutlinedInput
         type="button"
         className="updateButton"
         value="Update!"
         onClick={updateEntries}
-        sx={muiUpdateButtonSx}
+        sx={{
+          ...muiUpdateButtonSx,
+          ...mobileStyleUpdateButton,
+        }}
         inputProps={{ sx: { cursor: 'pointer' } }}
       />
     </Box>
