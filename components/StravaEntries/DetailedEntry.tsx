@@ -143,7 +143,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          marginLeft: '1%',
+          marginX: '1%',
           marginBottom: '1%',
         }}
       >
@@ -156,7 +156,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             rows={20}
             value={props.editedDescription}
             onChange={props.handleDescriptionChange}
-            sx={{ width: '90%', alignSelf: 'center' }}
+            sx={{ width: '90%', alignSelf: 'center', display: 'flex' }}
             InputProps={{ sx: { color: 'ivory' } }}
           />
         ) : (
@@ -166,7 +166,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               color: 'ivory',
               display: 'flex',
               flexDirection: 'column',
-              marginLeft: '1%',
+              justifyContent: 'center',
+              marginX: '1%',
               marginBottom: '1%',
               whiteSpace: 'pre-line',
               border: '1px solid ivory',
