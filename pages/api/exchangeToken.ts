@@ -5,6 +5,11 @@ const handler = nextConnect();
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const code = req.query.code;
+
+  if (req.query.error === 'access_denied') {
+    return res.redirect(`${process.env.REDIRECT_URI_HOST}/AccessDenied`);
+  }
+
   try {
     const { data } = await axios(
       `${process.env.DATA_BASE_URL}/srg/exchange_token?code=${code}`
