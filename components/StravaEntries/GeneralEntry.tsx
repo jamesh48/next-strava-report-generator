@@ -3,6 +3,7 @@ import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
 import { Box, Link, Typography } from '@mui/material';
+import { useCSX } from '@lib';
 
 interface GeneralEntryProps {
   no: number | undefined;
@@ -46,6 +47,9 @@ const GeneralEntry = (props: GeneralEntryProps) => {
   };
 
   const isTopThreeEntry = Number(props.no) >= 0 && Number(props.no) <= 2;
+
+  const mobileCentered = useCSX('left', 'center', 'textAlign');
+
   return (
     <Box
       id={
@@ -67,6 +71,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             color: 'ivory',
           },
         },
+
         ...(() => {
           if (Number(props.no) === 0) {
             return { backgroundColor: 'goldenrod' };
@@ -80,6 +85,8 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           }
           return {};
         })(),
+
+        ...mobileCentered,
       }}
     >
       <Box

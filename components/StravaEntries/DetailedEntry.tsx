@@ -16,6 +16,7 @@ import { Line } from 'react-chartjs-2';
 import { Box, Link, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
+import { useCSX } from '@lib';
 
 interface DetailedEntryProps {
   editing: boolean;
@@ -120,6 +121,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     });
   };
 
+  const mobileColumns = useCSX('row', 'column', 'flexDirection');
+
   return (
     <Box
       className="detailedEntry"
@@ -174,21 +177,22 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Typography>
         )}
       </Box>
-      {/* Kudos & Comments */}
       <Box
         id="funStats"
         sx={{
-          display: 'grid',
+          display: 'flex',
           marginLeft: '2.5%',
-          gridTemplateColumns: '14% 20.5% 17.5% 2% auto',
-          gridTemplateRows: 'auto',
+
+          ...mobileColumns,
         }}
       >
+        {/* Kudos & Comments */}
         <Box
           id="kudosX"
           sx={{
             display: 'flex',
             alignItems: 'flex-start',
+            flex: 1,
           }}
         >
           <Image
@@ -247,6 +251,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             id="goldenHeartRate"
             sx={{
               display: 'flex',
+              flex: 1,
             }}
           >
             <Image
@@ -351,6 +356,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           id="trophyCase"
           sx={{
             display: 'flex',
+            flex: 1,
           }}
         >
           <Image
@@ -378,13 +384,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               </Typography>
             </Box>
           </Box>
-          <Typography className="achievements" id="emptyCount" variant="h6">
-            <p></p>
-          </Typography>
         </Box>
-
-        {/* Empty Div For Spacing */}
-        <Box />
 
         {props.currentActivity.photos.primary ? (
           <Image
@@ -442,9 +442,16 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       {currentStat === 'heartRate' && data ? (
         <Line options={options} data={data} />
       ) : currentStat === 'kudosComments' ? (
-        <Box sx={{ paddingLeft: '2.5%', color: 'ivory', display: 'flex' }}>
+        <Box
+          sx={{
+            paddingLeft: '2.5%',
+            color: 'ivory',
+            display: 'flex',
+            ...mobileColumns,
+          }}
+        >
           {currentKudoers.length ? (
-            <Box>
+            <Box sx={{ marginLeft: '1rem' }}>
               <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
                 Kudoers
               </Typography>
@@ -458,8 +465,10 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             </Box>
           ) : null}
           {currentComments.length ? (
-            <Box sx={{ paddingLeft: '2.5%' }}>
-              <Typography variant="h5">Comments</Typography>
+            <Box sx={{ marginLeft: '1rem' }}>
+              <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
+                Comments
+              </Typography>
               <Box>
                 {currentComments.map((x, index) => (
                   <Box key={index} sx={{ display: 'flex' }}>

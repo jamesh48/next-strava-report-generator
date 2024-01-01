@@ -73,11 +73,11 @@ const ActivityChart = (props: ActivityChartProps) => {
   const { data: allEntries } = useGetAllEntriesQuery(null);
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const swims = allEntries?.filter(
+  const activities = allEntries?.filter(
     (entry) => entry.type === props.activityType
   );
   const thisYearsActivities =
-    swims?.filter((entry) =>
+    activities?.filter((entry) =>
       entry.start_date.startsWith(currentYear.toString())
     ) || [];
 
