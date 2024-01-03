@@ -4,7 +4,7 @@ import { List, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useMobileBrowserCheck } from '@lib';
 import { Entry } from '@components/StravaEntries/EntryTypes';
 
-interface PageNoUlProps {
+export interface PageNoUlProps {
   handleClick: ((event: SelectChangeEvent<string>) => void) &
     React.MouseEventHandler<HTMLLIElement>;
   currentPage: number;
