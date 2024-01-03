@@ -4,7 +4,7 @@ import { useCSX } from '@lib';
 import { YTDSwimTotals } from './UserProfileTypes';
 import ActivityChart from './ActivityChart';
 
-interface SwimmingTotalsSection {
+export interface SwimmingTotalsProps {
   profile: {
     ytd_swim_totals: YTDSwimTotals;
   };
@@ -12,7 +12,7 @@ interface SwimmingTotalsSection {
 
 const SwimmingTotals = ({
   profile: { ytd_swim_totals },
-}: SwimmingTotalsSection) => {
+}: SwimmingTotalsProps) => {
   return (
     <Box
       className="ytdTotals profileBoxes"

@@ -39,7 +39,7 @@ describe('PageNoUl Tests', () => {
     expect(screen.getByText('1')).toBeInTheDocument();
   });
 
-  it('Should Render a single Page Number', () => {
+  it('Should Render more than one page Number', () => {
     renderWithState(
       {},
       {

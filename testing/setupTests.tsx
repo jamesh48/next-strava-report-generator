@@ -1,10 +1,17 @@
-// import 'whatwg-fetch';
+import 'whatwg-fetch';
 import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
+import 'jest-canvas-mock';
 import { configure } from '@testing-library/dom';
 import { server } from './MSW/server';
 
 global.structuredClone = (val: unknown) => JSON.parse(JSON.stringify(val));
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 beforeAll(() => {
   configure({ defaultHidden: true });

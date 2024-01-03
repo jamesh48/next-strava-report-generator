@@ -32,12 +32,6 @@ function render(
   // modifiedTheme.transitions.create = () => 'none';
   GlobalStore.prototype.configureGlobalStore({
     ...preloadedState,
-    endpoints: {
-      globalServicesEndpoint: '/gsapi',
-      collabPluginEndpoint: 'https://ctp-oqa.ual.com',
-      faaElasticEndpoint: '/api/uv-elastic',
-      volareEndpoint: 'https://iomapi.qa.aws.ual.com',
-    },
   });
   const testStore = GlobalStore.prototype.getStore();
   if (actions) {
