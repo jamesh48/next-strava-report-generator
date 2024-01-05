@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@redux/store';
 
-const initialState: { progressBarProgress: number } = {
+export const initialState: { progressBarProgress: number } = {
   progressBarProgress: 0,
 };
 

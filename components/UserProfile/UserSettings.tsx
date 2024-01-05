@@ -256,6 +256,7 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Button
+              disabled={!dangerArea}
               sx={{
                 color: 'darkturquoise',
                 border: '1px solid white',

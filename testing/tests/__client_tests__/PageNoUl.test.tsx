@@ -82,6 +82,30 @@ describe('PageNoUl Tests', () => {
       });
     });
 
+    it('Should Render a single Page Number', () => {
+      renderWithState(
+        {},
+        {
+          handleClick: () => {},
+          currentPage: 1,
+          entriesPerPage: 1,
+          entries: [
+            {
+              activityId: 123456789,
+              name: 'Test Entry',
+              start_date: '',
+              elapsed_time: 300,
+              max_speed: '50.3',
+              type: 'Run',
+              distance: 5000,
+              moving_time: 250,
+            },
+          ],
+        }
+      );
+      expect(screen.getByText('1')).toBeInTheDocument();
+    });
+
     it('Should not Render a Select when there are no Entries in Mobile Browser', () => {
       renderWithState(
         {},
@@ -92,6 +116,7 @@ describe('PageNoUl Tests', () => {
           entries: [],
         }
       );
+      expect(screen.queryByText('1')).not.toBeInTheDocument();
       const element = screen.queryByTestId('pageNumbers');
       expect(element).not.toBeInTheDocument();
     });

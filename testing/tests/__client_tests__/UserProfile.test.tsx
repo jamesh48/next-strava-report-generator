@@ -64,6 +64,38 @@ describe('User Profile Tests', () => {
     expect(screen.getByText(/Apply/i)).toBeInTheDocument();
   });
 
+  test('It should Persist changing the default sort to Date: Most Recent in User Settings', async () => {
+    renderWithState({
+      entriesApi: {
+        queries: {
+          'getAllEntries(null)': { status: QueryStatus.fulfilled },
+        },
+      },
+    });
+    await screen.findByText(/James/i);
+    const userPreferencesLink = screen.getByText(/User Preferences/i);
+    // Click User Preferences
+    userEvent.click(userPreferencesLink);
+    await screen.findByText(/SRG User Settings/i);
+    // Change Default Sport to Swimming
+    const speedFastestFirst = screen.getByText(/Speed: Fastest First/i);
+    userEvent.click(speedFastestFirst);
+    const dateMostRecent = await screen.findByText(/Date: Most Recent/i);
+    userEvent.click(dateMostRecent);
+    // Waiting for the options to not be seen ensures that they dont render when the User Preferences Reloads
+    await waitFor(() => {
+      const element = screen.queryByText(/Date: Least Recent/i);
+      expect(element).toBeNull();
+    });
+    // Apply Changes
+    userEvent.click(screen.getByText(/Apply/i));
+    // Revisit User Preferences
+    userEvent.click(screen.getByText(/User Preferences/i));
+    await screen.findByText(/SRG User Settings/i);
+    // Check that Swimming is Default Option
+    expect(screen.getByText(/Date: Most Recent/i)).toBeInTheDocument();
+  });
+
   test('It should Persist changing the default sport to Swimming in User Settings', async () => {
     renderWithState({
       entriesApi: {
@@ -96,6 +128,38 @@ describe('User Profile Tests', () => {
     expect(screen.getByText(/Swimming/i)).toBeInTheDocument();
   });
 
+  test('It should Persist changing the default date to This Year in User Settings', async () => {
+    renderWithState({
+      entriesApi: {
+        queries: {
+          'getAllEntries(null)': { status: QueryStatus.fulfilled },
+        },
+      },
+    });
+    await screen.findByText(/James/i);
+    const userPreferencesLink = screen.getByText(/User Preferences/i);
+    // Click User Preferences
+    userEvent.click(userPreferencesLink);
+    await screen.findByText(/SRG User Settings/i);
+    // Change Default Sport to Swimming
+    const allTime = screen.getByText(/All Time/i);
+    userEvent.click(allTime);
+    const thisYear = await screen.findByText(/This Year/i);
+    userEvent.click(thisYear);
+    // Waiting for the options to not be seen ensures that they dont render when the User Preferences Reloads
+    await waitFor(() => {
+      const element = screen.queryByText(/This Month/i);
+      expect(element).toBeNull();
+    });
+    // Apply Changes
+    userEvent.click(screen.getByText(/Apply/i));
+    // Revisit User Preferences
+    userEvent.click(screen.getByText(/User Preferences/i));
+    await screen.findByText(/SRG User Settings/i);
+    // Check that Swimming is Default Option
+    expect(screen.getByText(/This Year/i)).toBeInTheDocument();
+  });
+
   test('It should not persist changing the default sport to Swimming in User Settings when the close button is clicked', async () => {
     renderWithState({
       entriesApi: {
@@ -119,12 +183,113 @@ describe('User Profile Tests', () => {
       const element = screen.queryByText(/Cycling/i);
       expect(element).toBeNull();
     });
-    // Apply Changes
+    // Close Modal
     userEvent.click(screen.getByTestId('userpreferences-closebutton'));
+    await waitFor(() => {
+      const element = screen.queryByText(/SRG User Settings/i);
+      expect(element).toBeNull();
+    });
     // Revisit User Preferences
     userEvent.click(screen.getByText(/User Preferences/i));
     await screen.findByText(/SRG User Settings/i);
     // Check that Running is still the Default Option
     expect(screen.getByText(/Running/i)).toBeInTheDocument();
+  });
+
+  test('It should not persist changing the default sort to Date: Most Recent in User Settings when the close button is clicked', async () => {
+    renderWithState({
+      entriesApi: {
+        queries: {
+          'getAllEntries(null)': { status: QueryStatus.fulfilled },
+        },
+      },
+    });
+    await screen.findByText(/James/i);
+    const userPreferencesLink = screen.getByText(/User Preferences/i);
+    // Click User Preferences
+    userEvent.click(userPreferencesLink);
+    await screen.findByText(/SRG User Settings/i);
+    // Change Default Sport to Swimming
+    const speedFastestFirst = screen.getByText(/Speed: Fastest First/i);
+    userEvent.click(speedFastestFirst);
+    const dateMostRecent = await screen.findByText(/Date: Most Recent/i);
+    userEvent.click(dateMostRecent);
+    // Waiting for the options to not be seen ensures that they dont render when the User Preferences Reloads
+    await waitFor(() => {
+      const element = screen.queryByText(/Date: Least Recent/i);
+      expect(element).toBeNull();
+    });
+
+    // Close Modal
+    userEvent.click(screen.getByTestId('userpreferences-closebutton'));
+    await waitFor(() => {
+      const element = screen.queryByText(/SRG User Settings/i);
+      expect(element).toBeNull();
+    });
+    // Revisit User Preferences
+    userEvent.click(screen.getByText(/User Preferences/i));
+    await screen.findByText(/SRG User Settings/i);
+    // Check that Running is still the Default Option
+    expect(screen.getByText(/Speed: Fastest First/i)).toBeInTheDocument();
+  });
+
+  test('It should not persist changing the default date to This Year in User Settings when the close button is clicked', async () => {
+    renderWithState({
+      entriesApi: {
+        queries: {
+          'getAllEntries(null)': { status: QueryStatus.fulfilled },
+        },
+      },
+    });
+    await screen.findByText(/James/i);
+    const userPreferencesLink = screen.getByText(/User Preferences/i);
+    // Click User Preferences
+    userEvent.click(userPreferencesLink);
+    await screen.findByText(/SRG User Settings/i);
+    // Change Default Sport to Swimming
+    const allTime = screen.getByText(/All Time/i);
+    userEvent.click(allTime);
+    const thisYear = await screen.findByText(/This Year/i);
+    userEvent.click(thisYear);
+    // Waiting for the options to not be seen ensures that they dont render when the User Preferences Reloads
+    await waitFor(() => {
+      const element = screen.queryByText(/This Month/i);
+      expect(element).toBeNull();
+    });
+
+    // Close Modal
+    userEvent.click(screen.getByTestId('userpreferences-closebutton'));
+    await waitFor(() => {
+      const element = screen.queryByText(/SRG User Settings/i);
+      expect(element).toBeNull();
+    });
+
+    // Revisit User Preferences
+    userEvent.click(screen.getByText(/User Preferences/i));
+    await screen.findByText(/SRG User Settings/i);
+    // Check that Running is still the Default Option
+    expect(screen.getByText(/All Time/i)).toBeInTheDocument();
+  });
+
+  test('Destroy  User Settings Button should be disabled when Danger Area is closed and enabled when it is open', async () => {
+    renderWithState({
+      entriesApi: {
+        queries: {
+          'getAllEntries(null)': { status: QueryStatus.fulfilled },
+        },
+      },
+    });
+    await screen.findByText(/James/i);
+    const userPreferencesLink = screen.getByText(/User Preferences/i);
+    // Click User Preferences
+    userEvent.click(userPreferencesLink);
+    await screen.findByText(/SRG User Settings/i);
+    expect(screen.getByText(/Destroy All User Information/i)).toBeDisabled();
+    userEvent.click(screen.getByText(/Danger Zone/i));
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Destroy All User Information/i)
+      ).not.toBeDisabled();
+    });
   });
 });

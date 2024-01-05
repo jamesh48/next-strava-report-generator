@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 //
 import App from '@components/App/App';
 import GlobalStore from '@redux/store';
-import useFetchData from 'lib/useFetch';
+import { useFetchData } from '@lib';
 import { appInitialState } from '@redux/slices';
 
 export default function Home() {

@@ -14,8 +14,8 @@ const renderWithState = (
   return render(ui, { preloadedState: state, actions: preloadedDispatch });
 };
 
-describe.only('Swimming Totals Test Suite', () => {
-  it.only('Should render swimming totals', () => {
+describe('Swimming Totals Test Suite', () => {
+  it('Should render swimming totals', () => {
     renderWithState(
       {},
       {
