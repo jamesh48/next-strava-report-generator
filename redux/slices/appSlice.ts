@@ -23,7 +23,7 @@ export const appInitialState: {
   popupModalDetails: PopupModalDetails;
 } = {
   sortCondition: 'speedDesc',
-  sportCondition: 'running',
+  sportCondition: 'Run',
   customDateCondition: false,
   dateCondition: 'allTime',
   fromDate: '',

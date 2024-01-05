@@ -14,7 +14,13 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
     const { data } = await axios(
       `${process.env.DATA_BASE_URL}/srg/exchange_token?code=${code}`
     );
-    res.setHeader('Set-Cookie', `athleteId=${data}; HttpOnly`);
+    const futureDate = new Date(
+      new Date().getTime() + 10 * 365 * 24 * 60 * 60 * 1000
+    ); // 10 years from now
+    res.setHeader(
+      'Set-Cookie',
+      `athleteId=${data}; HttpOnly;Expires=${futureDate.toUTCString()}`
+    );
     return res.redirect(process.env.REDIRECT_URI_HOST!);
   } catch (err: any) {
     return res.send(err);

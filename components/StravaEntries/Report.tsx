@@ -137,7 +137,7 @@ const Report = (props: ReportProps) => {
   };
 
   return (
-    <Box id="report" sx={{ margin: '2.5% auto', width: '95%' }}>
+    <Box id="report" sx={{ width: '95%' }}>
       {isMobile ? (
         <PageNoUl
           {...props}

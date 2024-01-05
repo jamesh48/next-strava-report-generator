@@ -72,4 +72,28 @@ describe('PageNoUl Tests', () => {
     );
     expect(screen.getByText('2')).toBeInTheDocument();
   });
+
+  describe('Mobile Browser Tests', () => {
+    beforeAll(() => {
+      Object.defineProperty(window.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+        writable: true,
+      });
+    });
+
+    it('Should not Render a Select when there are no Entries in Mobile Browser', () => {
+      renderWithState(
+        {},
+        {
+          handleClick: () => {},
+          currentPage: 1,
+          entriesPerPage: 1,
+          entries: [],
+        }
+      );
+      const element = screen.queryByTestId('pageNumbers');
+      expect(element).not.toBeInTheDocument();
+    });
+  });
 });

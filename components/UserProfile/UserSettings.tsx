@@ -22,7 +22,7 @@ import {
 } from '@redux/slices';
 import axios from 'axios';
 import { useState } from 'react';
-import usePopupModal from 'lib/usePopupModal';
+import { usePopupModal } from '@lib';
 
 interface UserSettingsProps {
   closeUserSettingsCB: () => void;
@@ -95,7 +95,7 @@ const UserSettings = (props: UserSettingsProps) => {
               color: 'turquoise',
             }}
           >
-            <Close />
+            <Close data-testid="userpreferences-closebutton" />
           </Button>
         </Box>
         <Box>

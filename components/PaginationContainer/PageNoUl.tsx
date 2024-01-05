@@ -15,10 +15,11 @@ const PageNoUl = (props: PageNoUlProps) => {
   const isMobile = useMobileBrowserCheck();
 
   if (isMobile) {
-    return (
+    return props.entries?.length ? (
       <Select
         className="pageNoUls"
         id="pageNumbers"
+        data-testid="pageNumbers"
         sx={{
           marginBottom: '1%',
           display: 'flex',
@@ -69,13 +70,14 @@ const PageNoUl = (props: PageNoUlProps) => {
           return null;
         })()}
       </Select>
-    );
+    ) : null;
   }
   // Desktop View
   return (
     <List
       className="pageNoUls"
       id="pageNumbers"
+      data-testid="pageNumbers"
       disablePadding={true}
       sx={{
         listStyleType: 'none',

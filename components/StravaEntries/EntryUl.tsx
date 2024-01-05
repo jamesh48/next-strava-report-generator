@@ -4,6 +4,7 @@ import EmptyEntry from './EmptyEntry';
 import { CurrentActivity, Entry, Format } from './EntryTypes.js';
 import { List, ListItem } from '@mui/material';
 import { useGetAllEntriesQuery } from '@redux/slices';
+import { useCSX } from '@lib';
 
 interface EntryUIProps {
   entries: Entry[];
@@ -42,14 +43,16 @@ const EntryUI = (props: EntryUIProps) => {
     );
   });
 
+  const mobileStyles = useCSX({}, { marginBottom: '15%', marginTop: '2.5%' });
+
   return (
     <List
       className="entryUls"
       disablePadding={true}
       sx={{
         listStyleType: 'none',
-        marginBottom: '1%',
         boxShadow: '0 0 10px coral',
+        ...mobileStyles,
       }}
     >
       {(currentEntries?.length === 0 && totalEntries?.length) ||

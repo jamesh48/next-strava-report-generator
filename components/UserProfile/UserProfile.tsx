@@ -9,7 +9,7 @@ import { ProfileData } from './UserProfileTypes';
 import { fetchUserData, useCSX } from '@lib';
 import { useGetAllEntriesQuery } from '@redux/slices';
 
-const Profile = () => {
+const UserProfile = () => {
   const { isLoading } = useGetAllEntriesQuery(null);
   const [rateLimit, setRateLimit] = React.useState(false);
   const [userProfile, setUserProfile] = React.useState({
@@ -162,4 +162,4 @@ const Profile = () => {
     </Box>
   );
 };
-export default Profile;
+export default UserProfile;

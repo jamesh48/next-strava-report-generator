@@ -34,7 +34,7 @@ const RunningTotals = (props: RunningTotalsProps) => {
           cursor: 'default',
         }}
       >
-        Year To Date Run Totals
+        Year-To-Date Run Totals
       </Typography>
       <Typography className="ytdDescriptor" sx={{ cursor: 'default' }}>
         Number of Runs: {props.profile.ytd_run_totals.count}

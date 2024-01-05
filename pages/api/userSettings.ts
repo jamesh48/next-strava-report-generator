@@ -13,7 +13,6 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         srg_athlete_id,
       },
     });
-    console.log(data);
     return res.send(data);
   } catch (err) {
     console.log((err as { message: string }).message);

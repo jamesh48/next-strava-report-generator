@@ -1,0 +1,90 @@
+{
+  "id": 19812306,
+  "username": "james_hrivnak",
+  "resource_state": 2,
+  "firstname": "James",
+  "lastname": "Hrivnak",
+  "bio": "",
+  "city": "Boulder",
+  "state": "Colorado",
+  "country": "United States",
+  "sex": "M",
+  "premium": false,
+  "summit": false,
+  "created_at": "2017-02-08T06:13:59Z",
+  "updated_at": "2024-01-03T20:48:42Z",
+  "badge_type_id": 0,
+  "weight": 95.2543,
+  "profile_medium": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/19812306/13697941/1/medium.jpg",
+  "profile": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/19812306/13697941/1/large.jpg",
+  "friend": null,
+  "follower": null,
+  "biggest_ride_distance": null,
+  "biggest_climb_elevation_gain": null,
+  "recent_ride_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0,
+    "achievement_count": 0
+  },
+  "all_ride_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0
+  },
+  "recent_run_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0,
+    "achievement_count": 0
+  },
+  "all_run_totals": {
+    "count": 172,
+    "distance": 1420488,
+    "moving_time": 508328,
+    "elapsed_time": 539610,
+    "elevation_gain": 5996
+  },
+  "recent_swim_totals": {
+    "count": 5,
+    "distance": 11023.279907226562,
+    "moving_time": 15514,
+    "elapsed_time": 15519,
+    "elevation_gain": 0,
+    "achievement_count": 0
+  },
+  "all_swim_totals": {
+    "count": 254,
+    "distance": 598749,
+    "moving_time": 791048,
+    "elapsed_time": 793525,
+    "elevation_gain": 0
+  },
+  "ytd_ride_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0
+  },
+  "ytd_run_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0
+  },
+  "ytd_swim_totals": {
+    "count": 0,
+    "distance": 0,
+    "moving_time": 0,
+    "elapsed_time": 0,
+    "elevation_gain": 0
+  }
+}
