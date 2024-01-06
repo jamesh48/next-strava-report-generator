@@ -21,7 +21,7 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
       - name: Run Client integration tests
-        run: npm run test:client
+        run: npm run test:silent:client -- --runInBand
   # https://dev.to/aws-builders/deploy-to-aws-with-github-actions-and-aws-cdk-4m1e
   deploy:
     runs-on: ubuntu-latest
