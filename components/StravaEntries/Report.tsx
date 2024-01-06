@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, SelectChangeEvent } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import { Entry, Format } from './EntryTypes.js';
+import { Entry, Format, Sport } from './EntryTypes.js';
 import {
   useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
@@ -13,7 +13,7 @@ import { useSelector } from '@redux/reduxHooks';
 import { useMobileBrowserCheck } from '@lib';
 
 export interface ReportProps {
-  sport: string;
+  sport: Sport;
   distance: number;
   format: Format;
   titleQuery: string;

@@ -1,5 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@redux/store';
+import { Sport } from '@components/StravaEntries/EntryTypes';
 
 export type ModalSeverities = 'success' | 'info' | 'warning' | 'error';
 type ModalStates = 'closed' | 'confirmed' | 'canceled' | 'open';
@@ -15,7 +16,7 @@ export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 
 export const appInitialState: {
   sortCondition: string;
-  sportCondition: string;
+  sportCondition: Sport;
   customDateCondition: boolean;
   dateCondition: DateCondition;
   fromDate: string;
@@ -57,7 +58,7 @@ export const appSlice = createSlice({
     setSortCondition: (state, action: PayloadAction<string>) => {
       state.sortCondition = action.payload;
     },
-    setSportCondition: (state, action: PayloadAction<string>) => {
+    setSportCondition: (state, action: PayloadAction<Sport>) => {
       state.sportCondition = action.payload;
     },
     setDateCondition: (state, action: PayloadAction<DateCondition>) => {

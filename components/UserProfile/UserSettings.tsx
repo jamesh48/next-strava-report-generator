@@ -23,6 +23,7 @@ import {
 import axios from 'axios';
 import { useState } from 'react';
 import { usePopupModal } from '@lib';
+import { Sport } from '@components/StravaEntries/EntryTypes';
 
 interface UserSettingsProps {
   closeUserSettingsCB: () => void;
@@ -38,7 +39,9 @@ const UserSettings = (props: UserSettingsProps) => {
     useSelector(getDateCondition);
 
   const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
-  const [selectedSport, setSelectedSport] = useState(defaultSportCondition);
+  const [selectedSport, setSelectedSport] = useState<Sport>(
+    defaultSportCondition
+  );
   const [selectedDate, setSelectedDate] = useState<DateCondition>(
     defaultDateCondition as DateCondition
   );
@@ -116,7 +119,9 @@ const UserSettings = (props: UserSettingsProps) => {
               sx={{ height: '2rem', width: '15rem' }}
               defaultValue={defaultSportCondition}
               inputProps={{ sx: { color: 'coral' } }}
-              onChange={(event) => setSelectedSport(event.target.value)}
+              onChange={(event) =>
+                setSelectedSport(event.target.value as Sport)
+              }
             >
               {/* Values correspond with radio values */}
               <MenuItem value="Run">Running</MenuItem>

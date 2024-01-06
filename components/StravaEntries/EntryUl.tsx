@@ -1,7 +1,7 @@
 import React from 'react';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
-import { CurrentActivity, Entry, Format } from './EntryTypes.js';
+import { CurrentActivity, Entry, Format, Sport } from './EntryTypes.js';
 import { List, ListItem } from '@mui/material';
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { useCSX } from '@lib';
@@ -12,7 +12,7 @@ interface EntryUIProps {
   currentPage: number;
   currentActivity: CurrentActivity;
   invalidEntry: boolean;
-  sport: string;
+  sport: Sport;
   format?: Format;
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
 }

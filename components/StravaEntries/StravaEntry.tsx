@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
-import { CurrentActivity, Entry, Format } from './EntryTypes';
+import { CurrentActivity, Entry, Format, Sport } from './EntryTypes';
 import { useUpdateIndividualEntryMutation } from '@redux/slices';
 
-interface StravaEntryProps {
+export interface StravaEntryProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-  sport: string;
+  sport: Sport;
   entry: Entry;
   format: Format;
   no: number | undefined;

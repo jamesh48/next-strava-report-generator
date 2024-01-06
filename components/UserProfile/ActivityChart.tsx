@@ -39,7 +39,7 @@ interface CalendarDates {
   dec: { count: number; distance: number };
 }
 
-interface ActivityChartProps {
+export interface ActivityChartProps {
   activityType: 'Run' | 'Swim' | 'Ride' | 'Walk';
 }
 

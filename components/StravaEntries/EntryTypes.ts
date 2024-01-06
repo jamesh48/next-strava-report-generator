@@ -3,6 +3,8 @@ export interface EntryDescriptorProps {
   value: string;
 }
 
+export type Sport = 'Swim' | 'Run' | 'Ride' | 'Walk';
+
 export type Format =
   | 'avgmpace'
   | 'avgypace'

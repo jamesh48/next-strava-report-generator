@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import UserProfile from '@components/UserProfile/UserProfile';
 // import reportTestData from "../../backend/testData/entryTestData";
 import Report from '@components/StravaEntries/Report';
-import { Format } from '@components/StravaEntries/EntryTypes';
+import { Format, Sport } from '@components/StravaEntries/EntryTypes';
 import {
   getSportCondition,
   setSportCondition,
@@ -40,7 +40,7 @@ export default function App() {
 
   const setSportCallback: React.MouseEventHandler<HTMLLabelElement> &
     React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    const value = (e.target as HTMLInputElement).value;
+    const value = (e.target as HTMLInputElement).value as Sport;
     dispatch(setSportCondition(value));
   };
 

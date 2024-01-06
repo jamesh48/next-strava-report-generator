@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
-import { render as rtlRender } from '@testing-library/react';
+import { act, render as rtlRender } from '@testing-library/react';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import GlobalStore, { RootState } from '@redux/store';
+import userEvent from '@testing-library/user-event';
 
 type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>;
@@ -52,6 +53,12 @@ function render(
     ...renderOptions,
   });
 }
+
+export const actClick = async (selector: Element) => {
+  await act(async () => {
+    userEvent.click(selector);
+  });
+};
 
 export * from '@testing-library/react';
 export { render };
