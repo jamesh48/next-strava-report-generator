@@ -11,7 +11,7 @@ import {
   getSortCondition,
   appInitialState,
   getSportCondition,
-  // getPopupModalDetails,
+  getPopupModalDetails,
   getModalState,
 } from '@redux/slices/appSlice';
 
@@ -54,6 +54,17 @@ describe('appSlice reducers', () => {
 });
 
 describe('appSlice selectors', () => {
+  it('should select popUpModalDetails from state', () => {
+    // @ts-expect-errorts-ignore
+    const result = getPopupModalDetails({ app: appInitialState });
+    expect(result).toEqual({
+      body: '',
+      severity: 'success',
+      state: 'closed',
+      title: '',
+    });
+  });
+
   it('should select sortCondition from the state', () => {
     // @ts-expect-errorts-ignore
     const result = getSortCondition({ app: appInitialState });

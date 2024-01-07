@@ -18,7 +18,7 @@ import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
 
-interface DetailedEntryProps {
+export interface DetailedEntryProps {
   editing: boolean;
   editedDescription: string;
   currentActivity: CurrentActivity;
