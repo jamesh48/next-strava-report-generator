@@ -57,7 +57,7 @@ describe('StravaEntry Tests', () => {
           photos: {
             primary: {
               urls: {
-                '600': '',
+                '600': 'https://www.google.com',
               },
             },
           },

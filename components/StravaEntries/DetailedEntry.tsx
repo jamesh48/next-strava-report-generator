@@ -332,15 +332,16 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               src="/images/heartrate.png"
               layout="static"
             />
-            <Typography
+            <Box
               className="heartRate"
               id="avgHeartRate"
-              variant="h6"
-              color="ivory"
               sx={{ paddingLeft: '1.5%', margin: 0 }}
             >
-              <Typography>No HR Info Available</Typography>
-            </Typography>
+              <Typography variant="h6" color="ivory">
+                No HR Info Available
+              </Typography>
+            </Box>
+
             <Typography
               variant="h6"
               className="heartRate"
