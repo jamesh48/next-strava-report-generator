@@ -1,12 +1,7 @@
-import allEntries from '../../MSW/jsonPayloads/allEntries.json';
-import Report, { ReportProps } from '@components/StravaEntries/Report';
-import {
-  TestActions,
-  TestState,
-  render,
-  screen,
-} from '../../testUtils/test-utils';
 import { QueryStatus } from '@reduxjs/toolkit/query';
+import allEntries from '@testing/MSW/jsonPayloads/allEntries.json';
+import Report, { ReportProps } from '@components/StravaEntries/Report';
+import { TestActions, TestState, render, screen } from '@testing/test-utils';
 
 const renderWithState = (
   state: TestState,

@@ -2,8 +2,7 @@ import React from 'react';
 import SwimmingTotals, {
   SwimmingTotalsProps,
 } from '@components/UserProfile/SwimmingTotals';
-import { screen } from '@testing-library/dom';
-import { TestActions, TestState, render } from '../../testUtils/test-utils';
+import { TestActions, TestState, render, screen } from '@testing/test-utils';
 
 const renderWithState = (
   state: TestState,

@@ -4,7 +4,9 @@
     "paths": {
       "@redux/*": ["redux/*"],
       "@lib": ["lib"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@testing/*": ["testing/*"],
+      "@pages/*": ["./pages/*"]
     }
   }
 }

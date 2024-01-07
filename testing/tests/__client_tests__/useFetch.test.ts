@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import userSettings from '../../MSW/jsonPayloads/userSettings.json';
+import userSettings from '@testing/MSW/jsonPayloads/userSettings.json';
 import { useFetchData } from '@lib';
 
 describe('useFetchData tests', () => {

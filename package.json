@@ -7,7 +7,7 @@
     "start": "next start -p 8000",
     "lint": "next lint",
     "test:client": "TEST_ENV=client jest --watch ./",
-    "test:silent:client": "TEST_ENV=client jest --silent ./",
+    "test:silent:client": "TEST_ENV=client jest --silent",
     "test:server": "TEST_ENV=server jest --watch ./__server_tests__"
   },
   "dependencies": {

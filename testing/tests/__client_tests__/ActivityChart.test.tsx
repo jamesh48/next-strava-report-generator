@@ -2,13 +2,13 @@ import React from 'react';
 import ActivityChart, {
   ActivityChartProps,
 } from '@components/UserProfile/ActivityChart';
-import { screen } from '@testing-library/dom';
 import {
   TestActions,
   TestState,
   actClick,
   render,
-} from '../../testUtils/test-utils';
+  screen,
+} from '@testing/test-utils';
 
 const renderWithState = (
   state: TestState,

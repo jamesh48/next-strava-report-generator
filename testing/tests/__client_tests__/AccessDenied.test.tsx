@@ -1,10 +1,13 @@
 import React from 'react';
+import {
+  TestActions,
+  TestState,
+  actClick,
+  render,
+  screen,
+} from '@testing/test-utils';
 
-import { TestActions, TestState, render } from '../../testUtils/test-utils';
-import { screen } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
-
-import AccessDenied from '../../../pages/AccessDenied';
+import AccessDenied from '@pages/AccessDenied';
 
 const renderWithState = (
   state: TestState,
@@ -46,7 +49,7 @@ describe('Access Denied Test Suite', () => {
     expect(jest.isMockFunction(window.location.replace)).toBe(true);
     renderWithState({}, {});
     const reloadButton = screen.getByText('Authorize');
-    userEvent.click(reloadButton);
+    actClick(reloadButton);
     expect(window.location.replace).toHaveBeenCalled();
   });
 });

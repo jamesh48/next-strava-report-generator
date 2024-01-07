@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 type UseIntervalFunc = (callback: () => void, delay: number | null) => void;
 
-export const useInterval: UseIntervalFunc = (callback, delay) => {
+const useInterval: UseIntervalFunc = (callback, delay) => {
   const savedCallback: React.MutableRefObject<any> = React.useRef();
   // Remember the latest callback.
   useEffect(() => {
@@ -30,3 +30,5 @@ export const useInterval: UseIntervalFunc = (callback, delay) => {
     return;
   }, [delay]);
 };
+
+export default useInterval;

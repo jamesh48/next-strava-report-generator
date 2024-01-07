@@ -1,14 +1,15 @@
 import React from 'react';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 import UserProfile from '@components/UserProfile/UserProfile';
-import { screen, waitFor } from '@testing-library/dom';
 import {
   TestActions,
   TestState,
   act,
   render,
   actClick,
-} from '../../testUtils/test-utils';
-import { QueryStatus } from '@reduxjs/toolkit/query';
+  screen,
+  waitFor,
+} from '@testing/test-utils';
 
 const renderWithState = (
   state: TestState,
