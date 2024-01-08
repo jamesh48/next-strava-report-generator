@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-
-import { Box, Link, TextField, Typography } from '@mui/material';
+import HeartRateChart from './HeartRateChart';
+import { Box, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
+import EditingContainer from './EditingContainer';
 
 export interface DetailedEntryProps {
   editing: boolean;
@@ -27,16 +16,6 @@ export interface DetailedEntryProps {
   handleActivityUpdate: () => void;
   format: Format;
 }
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const DetailedEntry = (props: DetailedEntryProps) => {
   const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
@@ -58,59 +37,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     }
   }, [kudoersResults]);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Heart Rate',
-      },
-    },
-  };
-
-  let data;
-  const currentMeasurement = (() => {
-    if (props.format === 'avgypace') {
-      return 'yds';
-    }
-    return 'mtrs';
-  })();
-
-  if (props.currentActivity.laps) {
-    let cumulativeDistance = 0;
-
-    data = {
-      labels: props.currentActivity.laps.map(
-        (increment) =>
-          (cumulativeDistance +=
-            increment.distance *
-            (() => {
-              if (props.format === 'avgypace') {
-                return 1.094;
-              }
-              return 1;
-            })()).toFixed() + ` ${currentMeasurement}`
-      ),
-      datasets: [
-        {
-          label: 'Max Heart Rate',
-          data: props.currentActivity.laps.map((x) => x.max_heartrate),
-          borderColor: 'red',
-          backgroundColor: 'red',
-        },
-        {
-          label: 'Average Heart Rate',
-          data: props.currentActivity.laps.map((x) => x.average_heartrate),
-          borderColor: 'darkturquoise',
-          backgroundColor: 'darkturquoise',
-        },
-      ],
-    };
-  }
-
   const handleKudosClick = () => {
     getKudoers(props.currentActivity.id);
     setCurrentStat((prevStat) => {
@@ -127,9 +53,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     <Box
       className="detailedEntry"
       sx={{
-        backgroundColor: 'coral',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
         border: '2px solid orangered',
         display: 'flex',
+        bgcolor: 'coral',
         flexDirection: 'column',
         textRendering: 'geometricPrecision',
         '& > p': {
@@ -145,6 +74,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           flexDirection: 'column',
           marginX: '1%',
           marginBottom: '1%',
+          width: '97.5%',
         }}
       >
         <Typography variant="h6" sx={{ color: 'ivory' }}>
@@ -156,8 +86,18 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             rows={20}
             value={props.editedDescription}
             onChange={props.handleDescriptionChange}
-            sx={{ width: '90%', alignSelf: 'center', display: 'flex' }}
-            InputProps={{ sx: { color: 'ivory' } }}
+            sx={{
+              width: '100%',
+              alignSelf: 'center',
+              display: 'flex',
+              marginBottom: '1%',
+            }}
+            InputProps={{
+              sx: {
+                color: 'ivory',
+                border: '1px solid ivory',
+              },
+            }}
           />
         ) : (
           <Typography
@@ -167,7 +107,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              marginX: '1%',
               marginBottom: '1%',
               whiteSpace: 'pre-line',
               border: '1px solid ivory',
@@ -177,13 +116,21 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             {props.currentActivity.description}
           </Typography>
         )}
+        <EditingContainer
+          handleActivityUpdate={props.handleActivityUpdate}
+          handleEditingChange={props.handleEditingChange}
+          editing={props.editing}
+        />
       </Box>
+
       <Box
         id="funStats"
         sx={{
           display: 'flex',
-          marginLeft: '2.5%',
-
+          width: '90%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          // marginLeft: '2.5%',
           ...mobileColumns,
         }}
       >
@@ -399,50 +346,18 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         ) : null}
       </Box>
       {/* Gear */}
-      <Box id="topActivityGear" sx={{ marginLeft: '1.5%', color: 'ivory' }}>
+      <Box
+        id="topActivityGear"
+        sx={{ alignSelf: 'flex-start', marginLeft: '1.5%', color: 'ivory' }}
+      >
         <Typography>Gear: {props.currentActivity.device_name}</Typography>
       </Box>
-      {
-        <Box
-          className="editingContainer"
-          sx={{ alignSelf: 'flex-end', padding: '0.5% 1.25%' }}
-        >
-          {props.editing && (
-            <Link
-              className="editingLink"
-              onClick={props.handleActivityUpdate}
-              sx={{
-                color: 'blue',
-                textDecoration: 'none',
-                marginRight: '10%',
-                cursor: 'pointer',
-                '&:hover': {
-                  color: 'ivory',
-                },
-              }}
-            >
-              Submit!
-            </Link>
-          )}
-          <Link
-            className="editingLink"
-            onClick={props.handleEditingChange}
-            sx={{
-              color: 'blue',
-              textDecoration: 'none',
-              marginRight: '10%',
-              cursor: 'pointer',
-              '&:hover': {
-                color: 'ivory',
-              },
-            }}
-          >
-            {props.editing ? 'Cancel' : 'Edit'}
-          </Link>
-        </Box>
-      }
-      {currentStat === 'heartRate' && data ? (
-        <Line options={options} data={data} />
+
+      {currentStat === 'heartRate' ? (
+        <HeartRateChart
+          currentActivity={props.currentActivity}
+          format={props.format}
+        />
       ) : currentStat === 'kudosComments' ? (
         <Box
           sx={{
