@@ -4,6 +4,10 @@ import StravaEntry, {
   StravaEntryProps,
 } from '@components/StravaEntries/StravaEntry';
 import { TestActions, TestState, render, screen } from '@testing/test-utils';
+import {
+  detailedEntryCurrentActivity,
+  stravaEntryGeneralEntry,
+} from '@testing/testFixtures';
 
 const renderWithState = (
   state: TestState,
@@ -37,43 +41,10 @@ describe('StravaEntry Tests', () => {
       {
         no: 1,
         showIndividualEntry: () => {},
-        currentActivity: {
-          id: 1759438787,
-          name: '2014 Barcelona E-Dreams Half Marathon',
-          kudos_count: 4,
-          comment_count: 3,
-          average_heartrate: 180,
-          max_heartrate: 195,
-          achievement_count: 2,
-          description: 'Took it out fast came home slow',
-          device_name: 'Apple Watch Ultra',
-          laps: [
-            {
-              max_heartrate: 195,
-              average_heartrate: 180,
-              distance: 21100,
-            },
-          ],
-          photos: {
-            primary: {
-              urls: {
-                '600': 'https://www.google.com',
-              },
-            },
-          },
-        },
+        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         sport: 'Run',
-        entry: {
-          activityId: 1759438787,
-          type: 'Run',
-          start_date: '2014-02-16T16:00:00Z',
-          max_speed: '0',
-          moving_time: 5544,
-          name: '2014 Barcelona E-Dreams Half Marathon',
-          distance: 21100,
-          elapsed_time: 5544,
-        },
+        entry: stravaEntryGeneralEntry,
       }
     );
     expect(
