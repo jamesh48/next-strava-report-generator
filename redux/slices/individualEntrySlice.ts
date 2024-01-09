@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
+import { entriesApi } from './entriesSlice';
 
 type Athlete = { firstname: string; lastname: string };
 export const individualEntrySlice = createApi({
@@ -33,10 +34,32 @@ export const individualEntrySlice = createApi({
     >({
       invalidatesTags: ['IndividualEntry'],
       query: (event) => ({
-        method: 'GET',
-        url: 'putActivityUpdate',
-        params: event,
+        method: 'POST',
+        url: '/putActivityUpdate',
+        body: event,
       }),
+      // Optimistic Update for the new Activity Name
+      onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
+        dispatch(
+          entriesApi.util.updateQueryData('getAllEntries', null, (draft) => {
+            const draftIndex = draft.findIndex((existingActivity) => {
+              return (
+                String(existingActivity.activityId) ===
+                String(payload.activityId)
+              );
+            });
+
+            draft[draftIndex].name = payload.name;
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          // Refetch all Activities on Failure
+          dispatch(entriesApi.util.invalidateTags(['Activities']));
+        }
+      },
     }),
   }),
 });

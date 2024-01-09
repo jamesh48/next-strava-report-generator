@@ -24,8 +24,7 @@ export interface RadiosProps {
 }
 
 const Radios = (props: RadiosProps) => {
-  const { data: totalEntries } = useGetAllEntriesQuery(null);
-
+  const { isSuccess } = useGetAllEntriesQuery(null);
   const initArr = [
     {
       title: 'Choose Sport',
@@ -42,7 +41,7 @@ const Radios = (props: RadiosProps) => {
           ? InputJSON.distanceSwimRadios
           : props.sport === 'Ride'
           ? InputJSON.distanceRideRadios
-          : [],
+          : InputJSON.distanceRunRadios,
       customDistance: props.customDistance,
       distance: props.distance,
     },
@@ -56,10 +55,11 @@ const Radios = (props: RadiosProps) => {
           ? InputJSON.formatSwimRadios
           : props.sport === 'Ride'
           ? InputJSON.formatRideRadios
-          : [],
+          : InputJSON.formatRunRadios,
       format: props.format,
     },
   ];
+
   return (
     <Box
       id="buttonsAndBar"
@@ -87,14 +87,11 @@ const Radios = (props: RadiosProps) => {
       >
         {initArr.map((radioColumn, index) => {
           return (
-            <RadioColumn
-              key={index}
-              {...radioColumn}
-              isLoaded={!!totalEntries?.length}
-            />
+            <RadioColumn key={index} {...radioColumn} isLoaded={isSuccess} />
           );
         })}
       </Box>
+
       <AdditionalFilters
         setTitleQuery={props.setTitleQuery}
         titleQuery={props.titleQuery}

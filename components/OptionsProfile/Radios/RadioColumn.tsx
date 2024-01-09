@@ -64,8 +64,6 @@ const RadioColumn = (props: RadioColumnProps) => {
         sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       >
         <FormControl>
-          {/* <RadioGroup value={props.radioValues[0]?.value}>
-           */}
           <RadioGroup
             value={(() => {
               if (props.title === 'Choose Sport' && sportCondition) {
@@ -108,30 +106,27 @@ const RadioColumn = (props: RadioColumnProps) => {
                   key={index}
                   value={radio.value}
                   disabled={!props.isLoaded ? true : false}
-                  control={
-                    <Radio
-                      checked={(() => {
-                        if (radio.name.indexOf('distance') > -1) {
-                          if (props.customDistance) {
-                            return false;
-                          }
-                          if (radio.value === '0' && props.distance === 0) {
-                            return true;
-                          }
-                          if (
-                            radio.value !== '0' &&
-                            props.distance === Number(radio.value)
-                          ) {
-                            return true;
-                          }
-                          return false;
-                        }
-                        return undefined;
-                      })()}
-                    />
-                  }
+                  checked={(() => {
+                    if (radio.name.indexOf('distance') > -1) {
+                      if (props.customDistance) {
+                        return false;
+                      }
+                      if (radio.value === '0' && props.distance === 0) {
+                        return true;
+                      }
+                      if (
+                        radio.value !== '0' &&
+                        props.distance === Number(radio.value)
+                      ) {
+                        return true;
+                      }
+                      return false;
+                    }
+                    return undefined;
+                  })()}
                   label={radio.labelText}
                   onClick={props.setCallback}
+                  control={<Radio />}
                 />
               );
             })}
