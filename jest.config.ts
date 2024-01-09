@@ -18,8 +18,8 @@ const customJestConfig: Config.InitialOptions = {
   collectCoverage: true,
   coveragePathIgnorePatterns: [
     '/node_modules/',
-    '<rootDir>/src/resources/',
-    '<rootDir>/src/shared/testFixtures/',
+    '<rootDir>/components/UserProfile/ActivityChart.tsx',
+    '<rootDir>/components/StravaEntries/HeartRateChart.tsx',
   ],
   testPathIgnorePatterns:
     process.env.TEST_ENV === 'client'

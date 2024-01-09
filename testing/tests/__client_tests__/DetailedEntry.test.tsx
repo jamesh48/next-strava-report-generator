@@ -19,11 +19,10 @@ describe('Detailed Entry Tests', () => {
     renderWithState(
       {},
       {
-        editing: false,
+        editingDescription: false,
         editedDescription: '',
-        handleEditingChange: () => {},
+        handleEditingDescriptionChange: () => {},
         handleDescriptionChange: () => {},
-        handleActivityUpdate: () => {},
         currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
       }
@@ -40,11 +39,10 @@ describe('Detailed Entry Tests', () => {
     renderWithState(
       {},
       {
-        editing: true,
+        editingDescription: true,
         editedDescription: 'Took it out fast came home slow',
-        handleEditingChange: () => {},
+        handleEditingDescriptionChange: () => {},
         handleDescriptionChange: () => {},
-        handleActivityUpdate: () => {},
         currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
       }
@@ -52,10 +50,11 @@ describe('Detailed Entry Tests', () => {
     expect(
       screen.getByText(/Took it out fast came home slow/i)
     ).toBeInTheDocument();
+    expect(screen.getByText(/Kudos/i)).toBeInTheDocument();
+    expect(screen.getByText(/Avg/i)).toBeInTheDocument();
     expect(screen.getByText(/Achievement Count/i)).toBeInTheDocument();
     expect(screen.getByText(/2/i)).toBeInTheDocument();
     expect(screen.getByText(/Apple Watch Ultra/i)).toBeInTheDocument();
     expect(screen.getByText(/195 bpm/i)).toBeInTheDocument();
-    expect(screen.getByText(/Submit/i)).toBeInTheDocument();
   });
 });

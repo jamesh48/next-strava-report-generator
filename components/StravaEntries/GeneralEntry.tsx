@@ -2,19 +2,27 @@ import React from 'react';
 import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
-import { Box, Link, Typography } from '@mui/material';
+import {
+  Box,
+  ClickAwayListener,
+  Link,
+  OutlinedInput,
+  Typography,
+} from '@mui/material';
 import { useCSX } from '@lib';
 
 interface GeneralEntryProps {
   no: number | undefined;
-  editing: boolean;
+  editingHeadline: boolean;
   editedName: string;
   entry: Entry;
   sport: string;
   format: Format;
   currentActivity: CurrentActivity;
   handleNameChange: (e: { target: { value: string } }) => void;
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
+  handleEditingHeadlineChange: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent> | true
+  ) => void;
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
@@ -93,18 +101,30 @@ const GeneralEntry = (props: GeneralEntryProps) => {
         className={
           isTopThreeEntry ? 'generalEntry specialEntry' : 'generalEntry'
         }
+        data-indentry={props.entry.activityId}
+        onClick={props.handleEditingHeadlineChange}
         sx={{
           ...(() => {
             if (isTopThreeEntry) {
               return {
+                // Clickable Area for Detailed Entry
+                width: '15%',
+                '& > *': {
+                  cursor: 'pointer',
+                },
                 color: 'ivory',
-                padding: '10px',
+                padding: '1rem',
                 '& > p': {
                   paddingLeft: '1.5%',
                 },
               };
             }
             return {
+              // Clickable Area for Detailed Entry
+              width: '15%',
+              '& > *': {
+                cursor: 'pointer',
+              },
               padding: '10px',
               '& > p': {
                 paddingLeft: '1.5%',
@@ -113,18 +133,21 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           })(),
         }}
       >
-        {props.editing ? (
-          <input
-            type="text"
-            value={props.editedName}
-            onChange={props.handleNameChange}
-          />
+        {props.editingHeadline ? (
+          <ClickAwayListener
+            onClickAway={() => props.handleEditingHeadlineChange(true)}
+          >
+            <OutlinedInput
+              type="text"
+              value={props.editedName}
+              onChange={props.handleNameChange}
+              sx={{ color: 'ivory', border: '1px solid white', height: '2rem' }}
+            />
+          </ClickAwayListener>
         ) : (
           <Link
             className="entryTitle"
-            data-indentry={props.entry.activityId}
             href=""
-            onClick={props.showIndividualEntry}
             sx={{
               color: isTopThreeEntry ? 'ivory' : 'orangered',
               textDecorationColor: isTopThreeEntry ? 'ivory' : 'orangered',

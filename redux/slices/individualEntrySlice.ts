@@ -41,6 +41,15 @@ export const individualEntrySlice = createApi({
       // Optimistic Update for the new Activity Name
       onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
         dispatch(
+          individualEntrySlice.util.updateQueryData(
+            'getIndividualEntry',
+            payload.activityId,
+            (draft) => {
+              draft.description = payload.description;
+            }
+          )
+        );
+        dispatch(
           entriesApi.util.updateQueryData('getAllEntries', null, (draft) => {
             const draftIndex = draft.findIndex((existingActivity) => {
               return (
@@ -56,6 +65,7 @@ export const individualEntrySlice = createApi({
         try {
           await queryFulfilled;
         } catch (err) {
+          console.log(err);
           // Refetch all Activities on Failure
           dispatch(entriesApi.util.invalidateTags(['Activities']));
         }

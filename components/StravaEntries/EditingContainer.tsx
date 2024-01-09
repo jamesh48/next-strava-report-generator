@@ -25,7 +25,7 @@ const EditingContainer = (props: EditingContainerProps) => (
         Submit!
       </Link>
     )}
-    <Link
+    {/* <Link
       className="editingLink"
       onClick={props.handleEditingChange}
       sx={{
@@ -39,7 +39,7 @@ const EditingContainer = (props: EditingContainerProps) => (
       }}
     >
       {props.editing ? 'Cancel' : 'Edit'}
-    </Link>
+    </Link> */}
   </Box>
 );
 

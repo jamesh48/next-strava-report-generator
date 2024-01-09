@@ -14,7 +14,7 @@ interface EntryUIProps {
   invalidEntry: boolean;
   sport: Sport;
   format?: Format;
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
+  showIndividualEntry: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const EntryUI = (props: EntryUIProps) => {

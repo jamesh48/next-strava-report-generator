@@ -17,7 +17,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         description,
       },
     });
-    return res.send('data');
+    return res.send({ message: 'data' });
   } catch (err) {
     const typedErr = err as { message: string };
     return res.send(typedErr.message);

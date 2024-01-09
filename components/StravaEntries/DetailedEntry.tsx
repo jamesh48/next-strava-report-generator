@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import HeartRateChart from './HeartRateChart';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, ClickAwayListener, TextField, Typography } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
-import EditingContainer from './EditingContainer';
 
 export interface DetailedEntryProps {
-  editing: boolean;
+  editingDescription: boolean;
   editedDescription: string;
   currentActivity: CurrentActivity;
-  handleEditingChange: React.MouseEventHandler<HTMLAnchorElement>;
+  handleEditingDescriptionChange: () => void;
   handleDescriptionChange: (e: { target: { value: string } }) => void;
-  handleActivityUpdate: () => void;
   format: Format;
 }
 
@@ -29,6 +27,16 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       athlete: { firstname: string; lastname: string };
     }[]
   >([]);
+
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (props.editingDescription && ref.current) {
+      ref.current.focus();
+      const textLength = ref.current.value.length;
+      ref.current.setSelectionRange(textLength, textLength);
+    }
+  }, [props.editingDescription]);
 
   useEffect(() => {
     if (kudoersResults && kudoersResults.data) {
@@ -48,7 +56,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   };
 
   const mobileColumns = useCSX('row', 'column', 'flexDirection');
-
   return (
     <Box
       className="detailedEntry"
@@ -73,32 +80,36 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           display: 'flex',
           flexDirection: 'column',
           marginX: '1%',
-          marginBottom: '1%',
           width: '97.5%',
         }}
       >
         <Typography variant="h6" sx={{ color: 'ivory' }}>
           Activity Description:
         </Typography>
-        {props.editing ? (
-          <TextField
-            multiline
-            rows={20}
-            value={props.editedDescription}
-            onChange={props.handleDescriptionChange}
-            sx={{
-              width: '100%',
-              alignSelf: 'center',
-              display: 'flex',
-              marginBottom: '1%',
-            }}
-            InputProps={{
-              sx: {
-                color: 'ivory',
-                border: '1px solid ivory',
-              },
-            }}
-          />
+        {props.editingDescription ? (
+          <ClickAwayListener
+            onClickAway={(_e) => props.handleEditingDescriptionChange()}
+          >
+            <TextField
+              multiline
+              rows={20}
+              inputRef={ref}
+              value={props.editedDescription}
+              onChange={props.handleDescriptionChange}
+              sx={{
+                width: '100%',
+                alignSelf: 'center',
+                display: 'flex',
+                marginBottom: '1%',
+              }}
+              InputProps={{
+                sx: {
+                  color: 'ivory',
+                  border: '1px solid ivory',
+                },
+              }}
+            />
+          </ClickAwayListener>
         ) : (
           <Typography
             className="topActivityDescription"
@@ -107,20 +118,29 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
-              marginBottom: '1%',
               whiteSpace: 'pre-line',
               border: '1px solid ivory',
               padding: '1rem',
             }}
+            onClick={props.handleEditingDescriptionChange}
           >
             {props.currentActivity.description}
           </Typography>
         )}
-        <EditingContainer
-          handleActivityUpdate={props.handleActivityUpdate}
-          handleEditingChange={props.handleEditingChange}
-          editing={props.editing}
-        />
+      </Box>
+      {/* Gear */}
+      <Box
+        id="topActivityGear"
+        sx={{
+          alignSelf: 'flex-start',
+          marginLeft: '1.75rem',
+          color: 'ivory',
+          padding: '.5rem',
+          marginY: '.75rem',
+          border: '1px solid ivory',
+        }}
+      >
+        <Typography>Gear: {props.currentActivity.device_name}</Typography>
       </Box>
 
       <Box
@@ -130,7 +150,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           width: '90%',
           justifyContent: 'center',
           alignItems: 'center',
-          // marginLeft: '2.5%',
           ...mobileColumns,
         }}
       >
@@ -270,6 +289,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             id="goldenHeartRate"
             sx={{
               display: 'flex',
+              flex: 1,
             }}
           >
             <Image
@@ -345,13 +365,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           />
         ) : null}
       </Box>
-      {/* Gear */}
-      <Box
-        id="topActivityGear"
-        sx={{ alignSelf: 'flex-start', marginLeft: '1.5%', color: 'ivory' }}
-      >
-        <Typography>Gear: {props.currentActivity.device_name}</Typography>
-      </Box>
 
       {currentStat === 'heartRate' ? (
         <HeartRateChart
@@ -364,12 +377,23 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             paddingLeft: '2.5%',
             color: 'ivory',
             display: 'flex',
+            width: '100%',
             ...mobileColumns,
           }}
         >
           {currentKudoers.length ? (
-            <Box sx={{ marginLeft: '1rem' }}>
-              <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start',
+                paddingLeft: '5rem',
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{ textDecoration: 'underline', width: '100%' }}
+              >
                 Kudoers
               </Typography>
               <Box>

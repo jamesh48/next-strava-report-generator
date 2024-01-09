@@ -6,7 +6,7 @@ import { CurrentActivity, Entry, Format, Sport } from './EntryTypes';
 import { useUpdateIndividualEntryMutation } from '@redux/slices';
 
 export interface StravaEntryProps {
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
+  showIndividualEntry: React.MouseEventHandler<HTMLDivElement>;
   sport: Sport;
   entry: Entry;
   format: Format;
@@ -15,7 +15,8 @@ export interface StravaEntryProps {
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
-  const [editing, toggleEditing] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
+  const [editingHeadline, setEditingHeadline] = useState(false);
   const [editedName, setEditedName] = useState('');
   const [editedDescription, setEditedDescription] = useState('');
   const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation();
@@ -25,16 +26,7 @@ const StravaEntry = (props: StravaEntryProps) => {
       setEditedName(props.currentActivity.name);
       setEditedDescription(props.currentActivity.description);
     }
-  }, [props.currentActivity]);
-
-  const handleActivityUpdate = async () => {
-    toggleEditing(false);
-    handleActivityUpdateMutation({
-      activityId: props.currentActivity.id,
-      name: editedName,
-      description: editedDescription,
-    });
-  };
+  }, [props.currentActivity, props.entry.activityId]);
 
   const handleDescriptionChange: (e: { target: { value: string } }) => void = (
     e
@@ -46,13 +38,38 @@ const StravaEntry = (props: StravaEntryProps) => {
     setEditedName(e.target.value);
   };
 
-  const handleEditingChange: React.MouseEventHandler<HTMLAnchorElement> = (
-    event
+  const handleEditingHeadlineChange = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent> | true
   ) => {
-    if (event.currentTarget.innerHTML === 'Cancel') {
-      setEditedDescription(props.currentActivity.description);
+    // If Clickaway Event Happens while editing, send api request.
+    if (e === true) {
+      setEditingHeadline(false);
+      handleActivityUpdateMutation({
+        activityId: props.currentActivity.id,
+        name: editedName,
+        description: editedDescription,
+      });
+    } else {
+      e.preventDefault();
+      if (props.currentActivity.id === Number(props.entry.activityId)) {
+        setEditingHeadline(true);
+      } else {
+        props.showIndividualEntry(e);
+      }
     }
-    toggleEditing((x) => !x);
+  };
+
+  const handleEditingDesciptionChange = () => {
+    if (editingDescription) {
+      setEditingDescription(false);
+      handleActivityUpdateMutation({
+        activityId: props.currentActivity.id,
+        name: editedName,
+        description: editedDescription,
+      });
+    } else {
+      setEditingDescription(true);
+    }
   };
 
   return (
@@ -62,20 +79,19 @@ const StravaEntry = (props: StravaEntryProps) => {
         no={props.no}
         entry={props.entry}
         format={props.format}
-        editing={editing}
+        editingHeadline={editingHeadline}
         editedName={editedName}
+        handleEditingHeadlineChange={handleEditingHeadlineChange}
         currentActivity={props.currentActivity}
         handleNameChange={handleNameChange}
-        showIndividualEntry={props.showIndividualEntry}
       />
       {props.currentActivity.id === Number(props.entry.activityId) && (
         <DetailedEntry
-          editing={editing}
+          editingDescription={editingDescription}
           currentActivity={props.currentActivity}
           editedDescription={editedDescription}
-          handleEditingChange={handleEditingChange}
+          handleEditingDescriptionChange={handleEditingDesciptionChange}
           handleDescriptionChange={handleDescriptionChange}
-          handleActivityUpdate={handleActivityUpdate}
           format={props.format}
         />
       )}
