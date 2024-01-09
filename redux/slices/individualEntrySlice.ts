@@ -32,13 +32,13 @@ export const individualEntrySlice = createApi({
         description: string;
       }
     >({
-      invalidatesTags: ['IndividualEntry'],
+      // invalidatesTags: ['IndividualEntry'],
       query: (event) => ({
         method: 'POST',
         url: '/putActivityUpdate',
         body: event,
       }),
-      // Optimistic Update for the new Activity Name
+      // Optimistic Update for the new Activity Description and Name
       onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
         dispatch(
           individualEntrySlice.util.updateQueryData(
@@ -66,8 +66,11 @@ export const individualEntrySlice = createApi({
           await queryFulfilled;
         } catch (err) {
           console.log(err);
-          // Refetch all Activities on Failure
+          // Refetch all Activities and Individual Entry on Failure
           dispatch(entriesApi.util.invalidateTags(['Activities']));
+          dispatch(
+            individualEntrySlice.util.invalidateTags(['IndividualEntry'])
+          );
         }
       },
     }),
