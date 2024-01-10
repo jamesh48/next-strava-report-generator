@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
 import { CurrentActivity, Entry, Format } from './EntryTypes';
@@ -57,6 +57,16 @@ const GeneralEntry = (props: GeneralEntryProps) => {
   const isTopThreeEntry = Number(props.no) >= 0 && Number(props.no) <= 2;
 
   const mobileCentered = useCSX('left', 'center', 'textAlign');
+
+  const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (props.editingHeadline && ref.current) {
+      ref.current.focus();
+      const textLength = ref.current.value.length;
+      ref.current.setSelectionRange(textLength, textLength);
+    }
+  }, [props.editingHeadline]);
 
   return (
     <Box
@@ -138,6 +148,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             onClickAway={() => props.handleEditingHeadlineChange(true)}
           >
             <OutlinedInput
+              inputRef={ref}
               type="text"
               value={props.editedName}
               onChange={props.handleNameChange}

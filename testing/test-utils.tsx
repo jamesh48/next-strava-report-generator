@@ -60,5 +60,11 @@ export const actClick = async (selector: Element) => {
   });
 };
 
+export const actKeyboard = async (keyboard: string) => {
+  await act(async () => {
+    userEvent.keyboard(keyboard);
+  });
+};
+
 export * from '@testing-library/react';
 export { render };
