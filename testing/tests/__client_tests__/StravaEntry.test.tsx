@@ -131,7 +131,6 @@ describe('StravaEntry Tests', () => {
     );
 
     await actClick(activityNameLink);
-    screen.debug(undefined, 100000);
     // // No Additional Click is needed
     await actKeyboard(' hello world');
     expect(screen.getByDisplayValue(/hello world/i)).toBeInTheDocument();

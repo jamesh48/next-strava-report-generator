@@ -26,6 +26,5 @@ describe('Activity Chart Tests', () => {
     expect(screen.getByText(/Count/i)).toBeInTheDocument();
     await actClick(screen.getByText(/Distance/i));
     await actClick(screen.getByText(/Count/i));
-    // screen.debug();
   });
 });
