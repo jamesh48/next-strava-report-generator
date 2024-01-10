@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { useCSX } from '@lib';
 import { YTDSwimTotals } from './UserProfileTypes';
 import ActivityChart from './ActivityChart';
@@ -13,6 +13,7 @@ export interface SwimmingTotalsProps {
 const SwimmingTotals = ({
   profile: { ytd_swim_totals },
 }: SwimmingTotalsProps) => {
+  const theme = useTheme();
   return (
     <Box
       className="ytdTotals profileBoxes"
@@ -31,10 +32,10 @@ const SwimmingTotals = ({
         variant="h6"
         className="ytdTotalsTitle"
         sx={{
-          color: 'orangered',
           textDecoration: 'underline',
           cursor: 'default',
         }}
+        color={theme.palette.strava.main}
       >
         Year-To-Date Swim Totals
       </Typography>

@@ -30,7 +30,6 @@ const EmptyEntry = () => (
           sx={{
             paddingBottom: '0px',
             textDecoration: 'underline',
-            color: 'orangered',
             paddingLeft: '.75rem',
             '&:hover': {
               color: 'blue',

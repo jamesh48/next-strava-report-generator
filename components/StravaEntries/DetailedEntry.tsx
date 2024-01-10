@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import HeartRateChart from './HeartRateChart';
-import { Box, ClickAwayListener, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  ClickAwayListener,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
@@ -16,6 +22,7 @@ export interface DetailedEntryProps {
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
+  const theme = useTheme();
   const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
   const [currentStat, setCurrentStat] = useState<null | string>(null);
   const [currentKudoers, setCurrentKudoers] = useState<
@@ -83,7 +90,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           width: '97.5%',
         }}
       >
-        <Typography variant="h6" sx={{ color: 'ivory' }}>
+        <Typography variant="h6" color={theme.palette.strava.contrastText}>
           Activity Description:
         </Typography>
         {props.editingDescription ? (
@@ -158,13 +165,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           id="kudosX"
           sx={{
             display: 'flex',
-            alignItems: 'flex-start',
             flex: 1,
+            alignItems: 'center',
           }}
         >
           <Image
-            height={50}
-            width={50}
+            height={100}
+            width={100}
             alt="kudos-img"
             layout="static"
             src="/images/kudos.jpeg"
@@ -174,7 +181,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             className="kudosDescriptors"
             sx={{
               paddingLeft: '2.5%',
-              flex: 1,
               display: 'flex',
               flexDirection: 'column',
             }}
@@ -184,15 +190,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="kudosCount"
                 className="kudos"
-                sx={{
-                  margin: 0,
-                  display: 'block',
-                  color: 'ivory',
-                }}
+                color={theme.palette.strava.contrastText}
               >
-                Kudos-{' '}
+                Kudos-
               </Typography>
-              <Typography sx={{ color: 'ivory' }} variant="h6">
+              <Typography
+                variant="h6"
+                color={theme.palette.strava.contrastText}
+              >
                 {props.currentActivity.kudos_count}
               </Typography>
             </Box>
@@ -201,9 +206,9 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="commentCount"
                 className="kudos"
-                sx={{ margin: 0, display: 'block', color: 'ivory' }}
+                color={theme.palette.strava.contrastText}
               >
-                Comments-{' '}
+                Comments-
               </Typography>
               <Typography variant="h6" sx={{ color: 'ivory' }}>
                 {props.currentActivity.comment_count}
@@ -223,8 +228,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           >
             <Image
               alt="heart-rate"
-              height={50}
-              width={50}
+              height={100}
+              width={100}
               layout="static"
               src="/images/heartrate.png"
               onClick={() => {
@@ -245,41 +250,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   id="avgHeartRate"
                   className="heartRate"
                   variant="h6"
-                  sx={{
-                    display: 'block',
-                    color: 'ivory',
-                    margin: 0,
-                    width: '3rem',
-                  }}
+                  color={theme.palette.strava.contrastText}
                 >
-                  Avg-{' '}
+                  Avg-
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{
-                    color: 'ivory',
-                  }}
+                  color={theme.palette.strava.contrastText}
                 >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>
                 <Typography
                   id="maxHeartRate"
                   className="heartRate"
-                  sx={{
-                    display: 'block',
-                    color: 'ivory',
-                    margin: 0,
-                    width: '3rem',
-                  }}
                   variant="h6"
+                  color={theme.palette.strava.contrastText}
                 >
-                  Max-{' '}
+                  Max-
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{
-                    color: 'ivory',
-                  }}
+                  color={theme.palette.strava.contrastText}
                 >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
               </Box>
             </Box>
@@ -302,7 +293,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             <Box
               className="heartRate"
               id="avgHeartRate"
-              sx={{ paddingLeft: '1.5%', margin: 0 }}
+              sx={{ paddingLeft: '1.5%' }}
             >
               <Typography variant="h6" color="ivory">
                 No HR Info Available
@@ -313,7 +304,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               variant="h6"
               className="heartRate"
               id="maxHeartRate"
-              sx={{ display: 'inline-block', margin: 0 }}
+              sx={{ display: 'inline-block' }}
             >
               <Typography sx={{ display: 'inline-block' }}></Typography>
             </Typography>
@@ -329,8 +320,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           }}
         >
           <Image
-            height={50}
-            width={50}
+            height={100}
+            width={100}
             alt="trophy-img"
             src="/images/trophy.jpeg"
             layout="static"
@@ -344,11 +335,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 className="achievements"
                 id="achievementCount"
-                sx={{ color: 'ivory', margin: 0 }}
+                color={theme.palette.strava.contrastText}
               >
                 Achievement Count-
               </Typography>
-              <Typography variant="h6" sx={{ color: 'ivory' }}>
+              <Typography
+                variant="h6"
+                color={theme.palette.strava.contrastText}
+              >
                 {props.currentActivity.achievement_count}
               </Typography>
             </Box>

@@ -7,6 +7,7 @@ import {
   RadioGroup,
   Typography,
   OutlinedInput,
+  useTheme,
 } from '@mui/material';
 import { useSelector } from '@redux/reduxHooks';
 import { getSportCondition } from '@redux/slices';
@@ -33,6 +34,7 @@ interface RadioColumnProps {
 }
 
 const RadioColumn = (props: RadioColumnProps) => {
+  const theme = useTheme();
   const sportCondition = useSelector(getSportCondition);
 
   return (
@@ -55,7 +57,7 @@ const RadioColumn = (props: RadioColumnProps) => {
         variant="h6"
         className="chooseTitle"
         id={props.title.split(' ').join('-').toLowerCase()}
-        sx={{ color: 'orangered' }}
+        color={theme.palette.strava.main}
       >
         {props.title}
       </Typography>

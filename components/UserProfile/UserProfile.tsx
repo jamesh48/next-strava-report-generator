@@ -91,13 +91,13 @@ const UserProfile = () => {
       }}
     >
       <Typography
-        variant="h5"
+        variant="h6"
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          color: 'orangered',
           width: '100%',
           paddingY: '6rem',
+          color: 'orangered',
         }}
       >
         Loading...
