@@ -67,6 +67,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
       ref.current.setSelectionRange(textLength, textLength);
     }
   }, [props.editingHeadline]);
+  const mobileEntryWidth = useCSX('15%', '100%', 'width');
 
   return (
     <Box
@@ -117,8 +118,6 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           ...(() => {
             if (isTopThreeEntry) {
               return {
-                // Clickable Area for Detailed Entry
-                width: '15%',
                 '& > *': {
                   cursor: 'pointer',
                 },
@@ -127,6 +126,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 '& > p': {
                   paddingLeft: '1.5%',
                 },
+                ...mobileEntryWidth,
               };
             }
             return {
@@ -139,6 +139,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
               '& > p': {
                 paddingLeft: '1.5%',
               },
+              ...mobileEntryWidth,
             };
           })(),
         }}
