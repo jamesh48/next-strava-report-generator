@@ -6,6 +6,7 @@ const darkTheme: ThemeOptions = {
     mode: 'dark',
     baseBackground: { main: '' },
     strava: { main: '' },
+    common: { black: 'black' },
   },
 };
 

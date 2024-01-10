@@ -65,6 +65,7 @@ const lightTheme: ThemeOptions = {
     mode: 'light',
     baseBackground: { main: 'darkslategray' },
     strava: { main: 'orangered', contrastText: 'ivory' },
+    common: { black: 'black' },
   },
   typography: {
     h6: {

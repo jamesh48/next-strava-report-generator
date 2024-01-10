@@ -2,6 +2,7 @@ declare module '@mui/material/styles/createPalette' {
   interface Palette {
     baseBackground: Palette['primary'];
     strava: Palette['primary'];
+    common: Palette['primary'];
   }
 
   interface PaletteOptions {
@@ -26,6 +27,7 @@ declare module '@mui/material/Button' {
 declare module '@mui/material/FormControl' {
   interface FormControlPropsColorOverrides {
     baseBackground: true;
+    strava: true;
   }
 }
 
