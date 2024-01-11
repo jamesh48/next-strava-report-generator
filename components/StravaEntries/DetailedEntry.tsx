@@ -70,9 +70,9 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        border: '2px solid orangered',
+        border: '2px solid ' + theme.palette.strava.main,
         display: 'flex',
-        bgcolor: 'coral',
+        bgcolor: theme.palette.strava.contrastColor,
         flexDirection: 'column',
         textRendering: 'geometricPrecision',
         '& > p': {
@@ -111,8 +111,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
               InputProps={{
                 sx: {
-                  color: 'ivory',
-                  border: '1px solid ivory',
+                  color: theme.palette.strava.contrastText,
+                  border: '1px solid ' + theme.palette.strava.contrastText,
                 },
               }}
             />
@@ -121,12 +121,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           <Typography
             className="topActivityDescription"
             sx={{
-              color: 'ivory',
+              color: theme.palette.strava.contrastText,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               whiteSpace: 'pre-line',
-              border: '1px solid ivory',
+              border: '1px solid ' + theme.palette.strava.contrastText,
               padding: '1rem',
             }}
             onClick={props.handleEditingDescriptionChange}
@@ -140,11 +140,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         id="topActivityGear"
         sx={{
           alignSelf: 'flex-start',
-          marginLeft: '1.75rem',
-          color: 'ivory',
+          marginLeft: '1.25%',
+          color: theme.palette.strava.contrastText,
           padding: '.5rem',
           marginY: '.75rem',
-          border: '1px solid ivory',
+          border: '1px solid ' + theme.palette.strava.contrastText,
         }}
       >
         <Typography>Gear: {props.currentActivity.device_name}</Typography>
@@ -210,7 +210,10 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               >
                 Comments-
               </Typography>
-              <Typography variant="h6" sx={{ color: 'ivory' }}>
+              <Typography
+                variant="h6"
+                color={theme.palette.strava.contrastText}
+              >
                 {props.currentActivity.comment_count}
               </Typography>
             </Box>
@@ -295,7 +298,10 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               id="avgHeartRate"
               sx={{ paddingLeft: '1.5%' }}
             >
-              <Typography variant="h6" color="ivory">
+              <Typography
+                variant="h6"
+                color={theme.palette.strava.contrastText}
+              >
                 No HR Info Available
               </Typography>
             </Box>
@@ -369,7 +375,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <Box
           sx={{
             paddingLeft: '2.5%',
-            color: 'ivory',
+            color: theme.palette.strava.contrastText,
             display: 'flex',
             width: '100%',
             ...mobileColumns,

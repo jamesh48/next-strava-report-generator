@@ -7,6 +7,7 @@ import {
   MenuItem,
   Divider,
   Collapse,
+  useTheme,
 } from '@mui/material';
 import { Close, Warning } from '@mui/icons-material';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
@@ -29,6 +30,7 @@ interface UserSettingsProps {
   closeUserSettingsCB: () => void;
 }
 const UserSettings = (props: UserSettingsProps) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const [destroyUserAndActivities] = useDestroyUserAndActivitiesMutation({
     fixedCacheKey: 'destroy-user-key',
@@ -62,7 +64,7 @@ const UserSettings = (props: UserSettingsProps) => {
           justifyContent: 'center',
           width: '25rem',
           top: '10rem',
-          bgcolor: 'darkslategray',
+          bgcolor: theme.palette.mainBackground.main,
         }}
       >
         <Box
@@ -81,7 +83,7 @@ const UserSettings = (props: UserSettingsProps) => {
               flex: 1,
               display: 'flex',
               justifyContent: 'center',
-              color: 'turquoise',
+              color: theme.palette.strava.main,
               cursor: 'default',
             }}
           >
@@ -92,10 +94,10 @@ const UserSettings = (props: UserSettingsProps) => {
             sx={{
               display: 'flex',
               height: '1.5rem',
-              outline: '1px solid orangered',
+              outline: '1px solid ' + theme.palette.strava.main,
               padding: '1rem .5rem',
               margin: '.5rem',
-              color: 'turquoise',
+              color: theme.palette.strava.main,
             }}
           >
             <Close data-testid="userpreferences-closebutton" />
@@ -111,14 +113,15 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Typography
-              sx={{ color: 'darkturquoise', cursor: 'default', flex: 1 }}
+              sx={{ cursor: 'default', flex: 1 }}
+              color={theme.palette.strava.main}
             >
               Default Sport
             </Typography>
             <Select
               sx={{ height: '2rem', width: '15rem' }}
               defaultValue={defaultSportCondition}
-              inputProps={{ sx: { color: 'coral' } }}
+              inputProps={{ sx: { color: theme.palette.strava.contrastColor } }}
               onChange={(event) =>
                 setSelectedSport(event.target.value as Sport)
               }
@@ -142,14 +145,15 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Typography
-              sx={{ color: 'darkturquoise', cursor: 'default', flex: 1 }}
+              color={theme.palette.strava.main}
+              sx={{ cursor: 'default', flex: 1 }}
             >
               Default Sort
             </Typography>
             <Select
               sx={{ height: '2rem', width: '15rem' }}
               defaultValue={defaultSortCondition}
-              inputProps={{ sx: { color: 'coral' } }}
+              inputProps={{ sx: { color: theme.palette.strava.contrastColor } }}
               onChange={(event) => setSelectedFormat(event.target.value)}
             >
               <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
@@ -181,14 +185,15 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Typography
-              sx={{ color: 'darkturquoise', cursor: 'default', flex: 1 }}
+              color={theme.palette.strava.main}
+              sx={{ cursor: 'default', flex: 1 }}
             >
               Default Date
             </Typography>
             <Select
               sx={{ height: '2rem', width: '15rem' }}
               defaultValue={defaultDateCondition}
-              inputProps={{ sx: { color: 'coral' } }}
+              inputProps={{ sx: { color: theme.palette.strava.contrastColor } }}
               onChange={(event) =>
                 setSelectedDate(event.target.value as DateCondition)
               }
@@ -209,7 +214,7 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Button
-              sx={{ color: 'darkturquoise' }}
+              sx={{ color: theme.palette.strava.main }}
               onClick={() => {
                 const asyncFn = async () => {
                   await axios({
@@ -249,8 +254,8 @@ const UserSettings = (props: UserSettingsProps) => {
           }}
           onClick={() => setDangerArea((ex) => !ex)}
         >
-          <Warning sx={{ color: 'orangered', paddingX: '.25rem' }} />
-          <Typography sx={{ color: 'darkturquoise' }}>Danger Zone</Typography>
+          <Warning sx={{ color: 'red', paddingX: '.25rem' }} />
+          <Typography color="red">Danger Zone</Typography>
         </Box>
         <Collapse in={dangerArea} collapsedSize={'0'} orientation="vertical">
           <Box
@@ -263,8 +268,8 @@ const UserSettings = (props: UserSettingsProps) => {
             <Button
               disabled={!dangerArea}
               sx={{
-                color: 'darkturquoise',
-                border: '1px solid white',
+                color: theme.palette.strava.main,
+                border: '1px solid ' + theme.palette.strava.main,
                 width: '75%',
                 display: 'flex',
                 justifyContent: 'center',

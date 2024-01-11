@@ -64,8 +64,19 @@ const lightTheme: ThemeOptions = {
   palette: {
     mode: 'light',
     baseBackground: { main: 'darkslategray' },
-    strava: { main: 'orangered', contrastText: 'ivory' },
-    common: { black: 'black' },
+    strava: {
+      main: 'orangered',
+      contrastText: 'ivory',
+      contrastColor: 'coral',
+    },
+    common: { black: 'black', white: 'ivory' },
+    // Turquoise, Dark Turquoise, Pale Turquoise
+    mainBackground: {
+      main: '#52fff3',
+      dark: '#00ced1',
+      light: '#AFEEEE',
+      accent: 'deepskyblue',
+    },
   },
   typography: {
     h6: {

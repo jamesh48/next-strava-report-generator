@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
 import UserSettings from './UserSettings';
 
 interface UserNameSectionProps {
@@ -13,7 +13,7 @@ interface UserNameSectionProps {
 }
 
 const UserNameSection = (props: UserNameSectionProps) => {
-  // const [showPreferencesButton, setShowPreferencesButton] = useState(false);
+  const theme = useTheme();
   const [showPreferences, setShowPreferences] = useState(false);
 
   const closeUserSettingsCB = () => {
@@ -30,15 +30,13 @@ const UserNameSection = (props: UserNameSectionProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         flex: 0.6,
-        color: 'orangered',
         borderLeft: 'none',
       }}
-      // onMouseOver={() => setShowPreferencesButton(true)}
-      // onMouseLeave={() => setShowPreferencesButton(false)}
     >
       <Typography
         variant="h4"
         id="userName"
+        color={theme.palette.strava.main}
         sx={{
           cursor: 'default',
           textAlign: 'center',
@@ -50,6 +48,7 @@ const UserNameSection = (props: UserNameSectionProps) => {
         id="userLocation"
         variant="h5"
         sx={{ cursor: 'default', textAlign: 'center' }}
+        color={theme.palette.strava.main}
       >
         {props.profile.city}, {props.profile.state} {props.profile.country}
       </Typography>

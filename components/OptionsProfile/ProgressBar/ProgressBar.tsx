@@ -6,6 +6,8 @@ import {
   Select,
   SelectChangeEvent,
   SxProps,
+  Theme,
+  useTheme,
 } from '@mui/material';
 import { useCSX, useInterval } from '@lib';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
@@ -29,37 +31,42 @@ const muiUpdateButtonContainerSx: SxProps = {
   width: '95%',
 };
 
-const muiUpdateButtonSx: SxProps = {
+const muiUpdateButtonSx = (theme: Theme) => ({
   cursor: 'pointer',
   textRendering: 'geometricPrecision',
-  backgroundColor: '#52fff3',
-  color: 'orangered',
-  border: '2px solid coral',
-  boxShadow: '0 0 5px coral',
+  backgroundColor: theme.palette.mainBackground.main,
+  color: theme.palette.strava.main,
+  border: '2px solid ' + theme.palette.strava.contrastColor,
+  boxShadow: '0 0 5px ' + theme.palette.strava.contrastColor,
   padding: '0.5vmax 1vmax',
   minWidth: '10%',
   margin: '1rem 0.5rem',
   height: '3rem',
   '&:hover': {
-    backgroundColor: 'coral',
-    color: 'ivory',
-    border: '2px solid ivory',
+    backgroundColor: theme.palette.strava.contrastColor,
+    color: theme.palette.strava.contrastText,
+    border: '2px solid ' + theme.palette.strava.contrastText,
     cursor: 'pointer',
   },
-};
+});
 
-const menuItemStyles = (indicator: boolean) => ({
+const menuItemStyles = (indicator: boolean, theme: Theme) => ({
   textAlign: 'center !important',
   display: 'flex',
   justifyContent: 'center',
-  bgcolor: indicator ? 'turquoise !important' : 'paleturquoise !important',
-  color: indicator ? 'orangered' : 'black',
+  bgcolor: indicator
+    ? `${theme.palette.mainBackground.main} !important`
+    : `${theme.palette.mainBackground.light} !important`,
+  color: indicator
+    ? theme.palette.strava.main
+    : theme.palette.strava.contrastText,
 });
 
 // time it takes to delete one dynamodb record in ms
 const dynamoDBDeletionRatePerRecord = 110;
 
 const ProgressBar = () => {
+  const theme = useTheme();
   const [deletionRate, setDeletionRate] = useState(75);
   const dispatch = useDispatch();
   const { data: allEntries } = useGetAllEntriesQuery(null);
@@ -142,51 +149,52 @@ const ProgressBar = () => {
         <Select
           className="updateButton"
           onChange={setSortConditionCallback}
+          // @ts-ignore
           sx={{
-            ...muiUpdateButtonSx,
+            ...muiUpdateButtonSx(theme),
             ...mobileStyleSelect,
           }}
           value={sortCondition || 'speedDesc'}
         >
           <MenuItem
             value="speedDesc"
-            sx={menuItemStyles(sortCondition === 'speedDesc')}
+            sx={menuItemStyles(sortCondition === 'speedDesc', theme)}
           >
             Speed: Fastest First
           </MenuItem>
           <MenuItem
             value="dateDesc"
-            sx={menuItemStyles(sortCondition === 'dateDesc')}
+            sx={menuItemStyles(sortCondition === 'dateDesc', theme)}
           >
             Date: Most Recent
           </MenuItem>
           <MenuItem
             value="dateAsc"
-            sx={menuItemStyles(sortCondition === 'dateAsc')}
+            sx={menuItemStyles(sortCondition === 'dateAsc', theme)}
           >
             Date: Least Recent
           </MenuItem>
           <MenuItem
             value="movingTimeDesc"
-            sx={menuItemStyles(sortCondition === 'movingTimeDesc')}
+            sx={menuItemStyles(sortCondition === 'movingTimeDesc', theme)}
           >
             Moving Time: Longest First
           </MenuItem>
           <MenuItem
             value="movingTimeAsc"
-            sx={menuItemStyles(sortCondition === 'movingTimeAsc')}
+            sx={menuItemStyles(sortCondition === 'movingTimeAsc', theme)}
           >
             Moving Time: Shortest First
           </MenuItem>
           <MenuItem
             value="timeElapsedDesc"
-            sx={menuItemStyles(sortCondition === 'timeElaspedDesc')}
+            sx={menuItemStyles(sortCondition === 'timeElaspedDesc', theme)}
           >
             Time Elapsed: Longest First
           </MenuItem>
           <MenuItem
             value="timeElapsedAsc"
-            sx={menuItemStyles(sortCondition === 'timeElaspedAsc')}
+            sx={menuItemStyles(sortCondition === 'timeElaspedAsc', theme)}
           >
             Time Elapsed: Shortest First
           </MenuItem>
@@ -194,7 +202,7 @@ const ProgressBar = () => {
       ) : (
         <Box
           sx={{
-            ...muiUpdateButtonSx,
+            ...muiUpdateButtonSx(theme),
             height: '1rem',
             width: '1rem',
           }}
@@ -205,8 +213,9 @@ const ProgressBar = () => {
         className="updateButton"
         value="Update!"
         onClick={updateEntries}
+        // @ts-ignore
         sx={{
-          ...muiUpdateButtonSx,
+          ...muiUpdateButtonSx(theme),
           ...mobileStyleUpdateButton,
         }}
         inputProps={{ sx: { cursor: 'pointer' } }}
@@ -218,9 +227,9 @@ const ProgressBar = () => {
         id="progressBarContainer"
         sx={{
           width: '95%',
-          border: '1px solid coral',
-          boxShadow: '0 0 5px ccoral',
-          backgroundColor: 'coral',
+          border: '1px solid ' + theme.palette.strava.contrastColor,
+          boxShadow: '0 0 5px ' + theme.palette.strava.contrastColor,
+          backgroundColor: theme.palette.strava.contrastColor,
           borderRadius: '50px',
           margin: '1% 2.5%',
         }}
@@ -242,7 +251,11 @@ const ProgressBar = () => {
         >
           <Box
             className="progressBarCounter"
-            sx={{ padding: 5, color: 'ivory', fontWeight: 900 }}
+            sx={{
+              padding: 5,
+              color: theme.palette.strava.contrastText,
+              fontWeight: 900,
+            }}
           >{`${progressBarProgress}%`}</Box>
         </Box>
       </Box>

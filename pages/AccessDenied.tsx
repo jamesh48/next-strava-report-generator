@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Link, Typography, useTheme } from '@mui/material';
 
 const AccessDenied = () => {
+  const theme = useTheme();
   const handleReload = () => {
     window.location.replace('https://stravareportgenerator.com');
   };
@@ -24,19 +25,22 @@ const AccessDenied = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          border: '1px solid orangered',
+          border: '1px solid ' + theme.palette.strava.main,
           padding: '5rem 3rem',
         }}
       >
         <Typography
           variant="h5"
-          sx={{ color: 'darkturquoise', textDecoration: 'underline' }}
+          sx={{
+            color: theme.palette.baseBackground.dark,
+            textDecoration: 'underline',
+          }}
         >
           Access Denied: You chose to not authorize...
         </Typography>
         <Typography
           sx={{
-            color: 'darkturquoise',
+            color: theme.palette.mainBackground.dark,
             display: 'flex',
             justifyContent: 'center',
           }}

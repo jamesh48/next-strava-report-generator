@@ -46,10 +46,10 @@ const RadioColumn = (props: RadioColumnProps) => {
         flex: 1,
         alignItems: 'center',
         '&:first-of-type': {
-          borderRight: '1px solid coral',
+          borderRight: '1px solid ' + theme.palette.strava.contrastColor,
         },
         '&:last-child': {
-          borderLeft: '1px solid coral',
+          borderLeft: '1px solid ' + theme.palette.strava.contrastColor,
         },
       }}
     >
@@ -63,7 +63,12 @@ const RadioColumn = (props: RadioColumnProps) => {
       </Typography>
       <Box
         className="multipleRadioButtonContainer"
-        sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          color: theme.palette.strava.main,
+        }}
       >
         <FormControl>
           <RadioGroup

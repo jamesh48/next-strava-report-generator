@@ -10,12 +10,6 @@ import { useFetchData } from '@lib';
 import { appInitialState } from '@redux/slices';
 
 export default function Home() {
-  const { data: userSettings } = useFetchData<{
-    defaultFormat: string;
-    defaultSport: string;
-    defaultDate: string;
-  }>('/api/userSettings');
-
   return (
     <Box>
       <Head>
@@ -23,20 +17,8 @@ export default function Home() {
         <meta name="description" content="A ordered list of strava activites" />
         <link rel="icon" href="/images/favicon.png" />
       </Head>
-      <ThemeProvider theme={lightTheme}>
-        <Provider
-          store={GlobalStore.prototype.configureGlobalStore({
-            app: {
-              ...appInitialState,
-              sortCondition: userSettings?.defaultFormat,
-              sportCondition: userSettings?.defaultSport,
-              dateCondition: userSettings?.defaultDate,
-            },
-          })}
-        >
-          <App />
-        </Provider>
-      </ThemeProvider>
+
+      <App />
     </Box>
   );
 }
