@@ -1,10 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 import '../styles/globals.css';
-import { ThemeProvider, useTheme } from '@mui/material';
 import { Provider } from 'react-redux';
+import { AppProps } from 'next/app';
+import { ThemeProvider, useTheme } from '@mui/material';
 import lightTheme from '../theme/muiLightTheme';
 import darkTheme from '../theme/muiDarkTheme';
-import { AppProps } from 'next/app';
 import { useFetchData } from '@lib';
 import { appInitialState } from '@redux/slices';
 import GlobalStore from '@redux/store';
@@ -29,10 +29,11 @@ function MyApp(props: AppProps) {
     defaultFormat: string;
     defaultSport: string;
     defaultDate: string;
+    darkMode: boolean;
   }>('/api/userSettings');
 
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={userSettings?.darkMode ? darkTheme : lightTheme}>
       <Provider
         store={GlobalStore.prototype.configureGlobalStore({
           app: {
@@ -40,6 +41,7 @@ function MyApp(props: AppProps) {
             sortCondition: userSettings?.defaultFormat,
             sportCondition: userSettings?.defaultSport,
             dateCondition: userSettings?.defaultDate,
+            darkMode: userSettings?.darkMode,
           },
         })}
       >
