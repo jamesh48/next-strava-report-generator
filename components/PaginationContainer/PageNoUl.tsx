@@ -34,7 +34,7 @@ const PageNoUl = (props: PageNoUlProps) => {
         }}
         inputProps={{
           sx: {
-            bgcolor: theme.palette.mainBackground.dark,
+            bgcolor: theme.palette.mainBackground.main,
             border: '2px solid ' + theme.palette.strava.main,
             fontSize: '1.25rem',
           },
@@ -63,7 +63,7 @@ const PageNoUl = (props: PageNoUlProps) => {
                       justifyContent: 'center',
                       bgcolor:
                         props.currentPage === number
-                          ? 'turquoise !important'
+                          ? theme.palette.mainBackground.main
                           : theme.palette.mainBackground.light,
                       color:
                         props.currentPage === number

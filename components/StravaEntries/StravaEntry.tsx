@@ -73,6 +73,8 @@ const StravaEntry = (props: StravaEntryProps) => {
     }
   };
 
+  const isCurrentActivity =
+    props.currentActivity.id === Number(props.entry.activityId);
   return (
     <Box sx={{ width: '100%' }}>
       <GeneralEntry
@@ -83,10 +85,10 @@ const StravaEntry = (props: StravaEntryProps) => {
         editingHeadline={editingHeadline}
         editedName={editedName}
         handleEditingHeadlineChange={handleEditingHeadlineChange}
-        currentActivity={props.currentActivity}
         handleNameChange={handleNameChange}
+        isCurrentActivity={isCurrentActivity}
       />
-      {props.currentActivity.id === Number(props.entry.activityId) && (
+      {isCurrentActivity && (
         <DetailedEntry
           editingDescription={editingDescription}
           currentActivity={props.currentActivity}

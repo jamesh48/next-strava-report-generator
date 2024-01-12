@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import EntryDescriptor from './EntryDescriptor';
 import NestedEntryDescriptor from './NestedEntryDescriptor';
-import { CurrentActivity, Entry, Format } from './EntryTypes';
+import { Entry, Format } from './EntryTypes';
 import {
   Box,
   ClickAwayListener,
@@ -19,7 +19,7 @@ interface GeneralEntryProps {
   entry: Entry;
   sport: string;
   format: Format;
-  currentActivity: CurrentActivity;
+  isCurrentActivity: boolean;
   handleNameChange: (e: { target: { value: string } }) => void;
   handleEditingHeadlineChange: (
     e: React.MouseEvent<HTMLDivElement, MouseEvent> | true
@@ -85,12 +85,13 @@ const GeneralEntry = (props: GeneralEntryProps) => {
       className="innerEntry"
       sx={{
         border: '1px solid ' + theme.palette.strava.contrastColor,
-        backgroundColor: 'paleturquoise',
+        backgroundColor: props.isCurrentActivity
+          ? theme.palette.mainBackground.main
+          : theme.palette.mainBackground.light,
         '&:hover': {
-          backgroundColor: !isTopThreeEntry ? 'darkturquoise' : null,
-          p: {
-            color: theme.palette.strava.contrastText,
-          },
+          backgroundColor: !isTopThreeEntry
+            ? theme.palette.mainBackground.main
+            : null,
         },
 
         ...(() => {
@@ -134,6 +135,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             return {
               // Clickable Area for Detailed Entry
               width: '15%',
+              color: theme.palette.mode === 'dark' ? 'ivory' : 'black',
               '& > *': {
                 cursor: 'pointer',
               },

@@ -15,7 +15,6 @@ import {
   detailedEntryCurrentActivity,
   stravaEntryGeneralEntry,
 } from '@testing/testFixtures';
-import userEvent from '@testing-library/user-event';
 
 const renderWithState = (
   state: TestState,
