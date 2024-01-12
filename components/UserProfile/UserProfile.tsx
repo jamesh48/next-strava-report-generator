@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 //
 import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
@@ -10,6 +10,7 @@ import { fetchUserData, useCSX } from '@lib';
 import { useGetAllEntriesQuery } from '@redux/slices';
 
 const UserProfile = () => {
+  const theme = useTheme();
   const { isLoading } = useGetAllEntriesQuery(null);
   const [rateLimit, setRateLimit] = React.useState(false);
   const [userProfile, setUserProfile] = React.useState({
@@ -55,11 +56,11 @@ const UserProfile = () => {
         display: 'flex',
         margin: '2.5% 0',
         width: '95%',
-        backgroundColor: '#52fff3',
-        border: '1px solid orangered',
+        backgroundColor: theme.palette.mainBackground.main,
+        border: '1px solid ' + theme.palette.strava.main,
         borderTop: 'none',
         borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
@@ -82,22 +83,22 @@ const UserProfile = () => {
         display: 'flex',
         margin: '2.5% 0',
         width: '95%',
-        backgroundColor: '#52fff3',
-        border: '1px solid orangered',
+        backgroundColor: theme.palette.mainBackground.main,
+        border: '1px solid ' + theme.palette.strava.main,
         borderTop: 'none',
         borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
       <Typography
-        variant="h5"
+        variant="h6"
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          color: 'orangered',
           width: '100%',
           paddingY: '6rem',
+          color: theme.palette.strava.main,
         }}
       >
         Loading...
@@ -111,11 +112,11 @@ const UserProfile = () => {
         display: 'flex',
         margin: '2.5% 0',
         width: '95%',
-        backgroundColor: '#52fff3',
-        border: '1px solid orangered',
         borderTop: 'none',
         borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        backgroundColor: theme.palette.mainBackground.main,
+        border: '1px solid ' + theme.palette.strava.main,
+        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
@@ -133,7 +134,7 @@ const UserProfile = () => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            color: 'orangered',
+            color: theme.palette.strava.main,
             width: '100%',
             padding: '0.5% 0',
             '&:first-of-type': {

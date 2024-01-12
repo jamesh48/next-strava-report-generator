@@ -17,6 +17,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err) {
     console.log((err as { message: string }).message);
     return res.send({
+      darkMode: false,
       defaultSport: 'Run',
       defaultFormat: 'speedDesc',
       defaultDate: 'allTime',
@@ -34,12 +35,13 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
         srg_athlete_id,
       },
       data: {
+        darkMode: req.body.selectedDarkMode,
         defaultSport: req.body.selectedSport,
         defaultFormat: req.body.selectedFormat,
         defaultDate: req.body.selectedDate,
       },
     });
-    return res.send('ok');
+    return res.send({ message: 'success' });
   } catch (err) {
     const typedErr = err as { message: string };
     console.log(typedErr.message);

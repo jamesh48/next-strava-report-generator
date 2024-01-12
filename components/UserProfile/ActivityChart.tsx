@@ -22,7 +22,7 @@ ChartJS.register(
 
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { useState } from 'react';
-import { Button, Box } from '@mui/material';
+import { Button, Box, useTheme } from '@mui/material';
 
 interface CalendarDates {
   jan: { count: number; distance: number };
@@ -43,16 +43,23 @@ export interface ActivityChartProps {
   activityType: 'Run' | 'Swim' | 'Ride' | 'Walk';
 }
 
-const dataMap = {
-  count: { title: 'Number of Activities', color: 'orangered' },
-  distance: { title: 'Distance of Activities', color: 'darkslategray' },
-};
-
 const ActivityChart = (props: ActivityChartProps) => {
+  const theme = useTheme();
+  const dataMap = {
+    count: {
+      title: 'Number of Activities',
+      color: theme.palette.strava.contrastColor,
+    },
+    distance: {
+      title: 'Distance of Activities',
+      color: theme.palette.baseBackground.main,
+    },
+  };
   const [currentlyShownChart, setCurrentlyShownChart] =
     useState<string>('count');
 
   const options = {
+    color: theme.palette.strava.main,
     responsive: true,
     stacked: false,
     interaction: {
@@ -66,6 +73,7 @@ const ActivityChart = (props: ActivityChartProps) => {
       title: {
         display: true,
         text: props.activityType + ' Activities',
+        color: theme.palette.strava.main,
       },
     },
   };
@@ -161,7 +169,7 @@ const ActivityChart = (props: ActivityChartProps) => {
           ([_month, hits]) => hits[currentlyShownChart]
         ),
         borderColor: dataMap[currentlyShownChart as 'count'].color,
-        backgroundColor: 'coral',
+        backgroundColor: theme.palette.strava.contrastColor,
         yAxisId: 'y',
       },
     ],

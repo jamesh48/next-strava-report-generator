@@ -3,6 +3,7 @@ import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
 import { entriesApi } from './entriesSlice';
 
 type Athlete = { firstname: string; lastname: string };
+
 export const individualEntrySlice = createApi({
   tagTypes: ['IndividualEntry'],
   reducerPath: 'individualEntriesApi',

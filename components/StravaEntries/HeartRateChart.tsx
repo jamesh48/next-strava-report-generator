@@ -1,5 +1,5 @@
 import { Line } from 'react-chartjs-2';
-import { Box, Button } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,6 +29,7 @@ interface HeartRateChartProps {
 }
 
 const HeartRateChart = (props: HeartRateChartProps) => {
+  const theme = useTheme();
   const [hrData, setHrData] = useState(['avgHR']);
   const [data, setData] = useState({
     labels: ['0'],
@@ -36,8 +37,8 @@ const HeartRateChart = (props: HeartRateChartProps) => {
       {
         label: 'loading',
         data: [] as number[],
-        backgroundColor: 'coral',
-        borderColor: 'coral',
+        backgroundColor: theme.palette.strava.contrastColor,
+        borderColor: theme.palette.strava.contrastColor,
       },
     ],
   });

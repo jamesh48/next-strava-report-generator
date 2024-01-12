@@ -53,6 +53,7 @@ describe('StravaEntry Tests', () => {
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,
+        handleCloseCurrentActivity: () => null,
       }
     );
     expect(
@@ -86,6 +87,7 @@ describe('StravaEntry Tests', () => {
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,
+        handleCloseCurrentActivity: () => null,
       }
     );
     const activityDescriptionDiv = screen.getByText(
@@ -124,6 +126,7 @@ describe('StravaEntry Tests', () => {
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,
+        handleCloseCurrentActivity: () => null,
       }
     );
     const activityNameLink = screen.getByText(

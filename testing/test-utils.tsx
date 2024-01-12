@@ -1,7 +1,9 @@
 import React, { ReactNode } from 'react';
+import { ThemeProvider } from '@mui/material';
 import { act, render as rtlRender } from '@testing-library/react';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import lightTheme from '../theme/muiLightTheme';
 import GlobalStore, { RootState } from '@redux/store';
 import userEvent from '@testing-library/user-event';
 
@@ -46,7 +48,11 @@ function render(
   }
 
   function Wrapper({ children }: { children: ReactNode }): JSX.Element {
-    return <Provider store={testStore}>{children}</Provider>;
+    return (
+      <Provider store={testStore}>
+        <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+      </Provider>
+    );
   }
   return rtlRender(ui, {
     wrapper: Wrapper as React.ComponentType,

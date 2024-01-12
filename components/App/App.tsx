@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 //
 import UserProfile from '@components/UserProfile/UserProfile';
 import Report from '@components/StravaEntries/Report';
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from '@redux/reduxHooks';
 import PopupModal from './PopupModal';
 
 export default function App() {
+  const theme = useTheme();
   // Radios
   const sport = useSelector(getSportCondition);
   const dispatch = useDispatch();
@@ -83,9 +84,9 @@ export default function App() {
           width: '95%',
           margin: '2.5% auto',
           paddingTop: '25px',
-          border: '1px solid coral',
-          boxShadow: '0 0 10px coral',
-          backgroundColor: 'darkturquoise',
+          border: `1px solid ${theme.palette.strava.contrastColor}`,
+          boxShadow: `0 0 10px ${theme.palette.strava.contrastColor}`,
+          backgroundColor: theme.palette.mainBackground.dark,
         }}
       >
         <UserProfile />

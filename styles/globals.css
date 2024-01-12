@@ -3,7 +3,6 @@
 html {
   text-rendering: geometricPrecision;
   font-family: 'Raleway';
-  background-color: darkslategray;
   display: flex;
   width: 100%;
 }

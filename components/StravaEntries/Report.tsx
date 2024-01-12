@@ -123,6 +123,28 @@ const Report = (props: ReportProps) => {
     setCurrentPage(Number((event.target as HTMLSelectElement).value));
   };
 
+  const handleCloseCurrentActivity = () => {
+    setCurrentActivity({
+      id: 0,
+      name: '',
+      kudos_count: 0,
+      comment_count: 0,
+      average_heartrate: 0,
+      max_heartrate: 0,
+      achievement_count: 0,
+      description: '',
+      device_name: '',
+      laps: [{ max_heartrate: 0, average_heartrate: 0, distance: 0 }],
+      photos: {
+        primary: {
+          urls: {
+            '600': '',
+          },
+        },
+      },
+    });
+  };
+
   useEffect(() => {
     if (individualEntryResults && individualEntryResults.data) {
       setCurrentActivity(individualEntryResults.data);
@@ -155,6 +177,7 @@ const Report = (props: ReportProps) => {
         entriesPerPage={entriesPerPage}
         currentActivity={currentActivity}
         showIndividualEntry={showIndividualEntry}
+        handleCloseCurrentActivity={handleCloseCurrentActivity}
       />
       {!isMobile ? (
         <PageNoUl

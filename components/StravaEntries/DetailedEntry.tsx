@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import HeartRateChart from './HeartRateChart';
-import { Box, ClickAwayListener, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  ClickAwayListener,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
@@ -13,9 +19,11 @@ export interface DetailedEntryProps {
   handleEditingDescriptionChange: () => void;
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   format: Format;
+  handleCloseCurrentActivity: () => void;
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
+  const theme = useTheme();
   const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
   const [currentStat, setCurrentStat] = useState<null | string>(null);
   const [currentKudoers, setCurrentKudoers] = useState<
@@ -63,9 +71,9 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        border: '2px solid orangered',
+        border: '2px solid ' + theme.palette.strava.main,
         display: 'flex',
-        bgcolor: 'coral',
+        bgcolor: theme.palette.mainBackground.entry,
         flexDirection: 'column',
         textRendering: 'geometricPrecision',
         '& > p': {
@@ -83,7 +91,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           width: '97.5%',
         }}
       >
-        <Typography variant="h6" sx={{ color: 'ivory' }}>
+        <Typography variant="h6" color={theme.palette.common.white}>
           Activity Description:
         </Typography>
         {props.editingDescription ? (
@@ -104,8 +112,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
               InputProps={{
                 sx: {
-                  color: 'ivory',
-                  border: '1px solid ivory',
+                  color: theme.palette.common.white,
+                  border: '1px solid ' + theme.palette.common.white,
                 },
               }}
             />
@@ -114,12 +122,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           <Typography
             className="topActivityDescription"
             sx={{
-              color: 'ivory',
+              color: theme.palette.common.white,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               whiteSpace: 'pre-line',
-              border: '1px solid ivory',
+              border: '1px solid ' + theme.palette.common.white,
               padding: '1rem',
             }}
             onClick={props.handleEditingDescriptionChange}
@@ -133,16 +141,15 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         id="topActivityGear"
         sx={{
           alignSelf: 'flex-start',
-          marginLeft: '1.75rem',
-          color: 'ivory',
+          marginLeft: '1.25%',
+          color: theme.palette.common.white,
           padding: '.5rem',
           marginY: '.75rem',
-          border: '1px solid ivory',
+          border: '1px solid ' + theme.palette.common.white,
         }}
       >
         <Typography>Gear: {props.currentActivity.device_name}</Typography>
       </Box>
-
       <Box
         id="funStats"
         sx={{
@@ -158,13 +165,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           id="kudosX"
           sx={{
             display: 'flex',
-            alignItems: 'flex-start',
             flex: 1,
+            alignItems: 'center',
           }}
         >
           <Image
-            height={50}
-            width={50}
+            height={100}
+            width={100}
             alt="kudos-img"
             layout="static"
             src="/images/kudos.jpeg"
@@ -174,7 +181,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             className="kudosDescriptors"
             sx={{
               paddingLeft: '2.5%',
-              flex: 1,
               display: 'flex',
               flexDirection: 'column',
             }}
@@ -184,15 +190,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="kudosCount"
                 className="kudos"
-                sx={{
-                  margin: 0,
-                  display: 'block',
-                  color: 'ivory',
-                }}
+                color={theme.palette.common.white}
               >
-                Kudos-{' '}
+                Kudos-
               </Typography>
-              <Typography sx={{ color: 'ivory' }} variant="h6">
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.kudos_count}
               </Typography>
             </Box>
@@ -201,11 +203,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="commentCount"
                 className="kudos"
-                sx={{ margin: 0, display: 'block', color: 'ivory' }}
+                color={theme.palette.common.white}
               >
-                Comments-{' '}
+                Comments-
               </Typography>
-              <Typography variant="h6" sx={{ color: 'ivory' }}>
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.comment_count}
               </Typography>
             </Box>
@@ -223,8 +225,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           >
             <Image
               alt="heart-rate"
-              height={50}
-              width={50}
+              height={100}
+              width={100}
               layout="static"
               src="/images/heartrate.png"
               onClick={() => {
@@ -245,41 +247,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   id="avgHeartRate"
                   className="heartRate"
                   variant="h6"
-                  sx={{
-                    display: 'block',
-                    color: 'ivory',
-                    margin: 0,
-                    width: '3rem',
-                  }}
+                  color={theme.palette.common.white}
                 >
-                  Avg-{' '}
+                  Avg-
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{
-                    color: 'ivory',
-                  }}
+                  color={theme.palette.common.white}
                 >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>
                 <Typography
                   id="maxHeartRate"
                   className="heartRate"
-                  sx={{
-                    display: 'block',
-                    color: 'ivory',
-                    margin: 0,
-                    width: '3rem',
-                  }}
                   variant="h6"
+                  color={theme.palette.common.white}
                 >
-                  Max-{' '}
+                  Max-
                 </Typography>
                 <Typography
                   variant="h6"
-                  sx={{
-                    color: 'ivory',
-                  }}
+                  color={theme.palette.common.white}
                 >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
               </Box>
             </Box>
@@ -302,9 +290,9 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             <Box
               className="heartRate"
               id="avgHeartRate"
-              sx={{ paddingLeft: '1.5%', margin: 0 }}
+              sx={{ paddingLeft: '1.5%' }}
             >
-              <Typography variant="h6" color="ivory">
+              <Typography variant="h6" color={theme.palette.common.white}>
                 No HR Info Available
               </Typography>
             </Box>
@@ -313,7 +301,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               variant="h6"
               className="heartRate"
               id="maxHeartRate"
-              sx={{ display: 'inline-block', margin: 0 }}
+              sx={{ display: 'inline-block' }}
             >
               <Typography sx={{ display: 'inline-block' }}></Typography>
             </Typography>
@@ -329,8 +317,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           }}
         >
           <Image
-            height={50}
-            width={50}
+            height={100}
+            width={100}
             alt="trophy-img"
             src="/images/trophy.jpeg"
             layout="static"
@@ -344,11 +332,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 className="achievements"
                 id="achievementCount"
-                sx={{ color: 'ivory', margin: 0 }}
+                color={theme.palette.common.white}
               >
                 Achievement Count-
               </Typography>
-              <Typography variant="h6" sx={{ color: 'ivory' }}>
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.achievement_count}
               </Typography>
             </Box>
@@ -365,7 +353,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           />
         ) : null}
       </Box>
-
       {currentStat === 'heartRate' ? (
         <HeartRateChart
           currentActivity={props.currentActivity}
@@ -375,7 +362,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <Box
           sx={{
             paddingLeft: '2.5%',
-            color: 'ivory',
+            color: theme.palette.common.white,
             display: 'flex',
             width: '100%',
             ...mobileColumns,
@@ -424,6 +411,22 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
         </Box>
       ) : null}
+      <Typography
+        variant="h6"
+        color={theme.palette.common.white}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          width: '95%',
+          cursor: 'pointer',
+          '&:hover': {
+            color: 'lightgray',
+          },
+        }}
+        onClick={props.handleCloseCurrentActivity}
+      >
+        Close Detail
+      </Typography>
     </Box>
   );
 };

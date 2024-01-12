@@ -25,6 +25,7 @@ describe('Detailed Entry Tests', () => {
         handleDescriptionChange: () => {},
         currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
+        handleCloseCurrentActivity: () => null,
       }
     );
     expect(
@@ -45,6 +46,7 @@ describe('Detailed Entry Tests', () => {
         handleDescriptionChange: () => {},
         currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
+        handleCloseCurrentActivity: () => null,
       }
     );
     expect(

@@ -1,8 +1,8 @@
 import React from 'react';
+import { List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { CurrentActivity, Entry, Format, Sport } from './EntryTypes.js';
-import { List, ListItem } from '@mui/material';
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { useCSX } from '@lib';
 
@@ -15,9 +15,11 @@ interface EntryUIProps {
   sport: Sport;
   format?: Format;
   showIndividualEntry: React.MouseEventHandler<HTMLDivElement>;
+  handleCloseCurrentActivity: () => void;
 }
 
 const EntryUI = (props: EntryUIProps) => {
+  const theme = useTheme();
   const { data: totalEntries } = useGetAllEntriesQuery(null);
   const currentEntries = props.entries?.slice(
     props.currentPage * props.entriesPerPage - props.entriesPerPage,
@@ -38,6 +40,7 @@ const EntryUI = (props: EntryUIProps) => {
           sport={props.sport}
           entry={entry}
           format={props.format}
+          handleCloseCurrentActivity={props.handleCloseCurrentActivity}
         />
       </ListItem>
     );
@@ -51,7 +54,7 @@ const EntryUI = (props: EntryUIProps) => {
       disablePadding={true}
       sx={{
         listStyleType: 'none',
-        boxShadow: '0 0 10px coral',
+        boxShadow: '0 0 10px ' + theme.palette.strava.contrastColor,
         ...mobileStyles,
       }}
     >

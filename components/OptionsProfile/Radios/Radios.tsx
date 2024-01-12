@@ -3,7 +3,7 @@ import InputJSON from './input.json';
 import RadioColumn from '@components/OptionsProfile/Radios/RadioColumn';
 import ProgressBar from '@components/OptionsProfile/ProgressBar/ProgressBar';
 import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Format } from '@components/StravaEntries/EntryTypes';
 import { useCSX } from '@lib';
 import { useGetAllEntriesQuery } from '@redux/slices';
@@ -24,6 +24,7 @@ export interface RadiosProps {
 }
 
 const Radios = (props: RadiosProps) => {
+  const theme = useTheme();
   const { isSuccess } = useGetAllEntriesQuery(null);
   const initArr = [
     {
@@ -78,11 +79,11 @@ const Radios = (props: RadiosProps) => {
           justifyContent: 'center',
           width: '95%',
           margin: '2.5% auto 0 auto',
-          border: '1px solid orangered',
+          border: '1px solid ' + theme.palette.strava.main,
           borderTop: 'none',
           borderLeft: 'none',
-          backgroundColor: '#52fff3',
-          boxShadow: '2.5px 2.5px 5px 0px orangered',
+          backgroundColor: theme.palette.mainBackground.main,
+          boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         }}
       >
         {initArr.map((radioColumn, index) => {

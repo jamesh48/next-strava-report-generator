@@ -8,6 +8,7 @@ import {
   Link,
   OutlinedInput,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { useCSX } from '@lib';
 
@@ -26,6 +27,7 @@ interface GeneralEntryProps {
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
+  const theme = useTheme();
   const m2y = 1.094;
   const mps2kph = 3.6;
 
@@ -67,7 +69,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
       ref.current.setSelectionRange(textLength, textLength);
     }
   }, [props.editingHeadline]);
-  const mobileEntryWidth = useCSX('15%', '100%', 'width');
+  const mobileEntryWidth = useCSX('20%', '100%', 'width');
 
   return (
     <Box
@@ -82,12 +84,12 @@ const GeneralEntry = (props: GeneralEntryProps) => {
       }
       className="innerEntry"
       sx={{
-        border: '1px solid coral',
+        border: '1px solid ' + theme.palette.strava.contrastColor,
         backgroundColor: 'paleturquoise',
         '&:hover': {
           backgroundColor: !isTopThreeEntry ? 'darkturquoise' : null,
           p: {
-            color: 'ivory',
+            color: theme.palette.strava.contrastText,
           },
         },
 
@@ -121,7 +123,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 '& > *': {
                   cursor: 'pointer',
                 },
-                color: 'ivory',
+                color: theme.palette.strava.contrastText,
                 padding: '1rem',
                 '& > p': {
                   paddingLeft: '1.5%',
@@ -153,7 +155,11 @@ const GeneralEntry = (props: GeneralEntryProps) => {
               type="text"
               value={props.editedName}
               onChange={props.handleNameChange}
-              sx={{ color: 'ivory', border: '1px solid white', height: '2rem' }}
+              sx={{
+                color: theme.palette.strava.contrastText,
+                border: '1px solid white',
+                height: '2rem',
+              }}
             />
           </ClickAwayListener>
         ) : (
@@ -161,8 +167,12 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             className="entryTitle"
             href=""
             sx={{
-              color: isTopThreeEntry ? 'ivory' : 'orangered',
-              textDecorationColor: isTopThreeEntry ? 'ivory' : 'orangered',
+              color: isTopThreeEntry
+                ? theme.palette.strava.contrastText
+                : theme.palette.strava.main,
+              textDecorationColor: isTopThreeEntry
+                ? theme.palette.strava.contrastText
+                : theme.palette.strava.main,
             }}
           >
             {props.entry.name}

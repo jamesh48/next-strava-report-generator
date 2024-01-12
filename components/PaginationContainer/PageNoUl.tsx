@@ -1,5 +1,11 @@
 import React from 'react';
-import { List, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import {
+  List,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  useTheme,
+} from '@mui/material';
 //
 import { useMobileBrowserCheck } from '@lib';
 import { Entry } from '@components/StravaEntries/EntryTypes';
@@ -13,7 +19,7 @@ export interface PageNoUlProps {
 }
 const PageNoUl = (props: PageNoUlProps) => {
   const isMobile = useMobileBrowserCheck();
-
+  const theme = useTheme();
   if (isMobile) {
     return props.entries?.length ? (
       <Select
@@ -24,12 +30,12 @@ const PageNoUl = (props: PageNoUlProps) => {
           marginBottom: '1%',
           display: 'flex',
           textAlign: 'center',
-          color: 'coral',
+          color: theme.palette.strava.contrastColor,
         }}
         inputProps={{
           sx: {
-            bgcolor: 'paleturquoise',
-            border: '2px solid orangered',
+            bgcolor: theme.palette.mainBackground.dark,
+            border: '2px solid ' + theme.palette.strava.main,
             fontSize: '1.25rem',
           },
         }}
@@ -58,8 +64,11 @@ const PageNoUl = (props: PageNoUlProps) => {
                       bgcolor:
                         props.currentPage === number
                           ? 'turquoise !important'
-                          : 'paleturquoise',
-                      color: props.currentPage === number ? 'coral' : 'black',
+                          : theme.palette.mainBackground.light,
+                      color:
+                        props.currentPage === number
+                          ? theme.palette.strava.contrastColor
+                          : theme.palette.common.black,
                     }}
                   >
                     {number}
@@ -112,7 +121,7 @@ const PageNoUl = (props: PageNoUlProps) => {
                   key={number}
                   style={
                     Number(props.currentPage) === number
-                      ? { backgroundColor: 'coral' }
+                      ? { backgroundColor: theme.palette.strava.contrastColor }
                       : {}
                   }
                   value={number}
@@ -122,14 +131,14 @@ const PageNoUl = (props: PageNoUlProps) => {
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    border: '1px solid coral',
-                    padding: '5px 10px 5px 10px',
-                    backgroundColor: 'paleturquoise',
-                    marginTop: '5px',
+                    border: '1px solid ' + theme.palette.common.black,
+                    padding: '.5rem .75rem',
+                    backgroundColor: theme.palette.mainBackground.light,
+                    marginTop: '.5rem',
                     '&:hover': {
                       cursor: 'pointer',
-                      backgroundColor: 'coral',
-                      borderX: '2px solid ivory',
+                      backgroundColor: theme.palette.strava.contrastColor,
+                      border: '2px solid ' + theme.palette.strava.contrastText,
                     },
                   }}
                 >

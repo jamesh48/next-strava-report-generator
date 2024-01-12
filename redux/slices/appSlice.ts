@@ -17,6 +17,7 @@ export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 export const appInitialState: {
   sortCondition: string;
   sportCondition: Sport;
+  darkMode: boolean;
   customDateCondition: boolean;
   dateCondition: DateCondition;
   fromDate: string;
@@ -26,6 +27,7 @@ export const appInitialState: {
   sortCondition: 'speedDesc',
   sportCondition: 'Run',
   customDateCondition: false,
+  darkMode: false,
   dateCondition: 'allTime',
   fromDate: '',
   toDate: '',
@@ -61,6 +63,9 @@ export const appSlice = createSlice({
     setSportCondition: (state, action: PayloadAction<Sport>) => {
       state.sportCondition = action.payload;
     },
+    setDarkMode: (state, action: PayloadAction<boolean>) => {
+      state.darkMode = action.payload;
+    },
     setDateCondition: (state, action: PayloadAction<DateCondition>) => {
       state.dateCondition = action.payload;
       state.customDateCondition = false;
@@ -79,6 +84,7 @@ export const appSlice = createSlice({
 export const {
   setSortCondition,
   setSportCondition,
+  setDarkMode,
   setToDateQuery,
   setFromDateQuery,
   setDateCondition,
@@ -86,6 +92,7 @@ export const {
   setPopupModalDetails,
 } = appSlice.actions;
 
+export const getDarkModeCondition = (state: RootState) => state.app.darkMode;
 export const getSortCondition = (state: RootState) => state.app.sortCondition;
 export const getSportCondition = (state: RootState) => state.app.sportCondition;
 
