@@ -15,6 +15,7 @@ interface EntryUIProps {
   sport: Sport;
   format?: Format;
   showIndividualEntry: React.MouseEventHandler<HTMLDivElement>;
+  handleCloseCurrentActivity: () => void;
 }
 
 const EntryUI = (props: EntryUIProps) => {
@@ -39,6 +40,7 @@ const EntryUI = (props: EntryUIProps) => {
           sport={props.sport}
           entry={entry}
           format={props.format}
+          handleCloseCurrentActivity={props.handleCloseCurrentActivity}
         />
       </ListItem>
     );

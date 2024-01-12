@@ -76,6 +76,7 @@ const lightTheme: ThemeOptions = {
       dark: '#00ced1',
       light: '#AFEEEE',
       accent: 'deepskyblue',
+      entry: 'coral',
     },
   },
   typography: {

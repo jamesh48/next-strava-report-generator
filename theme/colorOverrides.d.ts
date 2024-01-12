@@ -2,14 +2,17 @@ declare module '@mui/material/styles/createPalette' {
   interface Palette {
     baseBackground: Palette['primary'];
     strava: Palette['primary'] & { contrastColor: string };
-    mainBackground: Palette['primary'] & { accent: string };
+    mainBackground: Palette['primary'] & { accent: string; entry: string };
     common: Palette['primary'] & { blue: string };
   }
 
   interface PaletteOptions {
     baseBackground: PaletteOptions['primary'];
     strava: PaletteOptions['primary'] & { contrastColor: string };
-    mainBackground: PaletteOptions['primary'] & { accent: string };
+    mainBackground: PaletteOptions['primary'] & {
+      accent: string;
+      entry: string;
+    };
     common: PaletteOptions['primary'] & { blue: string };
   }
 }

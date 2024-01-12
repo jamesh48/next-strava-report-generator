@@ -12,6 +12,7 @@ export interface StravaEntryProps {
   format: Format;
   no: number | undefined;
   currentActivity: CurrentActivity;
+  handleCloseCurrentActivity: () => void;
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
@@ -93,6 +94,7 @@ const StravaEntry = (props: StravaEntryProps) => {
           handleEditingDescriptionChange={handleEditingDesciptionChange}
           handleDescriptionChange={handleDescriptionChange}
           format={props.format}
+          handleCloseCurrentActivity={props.handleCloseCurrentActivity}
         />
       )}
     </Box>

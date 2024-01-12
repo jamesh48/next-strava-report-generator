@@ -19,6 +19,7 @@ export interface DetailedEntryProps {
   handleEditingDescriptionChange: () => void;
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   format: Format;
+  handleCloseCurrentActivity: () => void;
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
@@ -72,7 +73,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         alignItems: 'center',
         border: '2px solid ' + theme.palette.strava.main,
         display: 'flex',
-        bgcolor: theme.palette.strava.contrastColor,
+        bgcolor: theme.palette.mainBackground.entry,
         flexDirection: 'column',
         textRendering: 'geometricPrecision',
         '& > p': {
@@ -90,7 +91,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           width: '97.5%',
         }}
       >
-        <Typography variant="h6" color={theme.palette.strava.contrastText}>
+        <Typography variant="h6" color={theme.palette.common.white}>
           Activity Description:
         </Typography>
         {props.editingDescription ? (
@@ -111,8 +112,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
               InputProps={{
                 sx: {
-                  color: theme.palette.strava.contrastText,
-                  border: '1px solid ' + theme.palette.strava.contrastText,
+                  color: theme.palette.common.white,
+                  border: '1px solid ' + theme.palette.common.white,
                 },
               }}
             />
@@ -121,12 +122,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           <Typography
             className="topActivityDescription"
             sx={{
-              color: theme.palette.strava.contrastText,
+              color: theme.palette.common.white,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               whiteSpace: 'pre-line',
-              border: '1px solid ' + theme.palette.strava.contrastText,
+              border: '1px solid ' + theme.palette.common.white,
               padding: '1rem',
             }}
             onClick={props.handleEditingDescriptionChange}
@@ -141,15 +142,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         sx={{
           alignSelf: 'flex-start',
           marginLeft: '1.25%',
-          color: theme.palette.strava.contrastText,
+          color: theme.palette.common.white,
           padding: '.5rem',
           marginY: '.75rem',
-          border: '1px solid ' + theme.palette.strava.contrastText,
+          border: '1px solid ' + theme.palette.common.white,
         }}
       >
         <Typography>Gear: {props.currentActivity.device_name}</Typography>
       </Box>
-
       <Box
         id="funStats"
         sx={{
@@ -190,14 +190,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="kudosCount"
                 className="kudos"
-                color={theme.palette.strava.contrastText}
+                color={theme.palette.common.white}
               >
                 Kudos-
               </Typography>
-              <Typography
-                variant="h6"
-                color={theme.palette.strava.contrastText}
-              >
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.kudos_count}
               </Typography>
             </Box>
@@ -206,14 +203,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 id="commentCount"
                 className="kudos"
-                color={theme.palette.strava.contrastText}
+                color={theme.palette.common.white}
               >
                 Comments-
               </Typography>
-              <Typography
-                variant="h6"
-                color={theme.palette.strava.contrastText}
-              >
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.comment_count}
               </Typography>
             </Box>
@@ -253,13 +247,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   id="avgHeartRate"
                   className="heartRate"
                   variant="h6"
-                  color={theme.palette.strava.contrastText}
+                  color={theme.palette.common.white}
                 >
                   Avg-
                 </Typography>
                 <Typography
                   variant="h6"
-                  color={theme.palette.strava.contrastText}
+                  color={theme.palette.common.white}
                 >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>
@@ -267,13 +261,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   id="maxHeartRate"
                   className="heartRate"
                   variant="h6"
-                  color={theme.palette.strava.contrastText}
+                  color={theme.palette.common.white}
                 >
                   Max-
                 </Typography>
                 <Typography
                   variant="h6"
-                  color={theme.palette.strava.contrastText}
+                  color={theme.palette.common.white}
                 >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
               </Box>
             </Box>
@@ -298,10 +292,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               id="avgHeartRate"
               sx={{ paddingLeft: '1.5%' }}
             >
-              <Typography
-                variant="h6"
-                color={theme.palette.strava.contrastText}
-              >
+              <Typography variant="h6" color={theme.palette.common.white}>
                 No HR Info Available
               </Typography>
             </Box>
@@ -341,14 +332,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 variant="h6"
                 className="achievements"
                 id="achievementCount"
-                color={theme.palette.strava.contrastText}
+                color={theme.palette.common.white}
               >
                 Achievement Count-
               </Typography>
-              <Typography
-                variant="h6"
-                color={theme.palette.strava.contrastText}
-              >
+              <Typography variant="h6" color={theme.palette.common.white}>
                 {props.currentActivity.achievement_count}
               </Typography>
             </Box>
@@ -365,7 +353,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           />
         ) : null}
       </Box>
-
       {currentStat === 'heartRate' ? (
         <HeartRateChart
           currentActivity={props.currentActivity}
@@ -375,7 +362,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <Box
           sx={{
             paddingLeft: '2.5%',
-            color: theme.palette.strava.contrastText,
+            color: theme.palette.common.white,
             display: 'flex',
             width: '100%',
             ...mobileColumns,
@@ -424,6 +411,22 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
         </Box>
       ) : null}
+      <Typography
+        variant="h6"
+        color={theme.palette.common.white}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          width: '95%',
+          cursor: 'pointer',
+          '&:hover': {
+            color: 'lightgray',
+          },
+        }}
+        onClick={props.handleCloseCurrentActivity}
+      >
+        Close Detail
+      </Typography>
     </Box>
   );
 };

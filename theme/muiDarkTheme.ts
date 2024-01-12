@@ -10,6 +10,7 @@ const darkTheme: ThemeOptions = {
       light: 'lightslategray',
       dark: 'black',
       accent: 'ivory',
+      entry: 'darkslategray',
     },
     strava: {
       main: 'white',
