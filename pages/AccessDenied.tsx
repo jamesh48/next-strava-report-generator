@@ -27,12 +27,13 @@ const AccessDenied = () => {
           justifyContent: 'center',
           border: '1px solid ' + theme.palette.strava.main,
           padding: '5rem 3rem',
+          bgcolor: theme.palette.mainBackground.dark,
         }}
       >
         <Typography
           variant="h5"
           sx={{
-            color: theme.palette.baseBackground.dark,
+            color: theme.palette.strava.main,
             textDecoration: 'underline',
           }}
         >
@@ -40,7 +41,7 @@ const AccessDenied = () => {
         </Typography>
         <Typography
           sx={{
-            color: theme.palette.mainBackground.dark,
+            color: theme.palette.strava.main,
             display: 'flex',
             justifyContent: 'center',
           }}
@@ -61,7 +62,7 @@ const AccessDenied = () => {
           </Link>
           to create an account first.
         </Typography>
-        <Typography sx={{ display: 'flex', color: 'darkturquoise' }}>
+        <Typography sx={{ display: 'flex', color: theme.palette.strava.main }}>
           {">> See you in the Winner's Circle Champ."}
         </Typography>
       </Box>
