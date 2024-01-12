@@ -12,9 +12,10 @@ interface TypedPalette extends PaletteOptions {
 
 const muiOverrides = (
   globalTheme: ThemeOptions,
-  darkMode: boolean
+  _darkMode: boolean
 ): ThemeOptions['components'] => {
   const palette = globalTheme.palette! as TypedPalette;
+  console.log(palette.strava.contrastColor);
   return {
     MuiCssBaseline: {
       styleOverrides: {
