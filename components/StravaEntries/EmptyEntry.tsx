@@ -11,12 +11,6 @@ const EmptyEntry = () => {
           width: '100%',
           border: '1px solid ' + theme.palette.strava.contrastColor,
           backgroundColor: theme.palette.mainBackground.light,
-          '&:hover': {
-            backgroundColor: theme.palette.mainBackground.dark,
-            p: {
-              color: theme.palette.strava.contrastText,
-            },
-          },
         }}
       >
         <Box
@@ -33,9 +27,6 @@ const EmptyEntry = () => {
               paddingBottom: '0px',
               textDecoration: 'underline',
               paddingLeft: '.75rem',
-              '&:hover': {
-                color: 'blue',
-              },
             }}
           >
             ~No Entries Found~
@@ -48,7 +39,7 @@ const EmptyEntry = () => {
               paddingBottom: '10px',
             }}
           >
-            But keep up the Good Work Champ!
+            {'>> Keep up the Good Work Champ!'}
           </Typography>
         </Box>
       </Box>
