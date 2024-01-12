@@ -88,9 +88,9 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
         width: '95%',
         margin: '2.5% auto 0 auto',
         padding: '.5% 0',
-        border: '1px solid ' + theme.palette.strava.main,
         borderTop: 'none',
         borderLeft: 'none',
+        border: '1px solid ' + theme.palette.strava.main,
         boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...mobileStyleContainer,
       }}

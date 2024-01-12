@@ -8,18 +8,22 @@ import {
   Divider,
   Collapse,
   useTheme,
+  FormControlLabel,
+  Switch,
 } from '@mui/material';
 import { Close, Warning } from '@mui/icons-material';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   getSortCondition,
   getSportCondition,
+  getDarkModeCondition,
   getDateCondition,
   setSortCondition,
   setSportCondition,
   setDateCondition,
   useDestroyUserAndActivitiesMutation,
   DateCondition,
+  setDarkMode,
 } from '@redux/slices';
 import axios from 'axios';
 import { useState } from 'react';
@@ -35,11 +39,15 @@ const UserSettings = (props: UserSettingsProps) => {
   const [destroyUserAndActivities] = useDestroyUserAndActivitiesMutation({
     fixedCacheKey: 'destroy-user-key',
   });
+
   const defaultSortCondition = useSelector(getSortCondition);
   const defaultSportCondition = useSelector(getSportCondition);
+  const defaultDarkModeCondition = useSelector(getDarkModeCondition);
   const [_fromDate, _toDate, defaultDateCondition] =
     useSelector(getDateCondition);
-
+  const [selectedDarkMode, setSelectedDarkMode] = useState(
+    defaultDarkModeCondition
+  );
   const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
   const [selectedSport, setSelectedSport] = useState<Sport>(
     defaultSportCondition
@@ -56,14 +64,24 @@ const UserSettings = (props: UserSettingsProps) => {
   const [open] = usePopupModal();
 
   return (
-    <Dialog open={true}>
+    <Dialog
+      open={true}
+      PaperProps={{
+        sx: {
+          border: '1px solid ' + theme.palette.strava.main,
+          boxShadow: '2.5px 2.5px .25rem 0px ' + theme.palette.strava.main,
+        },
+      }}
+    >
       <Box
         sx={{
+          overflowX: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           width: '25rem',
           top: '10rem',
+
           bgcolor: theme.palette.mainBackground.main,
         }}
       >
@@ -205,6 +223,76 @@ const UserSettings = (props: UserSettingsProps) => {
             </Select>
           </Box>
         </Box>
+        {/* Dark Mode */}
+        <Box>
+          <FormControlLabel
+            labelPlacement="start"
+            label="Dark Mode"
+            sx={{
+              color: theme.palette.strava.contrastColor,
+              display: 'flex',
+            }}
+            checked={selectedDarkMode}
+            onChange={() => setSelectedDarkMode((x) => !x)}
+            control={
+              <Switch
+                disableRipple
+                sx={{
+                  width: 42,
+                  height: 26,
+                  padding: 0,
+                  marginRight: '2rem',
+                  marginLeft: '1rem',
+                  marginY: '.5rem',
+                  '& .MuiSwitch-switchBase': {
+                    padding: 0,
+                    margin: 0.3,
+                    transitionDuration: '300ms',
+                    '&.Mui-checked': {
+                      transform: 'translateX(16px)',
+                      color: '#fff',
+                      '& + .MuiSwitch-track': {
+                        backgroundColor: 'orangered',
+                        opacity: 1,
+                        border: 0,
+                      },
+                      '&.Mui-disabled + .MuiSwitch-track': {
+                        opacity: 0.5,
+                      },
+                    },
+                    '&.Mui-focusVisible .MuiSwitch-thumb': {
+                      color: '#33cf4d',
+                      border: '6px solid #fff',
+                    },
+                    '&.Mui-disabled .MuiSwitch-thumb': {
+                      color:
+                        theme.palette.mode === 'light'
+                          ? theme.palette.grey[100]
+                          : theme.palette.grey[600],
+                    },
+                    '&.Mui-disabled + .MuiSwitch-track': {
+                      opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+                    },
+                  },
+                  '& .MuiSwitch-thumb': {
+                    boxSizing: 'border-box',
+                    width: 22,
+                    height: 22,
+                  },
+                  '& .MuiSwitch-track': {
+                    borderRadius: 26 / 2,
+                    backgroundColor:
+                      theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+                    opacity: 1,
+                    transition: theme.transitions.create(['background-color'], {
+                      duration: 500,
+                    }),
+                  },
+                }}
+              />
+            }
+          />
+        </Box>
         <Box>
           <Box
             sx={{
@@ -221,6 +309,7 @@ const UserSettings = (props: UserSettingsProps) => {
                     url: '/api/userSettings',
                     method: 'POST',
                     data: {
+                      selectedDarkMode,
                       selectedFormat,
                       selectedSport,
                       selectedDate,
@@ -232,6 +321,7 @@ const UserSettings = (props: UserSettingsProps) => {
                   dispatch(setSportCondition(selectedSport));
                   dispatch(setSortCondition(selectedFormat));
                   dispatch(setDateCondition(selectedDate));
+                  dispatch(setDarkMode(selectedDarkMode));
                   props.closeUserSettingsCB();
                 };
 

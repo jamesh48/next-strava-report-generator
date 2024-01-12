@@ -6,9 +6,19 @@ import { ThemeProvider, useTheme } from '@mui/material';
 import lightTheme from '../theme/muiLightTheme';
 import darkTheme from '../theme/muiDarkTheme';
 import { useFetchData } from '@lib';
-import { appInitialState } from '@redux/slices';
+import { appInitialState, getDarkModeCondition } from '@redux/slices';
 import GlobalStore from '@redux/store';
+import { useSelector } from '@redux/reduxHooks';
 
+const ThemeComponent = (props: AppProps & { initialDarkMode?: boolean }) => {
+  const darkMode = useSelector(getDarkModeCondition);
+
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <AppComponent {...props} />
+    </ThemeProvider>
+  );
+};
 const AppComponent = ({ Component, pageProps }: AppProps) => {
   const theme = useTheme();
 
@@ -24,7 +34,8 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
     </>
   );
 };
-function MyApp(props: AppProps) {
+
+const StravaReportGenerator = (props: AppProps) => {
   const { data: userSettings } = useFetchData<{
     defaultFormat: string;
     defaultSport: string;
@@ -33,22 +44,20 @@ function MyApp(props: AppProps) {
   }>('/api/userSettings');
 
   return (
-    <ThemeProvider theme={userSettings?.darkMode ? darkTheme : lightTheme}>
-      <Provider
-        store={GlobalStore.prototype.configureGlobalStore({
-          app: {
-            ...appInitialState,
-            sortCondition: userSettings?.defaultFormat,
-            sportCondition: userSettings?.defaultSport,
-            dateCondition: userSettings?.defaultDate,
-            darkMode: userSettings?.darkMode,
-          },
-        })}
-      >
-        <AppComponent {...props} />
-      </Provider>
-    </ThemeProvider>
+    <Provider
+      store={GlobalStore.prototype.configureGlobalStore({
+        app: {
+          ...appInitialState,
+          sortCondition: userSettings?.defaultFormat,
+          sportCondition: userSettings?.defaultSport,
+          dateCondition: userSettings?.defaultDate,
+          darkMode: userSettings?.darkMode,
+        },
+      })}
+    >
+      <ThemeComponent {...props} initialDarkMode={userSettings?.darkMode} />
+    </Provider>
   );
-}
+};
 
-export default MyApp;
+export default StravaReportGenerator;

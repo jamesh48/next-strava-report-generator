@@ -84,10 +84,10 @@ const UserProfile = () => {
         margin: '2.5% 0',
         width: '95%',
         backgroundColor: theme.palette.mainBackground.main,
-        border: '1px solid orangered',
+        border: '1px solid ' + theme.palette.strava.main,
         borderTop: 'none',
         borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
@@ -112,11 +112,11 @@ const UserProfile = () => {
         display: 'flex',
         margin: '2.5% 0',
         width: '95%',
-        backgroundColor: theme.palette.mainBackground.main,
-        border: '1px solid orangered',
         borderTop: 'none',
         borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px orangered',
+        backgroundColor: theme.palette.mainBackground.main,
+        border: '1px solid ' + theme.palette.strava.main,
+        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
