@@ -39,6 +39,9 @@ export type CurrentActivity = {
     average_heartrate: number;
     distance: number;
   }[];
+  map: {
+    polyline: string;
+  };
   photos: {
     primary: {
       urls: {

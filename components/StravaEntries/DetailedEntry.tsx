@@ -11,6 +11,7 @@ import {
 import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
+import ActivityMap from './ActivityMap/ActivityMap';
 
 export interface DetailedEntryProps {
   editingDescription: boolean;
@@ -91,7 +92,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           width: '97.5%',
         }}
       >
-        <Typography variant="h6" color={theme.palette.common.white}>
+        <Typography
+          variant="h6"
+          color={theme.palette.common.white}
+          sx={{ textDecoration: 'underline' }}
+        >
           Activity Description:
         </Typography>
         {props.editingDescription ? (
@@ -137,221 +142,260 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         )}
       </Box>
       {/* Gear */}
-      <Box
-        id="topActivityGear"
-        sx={{
-          alignSelf: 'flex-start',
-          marginLeft: '1.25%',
-          color: theme.palette.common.white,
-          padding: '.5rem',
-          marginY: '.75rem',
-          border: '1px solid ' + theme.palette.common.white,
-        }}
-      >
-        <Typography>Gear: {props.currentActivity.device_name}</Typography>
-      </Box>
+      {props.currentActivity.device_name ? (
+        <Box
+          id="topActivityGear"
+          sx={{
+            alignSelf: 'flex-start',
+            marginLeft: '1.25%',
+            color: theme.palette.common.white,
+            padding: '.5rem',
+            marginY: '.75rem',
+            border: '1px solid ' + theme.palette.common.white,
+          }}
+        >
+          <Typography>Gear: {props.currentActivity.device_name}</Typography>
+        </Box>
+      ) : (
+        <Box sx={{ marginY: '.75rem' }}></Box>
+      )}
       <Box
         id="funStats"
         sx={{
           display: 'flex',
-          width: '90%',
-          justifyContent: 'center',
+          flex: 1,
+          width: '97.5%',
+          justifyContent: props.currentActivity.map.polyline
+            ? 'center'
+            : 'flex-start',
           alignItems: 'center',
           ...mobileColumns,
         }}
       >
-        {/* Kudos & Comments */}
         <Box
-          id="kudosX"
           sx={{
             display: 'flex',
-            flex: 1,
-            alignItems: 'center',
+            flexDirection: 'column',
+            paddingLeft: '1rem',
+            border: '1px solid white',
+            flex: 0.3,
           }}
         >
-          <Image
-            height={100}
-            width={100}
-            alt="kudos-img"
-            layout="static"
-            src="/images/kudos.jpeg"
-            onClick={handleKudosClick}
-          />
+          {/* Kudos & Comments */}
           <Box
-            className="kudosDescriptors"
-            sx={{
-              paddingLeft: '2.5%',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <Box sx={{ display: 'flex' }}>
-              <Typography
-                variant="h6"
-                id="kudosCount"
-                className="kudos"
-                color={theme.palette.common.white}
-              >
-                Kudos-
-              </Typography>
-              <Typography variant="h6" color={theme.palette.common.white}>
-                {props.currentActivity.kudos_count}
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex' }}>
-              <Typography
-                variant="h6"
-                id="commentCount"
-                className="kudos"
-                color={theme.palette.common.white}
-              >
-                Comments-
-              </Typography>
-              <Typography variant="h6" color={theme.palette.common.white}>
-                {props.currentActivity.comment_count}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Heart Rate */}
-        {props.currentActivity.average_heartrate ? (
-          <Box
-            id="goldenHeartRate"
+            id="kudosX"
             sx={{
               display: 'flex',
               flex: 1,
+              alignItems: 'center',
+              marginY: '1rem',
             }}
           >
             <Image
-              alt="heart-rate"
               height={100}
               width={100}
+              alt="kudos-img"
               layout="static"
-              src="/images/heartrate.png"
-              onClick={() => {
-                setCurrentStat((prevStat) => {
-                  if (prevStat === 'heartRate') {
-                    return null;
-                  }
-                  return 'heartRate';
-                });
-              }}
+              src="/images/kudos.jpeg"
+              onClick={handleKudosClick}
             />
             <Box
-              className="heartRateDescriptors"
-              sx={{ paddingLeft: '2.5%', flex: 1 }}
+              className="kudosDescriptors"
+              sx={{
+                paddingLeft: '2.5%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
             >
               <Box sx={{ display: 'flex' }}>
                 <Typography
-                  id="avgHeartRate"
-                  className="heartRate"
                   variant="h6"
+                  id="kudosCount"
+                  className="kudos"
                   color={theme.palette.common.white}
                 >
-                  Avg-
+                  Kudos-
                 </Typography>
-                <Typography
-                  variant="h6"
-                  color={theme.palette.common.white}
-                >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
+                <Typography variant="h6" color={theme.palette.common.white}>
+                  {props.currentActivity.kudos_count}
+                </Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>
                 <Typography
-                  id="maxHeartRate"
-                  className="heartRate"
                   variant="h6"
+                  id="commentCount"
+                  className="kudos"
                   color={theme.palette.common.white}
                 >
-                  Max-
+                  Comments-
                 </Typography>
-                <Typography
-                  variant="h6"
-                  color={theme.palette.common.white}
-                >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
+                <Typography variant="h6" color={theme.palette.common.white}>
+                  {props.currentActivity.comment_count}
+                </Typography>
               </Box>
             </Box>
           </Box>
-        ) : (
+
+          {/* Heart Rate */}
+          {props.currentActivity.average_heartrate ? (
+            <Box
+              id="goldenHeartRate"
+              sx={{
+                display: 'flex',
+                flex: 1,
+                marginY: '1rem',
+              }}
+            >
+              <Image
+                alt="heart-rate"
+                height={100}
+                width={100}
+                layout="static"
+                src="/images/heartrate.png"
+                onClick={() => {
+                  setCurrentStat((prevStat) => {
+                    if (prevStat === 'heartRate') {
+                      return null;
+                    }
+                    return 'heartRate';
+                  });
+                }}
+              />
+              <Box
+                className="heartRateDescriptors"
+                sx={{ paddingLeft: '2.5%', flex: 1 }}
+              >
+                <Box sx={{ display: 'flex' }}>
+                  <Typography
+                    id="avgHeartRate"
+                    className="heartRate"
+                    variant="h6"
+                    color={theme.palette.common.white}
+                  >
+                    Avg-
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color={theme.palette.common.white}
+                  >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex' }}>
+                  <Typography
+                    id="maxHeartRate"
+                    className="heartRate"
+                    variant="h6"
+                    color={theme.palette.common.white}
+                  >
+                    Max-
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color={theme.palette.common.white}
+                  >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
+                </Box>
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              id="goldenHeartRate"
+              sx={{
+                display: 'flex',
+                flex: 1,
+                marginY: '1rem',
+                minHeight: '6rem',
+                alignItems: 'center',
+              }}
+            >
+              <Image
+                alt="heart-rate"
+                height={50}
+                width={50}
+                src="/images/heartrate.png"
+                layout="static"
+              />
+              <Box
+                className="heartRate"
+                id="avgHeartRate"
+                sx={{ paddingLeft: '1.5%' }}
+              >
+                <Typography variant="h6" color={theme.palette.common.white}>
+                  No HR Info Available
+                </Typography>
+              </Box>
+
+              <Typography
+                variant="h6"
+                className="heartRate"
+                id="maxHeartRate"
+                sx={{ display: 'inline-block' }}
+              >
+                <Typography sx={{ display: 'inline-block' }}></Typography>
+              </Typography>
+            </Box>
+          )}
+
+          {/* Trophy Case */}
           <Box
-            id="goldenHeartRate"
+            id="trophyCase"
             sx={{
               display: 'flex',
               flex: 1,
+              marginY: '1rem',
             }}
           >
             <Image
-              alt="heart-rate"
-              height={50}
-              width={50}
-              src="/images/heartrate.png"
+              height={100}
+              width={100}
+              alt="trophy-img"
+              src="/images/trophy.jpeg"
               layout="static"
             />
             <Box
-              className="heartRate"
-              id="avgHeartRate"
-              sx={{ paddingLeft: '1.5%' }}
+              className="achievementCountDescriptor"
+              sx={{ paddingLeft: '2.5%', flex: 1, display: 'flex' }}
             >
-              <Typography variant="h6" color={theme.palette.common.white}>
-                No HR Info Available
-              </Typography>
-            </Box>
-
-            <Typography
-              variant="h6"
-              className="heartRate"
-              id="maxHeartRate"
-              sx={{ display: 'inline-block' }}
-            >
-              <Typography sx={{ display: 'inline-block' }}></Typography>
-            </Typography>
-          </Box>
-        )}
-
-        {/* Trophy Case */}
-        <Box
-          id="trophyCase"
-          sx={{
-            display: 'flex',
-            flex: 1,
-          }}
-        >
-          <Image
-            height={100}
-            width={100}
-            alt="trophy-img"
-            src="/images/trophy.jpeg"
-            layout="static"
-          />
-          <Box
-            className="achievementCountDescriptor"
-            sx={{ paddingLeft: '2.5%', flex: 1, display: 'flex' }}
-          >
-            <Box sx={{ display: 'flex' }}>
-              <Typography
-                variant="h6"
-                className="achievements"
-                id="achievementCount"
-                color={theme.palette.common.white}
-              >
-                Achievement Count-
-              </Typography>
-              <Typography variant="h6" color={theme.palette.common.white}>
-                {props.currentActivity.achievement_count}
-              </Typography>
+              <Box sx={{ display: 'flex' }}>
+                <Typography
+                  variant="h6"
+                  className="achievements"
+                  id="achievementCount"
+                  color={theme.palette.common.white}
+                >
+                  Achievement Count-
+                </Typography>
+                <Typography variant="h6" color={theme.palette.common.white}>
+                  {props.currentActivity.achievement_count}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Box>
 
-        {props.currentActivity.photos.primary ? (
-          <Image
-            src={props.currentActivity.photos.primary.urls['600']}
-            height={150}
-            width={150}
-            layout="fixed"
-            alt="highlight-photo"
-          />
+        {props.currentActivity.map.polyline ? (
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+          >
+            <ActivityMap polyline={props.currentActivity.map.polyline} />
+          </Box>
         ) : null}
+        {/* Margin Left 1rem for entries without a map */}
+        <Box sx={{ marginLeft: '1rem' }}>
+          {props.currentActivity.photos.primary ? (
+            <Image
+              src={props.currentActivity.photos.primary.urls['600']}
+              height={400}
+              width={320}
+              layout="fixed"
+              alt="highlight-photo"
+            />
+          ) : null}
+        </Box>
       </Box>
       {currentStat === 'heartRate' ? (
         <HeartRateChart
@@ -374,7 +418,6 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                paddingLeft: '5rem',
               }}
             >
               <Typography

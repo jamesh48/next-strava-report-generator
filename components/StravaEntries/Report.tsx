@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, SelectChangeEvent } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import { Entry, Format, Sport } from './EntryTypes.js';
+import { CurrentActivity, Entry, Format, Sport } from './EntryTypes.js';
 import {
   useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
@@ -30,25 +30,7 @@ const Report = (props: ReportProps) => {
   const [entriesPerPage] = useState(7);
   // Entries
   const [invalidEntry, setInvalidEntry] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState({
-    id: 0,
-    name: '',
-    kudos_count: 0,
-    comment_count: 0,
-    average_heartrate: 0,
-    max_heartrate: 0,
-    achievement_count: 0,
-    description: '',
-    device_name: '',
-    laps: [{ max_heartrate: 0, average_heartrate: 0, distance: 0 }],
-    photos: {
-      primary: {
-        urls: {
-          '600': '',
-        },
-      },
-    },
-  });
+  const [currentActivity, setCurrentActivity] = useState({} as CurrentActivity);
   let { data: totalEntries } = useGetAllEntriesQuery(null);
 
   useEffect(() => {
@@ -124,25 +106,7 @@ const Report = (props: ReportProps) => {
   };
 
   const handleCloseCurrentActivity = () => {
-    setCurrentActivity({
-      id: 0,
-      name: '',
-      kudos_count: 0,
-      comment_count: 0,
-      average_heartrate: 0,
-      max_heartrate: 0,
-      achievement_count: 0,
-      description: '',
-      device_name: '',
-      laps: [{ max_heartrate: 0, average_heartrate: 0, distance: 0 }],
-      photos: {
-        primary: {
-          urls: {
-            '600': '',
-          },
-        },
-      },
-    });
+    setCurrentActivity({} as CurrentActivity);
   };
 
   useEffect(() => {

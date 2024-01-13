@@ -1,6 +1,9 @@
 module.exports = {
   reactStrictMode: true,
   distDir: 'build',
+  env: {
+    MAPBOX_ACCESS_TOKEN: process.env.MAPBOX_ACCESS_TOKEN,
+  },
   images: {
     remotePatterns: [
       {
