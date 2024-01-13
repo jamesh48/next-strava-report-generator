@@ -65,6 +65,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   };
 
   const mobileColumns = useCSX('row', 'column', 'flexDirection');
+  const alignGear = useCSX('flex-start', 'center', 'alignSelf');
   return (
     <Box
       className="detailedEntry"
@@ -146,12 +147,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <Box
           id="topActivityGear"
           sx={{
-            alignSelf: 'flex-start',
             marginLeft: '1.25%',
             color: theme.palette.common.white,
             padding: '.5rem',
             marginY: '.75rem',
             border: '1px solid ' + theme.palette.common.white,
+            ...alignGear,
           }}
         >
           <Typography>Gear: {props.currentActivity.device_name}</Typography>
@@ -178,7 +179,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             flexDirection: 'column',
             paddingX: '1rem',
             border: '1px solid white',
-            flex: 0.3,
+            flex: 1,
           }}
         >
           {/* Kudos & Comments */}
@@ -379,19 +380,26 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               justifyContent: 'center',
               alignItems: 'center',
               height: '100%',
+              marginX: '1rem',
             }}
           >
             <ActivityMap polyline={props.currentActivity.map.polyline} />
           </Box>
         ) : null}
         {/* Margin Left 1rem for entries without a map */}
-        <Box sx={{ marginLeft: '1rem' }}>
+        <Box
+          sx={{
+            flex: 1,
+            justifyContent: 'flex-end',
+            display: 'flex',
+          }}
+        >
           {props.currentActivity.photos.primary ? (
             <Image
               src={props.currentActivity.photos.primary.urls['600']}
               height={400}
               width={320}
-              layout="fixed"
+              layout="responsive"
               alt="highlight-photo"
             />
           ) : null}

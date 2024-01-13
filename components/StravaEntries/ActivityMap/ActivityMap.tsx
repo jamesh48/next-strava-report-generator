@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { CSSProperties, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import polyline from '@mapbox/polyline';
 import { Box } from '@mui/material';
@@ -68,18 +68,21 @@ const ActivityMap = (props: ActivityMapProps) => {
           'line-opacity': 1,
         },
       });
+      map.current.resize();
     });
 
     return () => map.current.remove();
   }, [props.polyline]);
 
-  const mobileWidth = useCSX('66%', '100%', 'width');
+  const canvasContainerWidth = useCSX('25rem', '21rem', 'width');
+
   return (
     <Box
       ref={mapContainer}
       sx={{
         height: '25rem',
-        ...mobileWidth,
+        flex: 1,
+        '.mapboxgl-canvas-container': canvasContainerWidth as CSSProperties,
       }}
     />
   );

@@ -69,7 +69,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
       ref.current.setSelectionRange(textLength, textLength);
     }
   }, [props.editingHeadline]);
-  const mobileEntryWidth = useCSX('20%', '100%', 'width');
+  const mobileEntryWidth = useCSX('20%', '90%', 'width');
 
   return (
     <Box
@@ -182,7 +182,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
         )}
         {props.format !== 'avgypace' ? (
           <EntryDescriptor
-            title={`Distance ${pastTense}`}
+            title={`Distance ${pastTense}:`}
             value={`${props.entry.distance} Meters`}
           />
         ) : (
