@@ -14,6 +14,7 @@ const {
   AWS_VPC_ID,
   CLIENT_ID,
   DATA_BASE_URL,
+  MAPBOX_ACCESS_TOKEN,
   REDIRECT_URI_HOST,
 } = process.env;
 
@@ -22,6 +23,8 @@ if (!AWS_DEFAULT_SG) throw new Error('AWS_DEFAULT_SG env is undefined!');
 if (!AWS_VPC_ID) throw new Error('AWS_VPC_ID env is undefined');
 if (!CLIENT_ID) throw new Error('CLIENT_ID env is undefined!');
 if (!DATA_BASE_URL) throw new Error('DATA_BASE_URL env is undefined!');
+if (!MAPBOX_ACCESS_TOKEN)
+  throw new Error('MAPBOX_ACCESS_TOKEN env is undefined');
 if (!REDIRECT_URI_HOST) throw new Error('REDIRECT_URI_HOST env is undefined!');
 
 new SRGFrontendStack(app, 'srg-fe-stack', {
@@ -34,6 +37,7 @@ new SRGFrontendStack(app, 'srg-fe-stack', {
     CLIENT_ID,
     DATA_BASE_URL,
     REDIRECT_URI_HOST,
+    MAPBOX_ACCESS_TOKEN,
   },
   env: {
     region: process.env.CDK_DEFAULT_REGION,

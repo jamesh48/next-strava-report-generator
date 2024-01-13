@@ -67,4 +67,5 @@ jobs:
           CDK_REGION: ${{ vars.CDK_REGION }}
           CLIENT_ID: ${{ vars.STRAVA_CLIENT_ID }}
           DATA_BASE_URL: ${{ vars.DATA_BASE_URL }}
+          MAPBOX_ACCESS_TOKEN: ${{ vars.MAPBOX_ACCESS_TOKEN }}
           REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}

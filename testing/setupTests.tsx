@@ -6,7 +6,7 @@ import { configure } from '@testing-library/dom';
 import { server } from './MSW/server';
 
 global.structuredClone = (val: unknown) => JSON.parse(JSON.stringify(val));
-
+global.TextDecoder = require('util').TextDecoder;
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),
   unobserve: jest.fn(),
