@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import MapManager from './MapManager';
 import { useSelector } from '@redux/reduxHooks';
 import { getClientSideToken } from '@redux/slices';
+import { useCSX } from '@lib';
 
 interface ActivityMapProps {
   polyline: string;
@@ -72,7 +73,16 @@ const ActivityMap = (props: ActivityMapProps) => {
     return () => map.current.remove();
   }, [props.polyline]);
 
-  return <Box ref={mapContainer} sx={{ height: '25rem', width: '66%' }}></Box>;
+  const mobileWidth = useCSX('66%', '100%', 'width');
+  return (
+    <Box
+      ref={mapContainer}
+      sx={{
+        height: '25rem',
+        ...mobileWidth,
+      }}
+    />
+  );
 };
 
 export default ActivityMap;

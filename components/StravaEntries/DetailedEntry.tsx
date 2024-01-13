@@ -176,7 +176,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            paddingLeft: '1rem',
+            paddingX: '1rem',
             border: '1px solid white',
             flex: 0.3,
           }}
