@@ -88,7 +88,12 @@ const Radios = (props: RadiosProps) => {
       >
         {initArr.map((radioColumn, index) => {
           return (
-            <RadioColumn key={index} {...radioColumn} isLoaded={isSuccess} />
+            <RadioColumn
+              key={index}
+              {...radioColumn}
+              isLoaded={isSuccess}
+              format={props.format}
+            />
           );
         })}
       </Box>

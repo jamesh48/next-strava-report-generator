@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useSelector } from '@redux/reduxHooks';
 import { getSportCondition } from '@redux/slices';
+import { Format } from '@components/StravaEntries/EntryTypes';
 
 export type RadioValueProps = {
   type: string;
@@ -24,7 +25,7 @@ interface RadioColumnProps {
   title: string;
   radioValues: RadioValueProps[];
   isLoaded: boolean;
-  format?: string;
+  format?: Format;
   distance?: number;
   customDistance?: boolean;
   placeholder?: string;
@@ -76,7 +77,11 @@ const RadioColumn = (props: RadioColumnProps) => {
               if (props.title === 'Choose Sport' && sportCondition) {
                 return sportCondition;
               }
-              return props.radioValues[0]?.value;
+
+              if (props.title === 'Choose Format') {
+                return props.format;
+              }
+              return null;
             })()}
           >
             {props.radioValues.map((radio, index) => {
