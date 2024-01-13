@@ -3,13 +3,16 @@ import mapboxgl from 'mapbox-gl';
 import polyline from '@mapbox/polyline';
 import { Box } from '@mui/material';
 import MapManager from './MapManager';
+import { useSelector } from '@redux/reduxHooks';
+import { getClientSideToken } from '@redux/slices';
 
 interface ActivityMapProps {
   polyline: string;
 }
 
 const ActivityMap = (props: ActivityMapProps) => {
-  mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN!;
+  const mapboxAccessToken = useSelector(getClientSideToken('mapbox'));
+  mapboxgl.accessToken = mapboxAccessToken;
   const mapContainer = useRef(null);
   const map: React.MutableRefObject<MapManager> = useRef({} as MapManager);
 

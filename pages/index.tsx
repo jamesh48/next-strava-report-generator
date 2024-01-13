@@ -5,6 +5,17 @@ import { Box } from '@mui/material';
 
 import App from '@components/App/App';
 
+export const getServerSideProps = () => {
+  const mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
+  return {
+    props: {
+      clientSideTokens: {
+        mapbox: mapboxAccessToken,
+      },
+    },
+  };
+};
+
 export default function Home() {
   return (
     <Box>

@@ -35,7 +35,9 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-const StravaReportGenerator = (props: AppProps) => {
+const StravaReportGenerator = (
+  props: AppProps<{ clientSideTokens: { mapbox: string } }>
+) => {
   const { data: userSettings } = useFetchData<{
     defaultFormat: string;
     defaultSport: string;
@@ -52,6 +54,9 @@ const StravaReportGenerator = (props: AppProps) => {
           sportCondition: userSettings?.defaultSport,
           dateCondition: userSettings?.defaultDate,
           darkMode: userSettings?.darkMode,
+          clientSideTokens: {
+            mapbox: props.pageProps.clientSideTokens.mapbox,
+          },
         },
       })}
     >

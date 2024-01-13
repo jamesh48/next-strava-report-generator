@@ -22,6 +22,7 @@ export const appInitialState: {
   dateCondition: DateCondition;
   fromDate: string;
   toDate: string;
+  clientSideTokens: { mapbox: string };
   popupModalDetails: PopupModalDetails;
 } = {
   sortCondition: 'speedDesc',
@@ -31,6 +32,9 @@ export const appInitialState: {
   dateCondition: 'allTime',
   fromDate: '',
   toDate: '',
+  clientSideTokens: {
+    mapbox: '',
+  },
   popupModalDetails: {
     title: '',
     body: '',
@@ -153,6 +157,11 @@ export const getDateCondition = createSelector(
     return ['', '', 'allTime'];
   }
 );
+
+export const getClientSideToken =
+  (token: keyof (typeof appInitialState)['clientSideTokens']) =>
+  (state: RootState) =>
+    state.app.clientSideTokens[token];
 
 export const getPopupModalDetails = (state: RootState) =>
   state.app.popupModalDetails;
