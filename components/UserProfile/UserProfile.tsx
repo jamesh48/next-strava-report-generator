@@ -5,43 +5,16 @@ import { Box, Typography, useTheme } from '@mui/material';
 import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
 import SwimmingTotals from './SwimmingTotals';
-import { ProfileData } from './UserProfileTypes';
-import { fetchUserData, useCSX } from '@lib';
-import { useGetAllEntriesQuery } from '@redux/slices';
+// import { ProfileData } from './UserProfileTypes';
+import { useCSX } from '@lib';
+import { useGetAllEntriesQuery, useGetUserProfileQuery } from '@redux/slices';
 
 const UserProfile = () => {
   const theme = useTheme();
   const { isLoading } = useGetAllEntriesQuery(null);
-  const [rateLimit, setRateLimit] = React.useState(false);
-  const [userProfile, setUserProfile] = React.useState({
-    profile: '',
-    firstname: '',
-    lastname: '',
-    city: '',
-    state: '',
-    country: '',
-    ytd_run_totals: {
-      distance: 0,
-      count: 0,
-      elapsed_time: 0,
-    },
-    ytd_swim_totals: {
-      distance: 0,
-      count: 0,
-      elapsed_time: 0,
-    },
-  });
-  React.useEffect(() => {
-    async function fetchUser() {
-      const incomingUserProfile: ProfileData & number = await fetchUserData();
-      if (incomingUserProfile === 429) {
-        setRateLimit(true);
-      } else {
-        setUserProfile(incomingUserProfile);
-      }
-    }
-    fetchUser();
-  }, []);
+  const [rateLimit] = React.useState(false);
+
+  const { data: userProfile } = useGetUserProfileQuery(null);
 
   const userProfileCSX = useCSX(
     { flexDirection: 'row' },

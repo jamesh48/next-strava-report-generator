@@ -10,7 +10,10 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+
+import { Share } from '@mui/icons-material';
 import { useCSX } from '@lib';
+import { useGetUserProfileQuery } from '@redux/slices';
 
 interface GeneralEntryProps {
   no: number | undefined;
@@ -22,12 +25,13 @@ interface GeneralEntryProps {
   isCurrentActivity: boolean;
   handleNameChange: (e: { target: { value: string } }) => void;
   handleEditingHeadlineChange: (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent> | true
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
   ) => void;
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
   const theme = useTheme();
+  const { data: userProfile } = useGetUserProfileQuery(null);
   const m2y = 1.094;
   const mps2kph = 3.6;
 
@@ -107,7 +111,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           }
           return {};
         })(),
-
+        display: 'flex',
         ...mobileCentered,
       }}
     >
@@ -115,8 +119,6 @@ const GeneralEntry = (props: GeneralEntryProps) => {
         className={
           isTopThreeEntry ? 'generalEntry specialEntry' : 'generalEntry'
         }
-        data-indentry={props.entry.activityId}
-        onClick={props.handleEditingHeadlineChange}
         sx={{
           ...(() => {
             if (isTopThreeEntry) {
@@ -165,20 +167,38 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             />
           </ClickAwayListener>
         ) : (
-          <Link
-            className="entryTitle"
-            href=""
-            sx={{
-              color: isTopThreeEntry
-                ? theme.palette.strava.contrastText
-                : theme.palette.strava.main,
-              textDecorationColor: isTopThreeEntry
-                ? theme.palette.strava.contrastText
-                : theme.palette.strava.main,
-            }}
-          >
-            {props.entry.name}
-          </Link>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Link
+              className="entryTitle"
+              href=""
+              sx={{
+                color: isTopThreeEntry
+                  ? theme.palette.strava.contrastText
+                  : theme.palette.strava.main,
+                textDecorationColor: isTopThreeEntry
+                  ? theme.palette.strava.contrastText
+                  : theme.palette.strava.main,
+              }}
+              onClick={props.handleEditingHeadlineChange}
+              data-indentry={props.entry.activityId}
+            >
+              {props.entry.name}
+            </Link>
+            {props.isCurrentActivity ? (
+              <Share
+                sx={{
+                  '&:hover': {
+                    color: theme.palette.strava.contrastText,
+                  },
+                }}
+                onClick={() =>
+                  window.open(
+                    `http://localhost:8000/SharedEntry?athleteId=${userProfile?.id}&activityId=${props.entry.activityId}`
+                  )
+                }
+              />
+            ) : null}
+          </Box>
         )}
         {props.format !== 'avgypace' ? (
           <EntryDescriptor

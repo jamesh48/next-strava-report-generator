@@ -11,6 +11,7 @@ export interface YTDSwimTotals {
 }
 
 export interface ProfileData {
+  id: number;
   profile: string;
   firstname: string;
   lastname: string;

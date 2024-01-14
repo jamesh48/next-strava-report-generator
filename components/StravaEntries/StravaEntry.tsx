@@ -6,7 +6,7 @@ import { CurrentActivity, Entry, Format, Sport } from './EntryTypes';
 import { useUpdateIndividualEntryMutation } from '@redux/slices';
 
 export interface StravaEntryProps {
-  showIndividualEntry: React.MouseEventHandler<HTMLDivElement>;
+  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
   sport: Sport;
   entry: Entry;
   format: Format;
@@ -40,7 +40,7 @@ const StravaEntry = (props: StravaEntryProps) => {
   };
 
   const handleEditingHeadlineChange = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent> | true
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
   ) => {
     // If Clickaway Event Happens while editing, send api request.
     if (e === true) {

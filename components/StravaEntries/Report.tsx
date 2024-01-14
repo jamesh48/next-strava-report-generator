@@ -115,9 +115,9 @@ const Report = (props: ReportProps) => {
     }
   }, [individualEntryResults]);
 
-  const showIndividualEntry: React.MouseEventHandler<HTMLDivElement> = async (
-    event
-  ) => {
+  const showIndividualEntry: React.MouseEventHandler<
+    HTMLAnchorElement
+  > = async (event) => {
     event.preventDefault();
     getIndividualEntry(Number(event.currentTarget.dataset.indentry));
   };

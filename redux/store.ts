@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer';
 
-import { entriesApi, individualEntrySlice } from './slices';
+import { entriesApi, individualEntrySlice, userProfileApi } from './slices';
 
 export default class GlobalStore {
   public store: ReturnType<typeof GlobalStore.prototype.configureGlobalStore>;
@@ -18,12 +18,14 @@ export default class GlobalStore {
         ...rootReducer,
         [entriesApi.reducerPath]: entriesApi.reducer,
         [individualEntrySlice.reducerPath]: individualEntrySlice.reducer,
+        [userProfileApi.reducerPath]: userProfileApi.reducer,
       },
       preloadedState: initialState,
       middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({ serializableCheck: { warnAfter: 100 } }).concat(
           entriesApi.middleware,
-          individualEntrySlice.middleware
+          individualEntrySlice.middleware,
+          userProfileApi.middleware
         ),
     });
     this.store = innerStore;

@@ -4,8 +4,8 @@ import { ParsedUrlQuery } from 'querystring';
 import { NextApiRequest, GetServerSidePropsContext, PreviewData } from 'next';
 import { IncomingMessage } from 'http';
 import axios from 'axios';
-import GeneralEntry from '@components/StravaEntries/GeneralEntry';
-import { useAlertOnMount } from '@lib';
+import StravaEntry from '@components/StravaEntries/StravaEntry';
+import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
 
 type SRGReq = IncomingMessage & {
   cookies: NextApiRequest['cookies'];
@@ -45,33 +45,24 @@ export const getServerSideProps: SRGSharedEventProps = async ({ query }) => {
   return {
     props: {
       fetchedActivity,
+      currentActivity: {},
     },
   };
 };
 
 const SharedEntry = (props: {
-  fetchedActivity: {
-    name: string;
-    start_date: string;
-    activityId: number;
-    max_speed: string;
-    distance: number;
-    elapsed_time: number;
-    moving_time: number;
-    type: string;
-  };
+  fetchedActivity: Entry;
+  currentActivity: CurrentActivity;
 }) => {
   return (
     <Box>
-      <GeneralEntry
-        handleEditingHeadlineChange={() => null}
-        handleNameChange={() => null}
-        editingHeadline={false}
-        editedName=""
+      <StravaEntry
         no={0}
+        showIndividualEntry={() => null}
+        handleCloseCurrentActivity={() => null}
         sport={'Run'}
         entry={props.fetchedActivity}
-        isCurrentActivity={true}
+        currentActivity={props.currentActivity}
         format="kph"
       />
     </Box>
