@@ -21,6 +21,7 @@ export interface DetailedEntryProps {
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   format: Format;
   handleCloseCurrentActivity: () => void;
+  isSharedActivity?: true;
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
@@ -387,14 +388,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Box>
         ) : null}
         {/* Margin Left 1rem for entries without a map */}
-        <Box
-          sx={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            display: 'flex',
-          }}
-        >
-          {props.currentActivity.photos.primary ? (
+        <Box sx={{ marginLeft: '1rem' }}>
+          {props.currentActivity.photos.primary?.urls['600'] ? (
             <Image
               src={props.currentActivity.photos.primary.urls['600']}
               height={400}
@@ -409,6 +404,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <HeartRateChart
           currentActivity={props.currentActivity}
           format={props.format}
+          isSharedActivity={props.isSharedActivity}
         />
       ) : currentStat === 'kudosComments' ? (
         <Box
@@ -462,22 +458,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
         </Box>
       ) : null}
-      <Typography
-        variant="h6"
-        color={theme.palette.common.white}
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          width: '95%',
-          cursor: 'pointer',
-          '&:hover': {
-            color: 'lightgray',
-          },
-        }}
-        onClick={props.handleCloseCurrentActivity}
-      >
-        Close Detail
-      </Typography>
+      {!props.isSharedActivity ? (
+        <Typography
+          variant="h6"
+          color={theme.palette.common.white}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            width: '95%',
+            cursor: 'pointer',
+            '&:hover': {
+              color: 'lightgray',
+            },
+          }}
+          onClick={props.handleCloseCurrentActivity}
+        >
+          Close Detail
+        </Typography>
+      ) : (
+        // Box for Spacing on Shared Entries
+        <Box sx={{ marginBottom: '2rem' }} />
+      )}
     </Box>
   );
 };

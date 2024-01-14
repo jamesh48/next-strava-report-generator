@@ -26,6 +26,7 @@ ChartJS.register(
 interface HeartRateChartProps {
   currentActivity: CurrentActivity;
   format: Format;
+  isSharedActivity?: true;
 }
 
 const HeartRateChart = (props: HeartRateChartProps) => {
@@ -65,7 +66,6 @@ const HeartRateChart = (props: HeartRateChartProps) => {
   useEffect(() => {
     if (props.currentActivity.laps) {
       let cumulativeDistance = 0;
-
       const maxHeartRateDataSet = {
         label: 'Max Heart Rate',
         data: props.currentActivity.laps.map((x) => x.max_heartrate),

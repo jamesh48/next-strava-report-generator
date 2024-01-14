@@ -2,17 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
-import { CurrentActivity, Entry, Format, Sport } from './EntryTypes';
+import {
+  CachedEntry,
+  CurrentActivity,
+  Entry,
+  Format,
+  Sport,
+} from './EntryTypes';
 import { useUpdateIndividualEntryMutation } from '@redux/slices';
+import { CustomMouseEventHandler } from './Report';
 
 export interface StravaEntryProps {
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
+  showIndividualEntry: CustomMouseEventHandler;
   sport: Sport;
   entry: Entry;
   format: Format;
   no: number | undefined;
   currentActivity: CurrentActivity;
   handleCloseCurrentActivity: () => void;
+  isSharedActivity?: true;
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
@@ -42,6 +50,10 @@ const StravaEntry = (props: StravaEntryProps) => {
   const handleEditingHeadlineChange = (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
   ) => {
+    // Page Refresh is Prevented at the ground level
+    if (props.isSharedActivity) {
+      return;
+    }
     // If Clickaway Event Happens while editing, send api request.
     if (e === true) {
       setEditingHeadline(false);
@@ -55,7 +67,12 @@ const StravaEntry = (props: StravaEntryProps) => {
       if (props.currentActivity.id === Number(props.entry.activityId)) {
         setEditingHeadline(true);
       } else {
-        props.showIndividualEntry(e);
+        if (props.entry.individualActivityCached) {
+          const cachedEntry = props.entry as Entry & CachedEntry;
+          props.showIndividualEntry(e, cachedEntry);
+        } else {
+          props.showIndividualEntry(e);
+        }
       }
     }
   };
@@ -87,6 +104,7 @@ const StravaEntry = (props: StravaEntryProps) => {
         handleEditingHeadlineChange={handleEditingHeadlineChange}
         handleNameChange={handleNameChange}
         isCurrentActivity={isCurrentActivity}
+        isSharedActivity={props.isSharedActivity}
       />
       {isCurrentActivity && (
         <DetailedEntry
@@ -97,6 +115,7 @@ const StravaEntry = (props: StravaEntryProps) => {
           handleDescriptionChange={handleDescriptionChange}
           format={props.format}
           handleCloseCurrentActivity={props.handleCloseCurrentActivity}
+          isSharedActivity={props.isSharedActivity}
         />
       )}
     </Box>

@@ -27,6 +27,7 @@ interface GeneralEntryProps {
   handleEditingHeadlineChange: (
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
   ) => void;
+  isSharedActivity?: true;
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
@@ -124,7 +125,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             if (isTopThreeEntry) {
               return {
                 '& > *': {
-                  cursor: 'pointer',
+                  cursor: props.isSharedActivity ? 'default' : 'pointer',
                 },
                 color: theme.palette.strava.contrastText,
                 padding: '1rem',
@@ -178,24 +179,51 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 textDecorationColor: isTopThreeEntry
                   ? theme.palette.strava.contrastText
                   : theme.palette.strava.main,
+                cursor: props.isSharedActivity ? 'default' : 'pointer',
               }}
-              onClick={props.handleEditingHeadlineChange}
+              onClick={(e) => {
+                e.preventDefault();
+                props.handleEditingHeadlineChange(e);
+              }}
               data-indentry={props.entry.activityId}
             >
               {props.entry.name}
             </Link>
-            {props.isCurrentActivity ? (
+            {props.isCurrentActivity && !props.isSharedActivity ? (
               <Share
                 sx={{
+                  marginLeft: '.25rem',
+                  color: theme.palette.strava.main,
+                  borderRadius: '50%',
+                  padding: '.25rem',
+                  backgroundColor: theme.palette.strava.contrastText,
                   '&:hover': {
-                    color: theme.palette.strava.contrastText,
+                    color: (() => {
+                      if (props.no === 0) {
+                        return 'goldenrod';
+                      }
+                      if (props.no === 1) {
+                        return 'silver';
+                      }
+                      if (props.no === 2) {
+                        return '#cd7f32';
+                      }
+                      return theme.palette.mainBackground.main;
+                    })(),
+                  },
+                  '&:active': {
+                    backgroundColor: 'green',
+                    color: theme.palette.strava.main,
                   },
                 }}
-                onClick={() =>
-                  window.open(
-                    `http://localhost:8000/SharedEntry?athleteId=${userProfile?.id}&activityId=${props.entry.activityId}`
-                  )
-                }
+                onClick={() => {
+                  const handleCopyUrl = async () => {
+                    await navigator.clipboard.writeText(
+                      `https://stravareportgenerator.com/SharedEntry?athleteId=${userProfile?.id}&activityId=${props.entry.activityId}`
+                    );
+                  };
+                  handleCopyUrl();
+                }}
               />
             ) : null}
           </Box>

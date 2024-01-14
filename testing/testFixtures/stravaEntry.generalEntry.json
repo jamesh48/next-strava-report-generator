@@ -6,5 +6,10 @@
   "moving_time": 5544,
   "name": "2014 Barcelona E-Dreams Half Marathon",
   "distance": 21100,
-  "elapsed_time": 5544
+  "elapsed_time": 5544,
+  "average_heartrate": 150.6,
+  "max_heartrate": 180,
+  "kudos_count": 2,
+  "comment_count": 2,
+  "achievement_count": 7
 }

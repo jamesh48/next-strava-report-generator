@@ -6,7 +6,7 @@ import UserNameSection from './UserNameSection';
 import RunningTotals from './RunningTotals';
 import SwimmingTotals from './SwimmingTotals';
 // import { ProfileData } from './UserProfileTypes';
-import { useCSX } from '@lib';
+import { authorizeApp, useCSX } from '@lib';
 import { useGetAllEntriesQuery, useGetUserProfileQuery } from '@redux/slices';
 
 const UserProfile = () => {
@@ -14,7 +14,11 @@ const UserProfile = () => {
   const { isLoading } = useGetAllEntriesQuery(null);
   const [rateLimit] = React.useState(false);
 
-  const { data: userProfile } = useGetUserProfileQuery(null);
+  const { data: userProfile, isError } = useGetUserProfileQuery(null);
+
+  if (isError) {
+    authorizeApp();
+  }
 
   const userProfileCSX = useCSX(
     { flexDirection: 'row' },
