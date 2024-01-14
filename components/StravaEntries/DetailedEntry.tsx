@@ -143,24 +143,43 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Typography>
         )}
       </Box>
-      {/* Gear */}
-      {props.currentActivity.device_name ? (
-        <Box
-          id="topActivityGear"
-          sx={{
-            marginLeft: '1.25%',
-            color: theme.palette.common.white,
-            padding: '.5rem',
-            marginY: '.75rem',
-            border: '1px solid ' + theme.palette.common.white,
-            ...alignGear,
-          }}
-        >
-          <Typography>Gear: {props.currentActivity.device_name}</Typography>
-        </Box>
-      ) : (
-        <Box sx={{ marginY: '.75rem' }}></Box>
-      )}
+      <Box sx={{ display: 'flex', width: '100%' }}>
+        {/* Device */}
+        {props.currentActivity.device_name ? (
+          <Box
+            id="topActivityDevice"
+            sx={{
+              alignSelf: 'flex-start',
+              marginLeft: '1.25%',
+              color: theme.palette.common.white,
+              padding: '.5rem',
+              marginY: '.75rem',
+              border: '1px solid ' + theme.palette.common.white,
+            }}
+          >
+            <Typography>Device: {props.currentActivity.device_name}</Typography>
+          </Box>
+        ) : null}
+        {/* Gear */}
+        {props.currentActivity.gear ? (
+          <Box
+            id="topActivityDevice"
+            sx={{
+              alignSelf: 'flex-start',
+              marginLeft: '1.25%',
+              color: theme.palette.common.white,
+              padding: '.5rem',
+              marginY: '.75rem',
+              border: '1px solid ' + theme.palette.common.white,
+            }}
+          >
+            <Typography>Gear: {props.currentActivity.gear.name}</Typography>
+          </Box>
+        ) : (
+          <Box sx={{ marginY: '.75rem' }}></Box>
+        )}
+      </Box>
+
       <Box
         id="funStats"
         sx={{

@@ -136,6 +136,9 @@ const Report = (props: ReportProps) => {
         ...cachedEntry,
         id: Number(cachedEntry.activityId),
         device_name: cachedEntry.deviceName,
+        gear: {
+          name: cachedEntry.gearName,
+        },
         laps: JSON.parse(cachedEntry.laps),
         map: {
           polyline: cachedEntry.mapPolyline,

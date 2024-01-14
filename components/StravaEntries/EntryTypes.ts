@@ -35,6 +35,7 @@ export type Entry = {
 export type CachedEntry = {
   description: string;
   deviceName: string;
+  gearName: string;
   laps: string;
   mapPolyline: string;
   primaryPhotoUrl: string;
@@ -50,6 +51,9 @@ export type CurrentActivity = {
   achievement_count: number;
   description: string;
   device_name?: string;
+  gear?: {
+    name: string;
+  };
   laps:
     | {
         max_heartrate: number;
