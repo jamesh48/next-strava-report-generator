@@ -6,6 +6,7 @@ import { IncomingMessage } from 'http';
 import axios from 'axios';
 import StravaEntry from '@components/StravaEntries/StravaEntry';
 import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
+import Head from 'next/head';
 
 type SRGReq = IncomingMessage & {
   cookies: NextApiRequest['cookies'];
@@ -65,6 +66,11 @@ const SharedEntry = (props: { fetchedActivity: Entry & CurrentActivity }) => {
         alignItems: 'center',
       }}
     >
+      <Head>
+        <title>SRG Shared Event</title>
+        <meta name="description" content="A ordered list of strava activites" />
+        <link rel="icon" href="/images/favicon.png" />
+      </Head>
       <StravaEntry
         no={0}
         showIndividualEntry={() => null}
