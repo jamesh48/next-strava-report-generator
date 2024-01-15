@@ -66,7 +66,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   };
 
   const mobileColumns = useCSX('row', 'column', 'flexDirection');
-  const alignGear = useCSX('flex-start', 'center', 'alignSelf');
+
   return (
     <Box
       className="detailedEntry"
