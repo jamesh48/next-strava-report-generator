@@ -219,6 +219,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               layout="static"
               src="/images/kudos.jpeg"
               onClick={handleKudosClick}
+              priority={true}
             />
             <Box
               className="kudosDescriptors"
@@ -273,6 +274,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 width={100}
                 layout="static"
                 src="/images/heartrate.png"
+                priority={true}
                 onClick={() => {
                   setCurrentStat((prevStat) => {
                     if (prevStat === 'heartRate') {
@@ -333,6 +335,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 width={50}
                 src="/images/heartrate.png"
                 layout="static"
+                priority={true}
               />
               <Box
                 className="heartRate"
@@ -370,6 +373,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               alt="trophy-img"
               src="/images/trophy.jpeg"
               layout="static"
+              priority={true}
             />
             <Box
               className="achievementCountDescriptor"
@@ -415,6 +419,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               width={320}
               layout="responsive"
               alt="highlight-photo"
+              priority={true}
             />
           ) : null}
         </Box>

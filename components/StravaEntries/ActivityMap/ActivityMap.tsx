@@ -68,10 +68,7 @@ const ActivityMap = (props: ActivityMapProps) => {
           'line-opacity': 1,
         },
       });
-      // Give Image Time to Load before Resizing Map
-      setTimeout(() => {
-        map.current.resize();
-      }, 1250);
+      map.current.resize();
     });
 
     return () => map.current.remove();
