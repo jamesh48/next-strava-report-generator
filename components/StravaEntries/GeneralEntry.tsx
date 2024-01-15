@@ -192,7 +192,9 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             {props.isCurrentActivity && !props.isSharedActivity ? (
               <Share
                 sx={{
-                  marginLeft: '.25rem',
+                  height: '1rem',
+                  width: '1rem',
+                  marginLeft: '1rem',
                   color: theme.palette.strava.main,
                   borderRadius: '50%',
                   padding: '.25rem',

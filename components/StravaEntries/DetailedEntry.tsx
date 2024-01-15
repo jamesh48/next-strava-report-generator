@@ -101,7 +101,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         >
           Activity Description:
         </Typography>
-        {props.editingDescription ? (
+        {props.editingDescription && !props.isSharedActivity ? (
           <ClickAwayListener
             onClickAway={(_e) => props.handleEditingDescriptionChange()}
           >
