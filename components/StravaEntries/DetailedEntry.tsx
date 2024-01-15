@@ -21,6 +21,7 @@ export interface DetailedEntryProps {
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   format: Format;
   handleCloseCurrentActivity: () => void;
+  isSharedActivity?: true;
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
@@ -65,7 +66,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   };
 
   const mobileColumns = useCSX('row', 'column', 'flexDirection');
-  const alignGear = useCSX('flex-start', 'center', 'alignSelf');
+
   return (
     <Box
       className="detailedEntry"
@@ -100,7 +101,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         >
           Activity Description:
         </Typography>
-        {props.editingDescription ? (
+        {props.editingDescription && !props.isSharedActivity ? (
           <ClickAwayListener
             onClickAway={(_e) => props.handleEditingDescriptionChange()}
           >
@@ -142,24 +143,43 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Typography>
         )}
       </Box>
-      {/* Gear */}
-      {props.currentActivity.device_name ? (
-        <Box
-          id="topActivityGear"
-          sx={{
-            marginLeft: '1.25%',
-            color: theme.palette.common.white,
-            padding: '.5rem',
-            marginY: '.75rem',
-            border: '1px solid ' + theme.palette.common.white,
-            ...alignGear,
-          }}
-        >
-          <Typography>Gear: {props.currentActivity.device_name}</Typography>
-        </Box>
-      ) : (
-        <Box sx={{ marginY: '.75rem' }}></Box>
-      )}
+      <Box sx={{ display: 'flex', width: '100%' }}>
+        {/* Device */}
+        {props.currentActivity.device_name ? (
+          <Box
+            id="topActivityDevice"
+            sx={{
+              alignSelf: 'flex-start',
+              marginLeft: '1.25%',
+              color: theme.palette.common.white,
+              padding: '.5rem',
+              marginY: '.75rem',
+              border: '1px solid ' + theme.palette.common.white,
+            }}
+          >
+            <Typography>Device: {props.currentActivity.device_name}</Typography>
+          </Box>
+        ) : null}
+        {/* Gear */}
+        {props.currentActivity.gear?.name ? (
+          <Box
+            id="topActivityDevice"
+            sx={{
+              alignSelf: 'flex-start',
+              marginLeft: '1.25%',
+              color: theme.palette.common.white,
+              padding: '.5rem',
+              marginY: '.75rem',
+              border: '1px solid ' + theme.palette.common.white,
+            }}
+          >
+            <Typography>Gear: {props.currentActivity.gear.name}</Typography>
+          </Box>
+        ) : (
+          <Box sx={{ marginY: '.75rem' }}></Box>
+        )}
+      </Box>
+
       <Box
         id="funStats"
         sx={{
@@ -179,7 +199,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             flexDirection: 'column',
             paddingX: '1rem',
             border: '1px solid white',
-            flex: 1,
+            flex: 0.25,
           }}
         >
           {/* Kudos & Comments */}
@@ -387,14 +407,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Box>
         ) : null}
         {/* Margin Left 1rem for entries without a map */}
-        <Box
-          sx={{
-            flex: 1,
-            justifyContent: 'flex-end',
-            display: 'flex',
-          }}
-        >
-          {props.currentActivity.photos.primary ? (
+        <Box sx={{ marginLeft: '1rem' }}>
+          {props.currentActivity.photos.primary?.urls['600'] ? (
             <Image
               src={props.currentActivity.photos.primary.urls['600']}
               height={400}
@@ -409,6 +423,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <HeartRateChart
           currentActivity={props.currentActivity}
           format={props.format}
+          isSharedActivity={props.isSharedActivity}
         />
       ) : currentStat === 'kudosComments' ? (
         <Box
@@ -462,22 +477,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
         </Box>
       ) : null}
-      <Typography
-        variant="h6"
-        color={theme.palette.common.white}
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          width: '95%',
-          cursor: 'pointer',
-          '&:hover': {
-            color: 'lightgray',
-          },
-        }}
-        onClick={props.handleCloseCurrentActivity}
-      >
-        Close Detail
-      </Typography>
+      {!props.isSharedActivity ? (
+        <Typography
+          variant="h6"
+          color={theme.palette.common.white}
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            width: '95%',
+            cursor: 'pointer',
+            '&:hover': {
+              color: 'lightgray',
+            },
+          }}
+          onClick={props.handleCloseCurrentActivity}
+        >
+          Close Detail
+        </Typography>
+      ) : (
+        // Box for Spacing on Shared Entries
+        <Box sx={{ marginBottom: '2rem' }} />
+      )}
     </Box>
   );
 };

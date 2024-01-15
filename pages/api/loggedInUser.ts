@@ -19,9 +19,9 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       request: { res: { statusCode: number } };
     };
     if (typedErr.request.res.statusCode === 429) {
-      return res.status(429).send(typedErr.message);
+      return res.status(429).send({ error: typedErr.message });
     }
-    return res.status(500).send(typedErr.message);
+    return res.status(500).send({ error: typedErr.message });
   }
   try {
     var stats = await axios({

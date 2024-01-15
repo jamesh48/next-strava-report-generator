@@ -22,6 +22,23 @@ export type Entry = {
   moving_time: number;
   elapsed_time: number;
   type: string;
+  // Shared Details
+  average_heartrate: number;
+  max_heartrate: number;
+  kudos_count: number;
+  comment_count: number;
+  achievement_count: number;
+  // Cached Detailed Entry
+  individualActivityCached?: true;
+};
+
+export type CachedEntry = {
+  description: string;
+  deviceName: string;
+  gearName: string;
+  laps: string;
+  mapPolyline: string;
+  primaryPhotoUrl: string;
 };
 
 export type CurrentActivity = {
@@ -33,17 +50,22 @@ export type CurrentActivity = {
   max_heartrate: number;
   achievement_count: number;
   description: string;
-  device_name: string;
-  laps: {
-    max_heartrate: number;
-    average_heartrate: number;
-    distance: number;
-  }[];
+  device_name?: string;
+  gear?: {
+    name: string;
+  };
+  laps:
+    | {
+        max_heartrate: number;
+        average_heartrate: number;
+        distance: number;
+      }[];
   map: {
-    polyline: string;
+    polyline?: string;
   };
   photos: {
-    primary: {
+    count: number;
+    primary?: {
       urls: {
         '600': string;
       };

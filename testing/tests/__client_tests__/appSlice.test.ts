@@ -117,7 +117,7 @@ describe('getDateCondition selector', () => {
       app: { ...appInitialState, dateCondition: 'thisWeek' },
     });
 
-    expect(result).toEqual(['2024-01-08', '', 'thisWeek']);
+    expect(result).toEqual(['2024-01-15', '', 'thisWeek']);
   });
 
   it('should handle setDateCondition', () => {

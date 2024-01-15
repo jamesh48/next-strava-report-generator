@@ -9,9 +9,12 @@ export const individualEntrySlice = createApi({
   reducerPath: 'individualEntriesApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
-    getIndividualEntry: builder.query<CurrentActivity, number>({
+    getIndividualEntry: builder.query<CurrentActivity, { entryid: number }>({
       providesTags: ['IndividualEntry'],
-      query: (entryid) => ({ url: '/individualEntry', params: { entryid } }),
+      query: (params) => ({
+        url: '/individualEntry',
+        params,
+      }),
     }),
     getKudoers: builder.query<
       {
@@ -44,7 +47,7 @@ export const individualEntrySlice = createApi({
         dispatch(
           individualEntrySlice.util.updateQueryData(
             'getIndividualEntry',
-            payload.activityId,
+            { entryid: payload.activityId },
             (draft) => {
               draft.description = payload.description;
             }

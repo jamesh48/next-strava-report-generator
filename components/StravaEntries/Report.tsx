@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Box, SelectChangeEvent } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import { CurrentActivity, Entry, Format, Sport } from './EntryTypes.js';
+import {
+  CachedEntry,
+  CurrentActivity,
+  Entry,
+  Format,
+  Sport,
+} from './EntryTypes.js';
 import {
   useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
@@ -18,6 +24,11 @@ export interface ReportProps {
   format: Format;
   titleQuery: string;
 }
+
+export type CustomMouseEventHandler = (
+  event: React.MouseEvent<HTMLAnchorElement>,
+  cachedEntry?: Entry & CachedEntry
+) => void;
 
 const Report = (props: ReportProps) => {
   const isMobile = useMobileBrowserCheck();
@@ -115,11 +126,37 @@ const Report = (props: ReportProps) => {
     }
   }, [individualEntryResults]);
 
-  const showIndividualEntry: React.MouseEventHandler<HTMLDivElement> = async (
-    event
+  const showIndividualEntry: CustomMouseEventHandler = async (
+    event,
+    cachedEntry?: Entry & CachedEntry
   ) => {
     event.preventDefault();
-    getIndividualEntry(Number(event.currentTarget.dataset.indentry));
+    if (cachedEntry) {
+      setCurrentActivity({
+        ...cachedEntry,
+        id: Number(cachedEntry.activityId),
+        device_name: cachedEntry.deviceName,
+        gear: {
+          name: cachedEntry.gearName,
+        },
+        laps: JSON.parse(cachedEntry.laps),
+        map: {
+          polyline: cachedEntry.mapPolyline,
+        },
+        photos: {
+          count: 1,
+          primary: {
+            urls: {
+              '600': cachedEntry.primaryPhotoUrl!,
+            },
+          },
+        },
+      });
+    } else {
+      getIndividualEntry({
+        entryid: Number(event.currentTarget.dataset.indentry),
+      });
+    }
   };
 
   return (
