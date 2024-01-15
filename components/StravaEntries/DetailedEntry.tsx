@@ -161,7 +161,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Box>
         ) : null}
         {/* Gear */}
-        {props.currentActivity.gear ? (
+        {props.currentActivity.gear?.name ? (
           <Box
             id="topActivityDevice"
             sx={{
