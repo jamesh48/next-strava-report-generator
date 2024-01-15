@@ -199,7 +199,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             flexDirection: 'column',
             paddingX: '1rem',
             border: '1px solid white',
-            flex: 1,
+            flex: 0.25,
           }}
         >
           {/* Kudos & Comments */}

@@ -64,10 +64,12 @@ const menuItemStyles = (indicator: boolean, theme: Theme) => ({
 
 // time it takes to delete one dynamodb record in ms
 const dynamoDBDeletionRatePerRecord = 110;
+const dynamoDBInsertionRatePerRecord = 30;
 
 const ProgressBar = () => {
   const theme = useTheme();
   const [deletionRate, setDeletionRate] = useState(75);
+  const [insertionRate, setInsertionRate] = useState(125);
   const dispatch = useDispatch();
   const { data: allEntries } = useGetAllEntriesQuery(null);
   const sortCondition = useSelector(getSortCondition);
@@ -76,6 +78,9 @@ const ProgressBar = () => {
     if (numberOfEntries) {
       const currentDeletionRate =
         (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100;
+      const currentInsertionRate =
+        (numberOfEntries * dynamoDBInsertionRatePerRecord) / 100;
+      setInsertionRate(currentInsertionRate);
       setDeletionRate(currentDeletionRate);
     }
   }, [allEntries?.length]);
@@ -111,7 +116,7 @@ const ProgressBar = () => {
         dispatch(incrementProgressBarProgress(progressBarProgress));
       }
     },
-    isSuccessAdd || isUninitializedAdd ? -1 : 75
+    isSuccessAdd || isUninitializedAdd ? -1 : insertionRate
   );
 
   useInterval(

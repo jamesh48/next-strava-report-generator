@@ -75,7 +75,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
     }
   }, [props.editingHeadline]);
   const mobileEntryWidth = useCSX('20%', '90%', 'width');
-
+  const mobileTitleCentered = useCSX('flex-start', 'center', 'justifyContent');
   return (
     <Box
       id={
@@ -168,7 +168,13 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             />
           </ClickAwayListener>
         ) : (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              ...mobileTitleCentered,
+            }}
+          >
             <Link
               className="entryTitle"
               href=""
@@ -194,7 +200,9 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 sx={{
                   height: '1rem',
                   width: '1rem',
-                  marginLeft: '1rem',
+                  position: 'relative',
+                  left: '.6rem',
+                  top: '.1rem',
                   color: theme.palette.strava.main,
                   borderRadius: '50%',
                   padding: '.25rem',
