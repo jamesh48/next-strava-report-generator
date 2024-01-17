@@ -22,16 +22,16 @@ jobs:
         run: npm ci
       - name: Run Client integration tests
         run: npm run test:silent:client -- --runInBand
-  coverage:
-    runs-on: ubuntu-latest
-    name: Code Coverage
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Run client integration tests
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        with:
-          test-script: npm run test:silent:client -- --runInBand
+  # coverage:
+  #   runs-on: ubuntu-latest
+  #   name: Code Coverage
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #     - name: Run client integration tests
+  #       uses: ArtiomTr/jest-coverage-report-action@v2
+  #       with:
+  #         test-script: npm run test:silent:client -- --runInBand
   # https://dev.to/aws-builders/deploy-to-aws-with-github-actions-and-aws-cdk-4m1e
   deploy:
     runs-on: ubuntu-latest
