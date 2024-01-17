@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import {
   BestEffort,
   SegmentEffort,
@@ -81,7 +81,7 @@ const Achievements = (props: AchievementsProps) => {
     'rotate(45deg) translate(-15%, 25%)',
     'rotate(90deg) translate(-15%, 25%)',
     'transform'
-  );
+  ) as CSSProperties;
   if (!props.bestEfforts.length) return null;
 
   // Determing Slider
