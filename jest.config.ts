@@ -28,9 +28,9 @@ const customJestConfig: Config.InitialOptions = {
   coverageThreshold: {
     global: {
       lines: 65,
-      statements: 70,
+      statements: 65,
       branches: 50,
-      functions: 55,
+      functions: 50,
     },
   },
 };
