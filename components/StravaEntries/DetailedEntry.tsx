@@ -12,6 +12,7 @@ import { CurrentActivity, Format } from './EntryTypes';
 import { useLazyGetKudoersQuery } from '@redux/slices';
 import { useCSX } from '@lib';
 import ActivityMap from './ActivityMap/ActivityMap';
+import Achievements from '@components/DetailedEntry/Achievements';
 
 export interface DetailedEntryProps {
   editingDescription: boolean;
@@ -62,6 +63,15 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         return null;
       }
       return 'kudosComments';
+    });
+  };
+
+  const handleAchievementsClick = () => {
+    setCurrentStat((prevStat) => {
+      if (prevStat === 'achievements') {
+        return null;
+      }
+      return 'achievements';
     });
   };
 
@@ -374,6 +384,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               src="/images/trophy.jpeg"
               layout="static"
               priority={true}
+              onClick={handleAchievementsClick}
             />
             <Box
               className="achievementCountDescriptor"
@@ -481,6 +492,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             </Box>
           ) : null}
         </Box>
+      ) : currentStat === 'achievements' ? (
+        <Achievements
+          bestEfforts={props.currentActivity.best_efforts}
+          bestSegments={props.currentActivity.segment_efforts}
+          activityId={props.currentActivity.id}
+        />
       ) : null}
       {!props.isSharedActivity ? (
         <Typography

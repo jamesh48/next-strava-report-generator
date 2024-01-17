@@ -135,6 +135,7 @@ const Report = (props: ReportProps) => {
       setCurrentActivity({
         ...cachedEntry,
         id: Number(cachedEntry.activityId),
+        best_efforts: JSON.parse(cachedEntry.bestEfforts),
         device_name: cachedEntry.deviceName,
         gear: {
           name: cachedEntry.gearName,
@@ -151,6 +152,7 @@ const Report = (props: ReportProps) => {
             },
           },
         },
+        segment_efforts: JSON.parse(cachedEntry.segmentEfforts),
       });
     } else {
       getIndividualEntry({

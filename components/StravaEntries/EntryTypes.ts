@@ -33,13 +33,51 @@ export type Entry = {
 };
 
 export type CachedEntry = {
+  bestEfforts: string;
   description: string;
   deviceName: string;
   gearName: string;
   laps: string;
   mapPolyline: string;
   primaryPhotoUrl: string;
+  segmentEfforts: string;
 };
+
+type Achievement = {
+  rank: number;
+  type: 'pr';
+  type_id: number;
+};
+
+export interface BestEffort {
+  name: string;
+  achievements: Achievement[];
+  pr_rank: null | number;
+  distance: number;
+  elapsed_time: number;
+  moving_time: number;
+  start_index: number;
+  end_index: number;
+  start_date: Date;
+  start_date_local: Date;
+}
+
+export interface SegmentEffort extends BestEffort {
+  average_heartrate: number;
+  max_heartrate: number;
+  segment: {
+    activity_type: Sport;
+    average_grade: number;
+    city: string;
+    state: string;
+    country: string;
+    elevation_high: number;
+    elevation_low: number;
+    end_latlng: [number, number];
+    start_latlng: [number, number];
+    private: boolean;
+  };
+}
 
 export type CurrentActivity = {
   id: number;
@@ -49,6 +87,8 @@ export type CurrentActivity = {
   average_heartrate: number;
   max_heartrate: number;
   achievement_count: number;
+  best_efforts: BestEffort[];
+  segment_efforts: SegmentEffort[];
   description: string;
   device_name?: string;
   gear?: {

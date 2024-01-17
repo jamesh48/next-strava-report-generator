@@ -1,30 +1,47 @@
-import { CSSProperties, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import polyline from '@mapbox/polyline';
 import { Box } from '@mui/material';
 import MapManager from './MapManager';
 import { useSelector } from '@redux/reduxHooks';
 import { getClientSideToken } from '@redux/slices';
-import { useCSX } from '@lib';
+import axios from 'axios';
 
 interface ActivityMapProps {
-  polyline: string;
+  startIndex?: number;
+  endIndex?: number;
   activityId?: number;
 }
 
-const ActivityMap = (props: ActivityMapProps) => {
+const ActivityStreamMap = (props: ActivityMapProps) => {
+  const [activityStream, setActivityStream] = useState<number[][]>([]);
   const mapboxAccessToken = useSelector(getClientSideToken('mapbox'));
   mapboxgl.accessToken = mapboxAccessToken;
   const mapContainer = useRef(null);
   const map: React.MutableRefObject<MapManager> = useRef({} as MapManager);
 
   useEffect(() => {
+    if (props.activityId) {
+      const fetchActivityStream = async () => {
+        const { data } = await axios<{ latlng: { data: number[][] } }>({
+          url: '/api/activityStream',
+          method: 'GET',
+          params: { activityId: props.activityId },
+        });
+        setActivityStream(data.latlng.data);
+      };
+
+      fetchActivityStream();
+    }
+  }, [props.activityId]);
+
+  useEffect(() => {
     if (!mapboxgl.accessToken) return; // initialize map only if token exists
+    if (!activityStream.length) return;
 
-    const latLong = polyline.decode(props.polyline);
-
-    const coordinates = latLong.map((point) => [point[1], point[0]]);
-    // Calculate the southwest and northeast corners of the bounding box
+    const coordinates = activityStream
+      .map((point) => [point[1], point[0]])
+      .reverse();
+    // Calculate the southwest and northeast corners of the bounding Box
     const southwest = [
       Math.min(...coordinates.map((coord) => coord[0])) + 0.01,
       Math.min(...coordinates.map((coord) => coord[1])) - 0.01,
@@ -52,7 +69,7 @@ const ActivityMap = (props: ActivityMapProps) => {
           properties: {},
           geometry: {
             type: 'LineString',
-            coordinates,
+            coordinates: coordinates.slice(props.startIndex, props.endIndex),
           },
         },
       });
@@ -75,20 +92,20 @@ const ActivityMap = (props: ActivityMapProps) => {
     });
 
     return () => map.current.remove();
-  }, [props.polyline]);
+  }, [activityStream, props.startIndex, props.endIndex]);
 
-  const canvasContainerWidth = useCSX('25rem', '21rem', 'width');
+  // const canvasContainerWidth = useCSX('25rem', '21rem', 'width');
 
   return (
     <Box
       ref={mapContainer}
       sx={{
-        height: '25rem',
-        flex: 1,
-        '.mapboxgl-canvas-container': canvasContainerWidth as CSSProperties,
+        height: '30rem',
+        width: '50%',
+        // '.mapboxgl-canvas-container': canvasContainerWidth as CSSProperties,
       }}
     />
   );
 };
 
-export default ActivityMap;
+export default ActivityStreamMap;
