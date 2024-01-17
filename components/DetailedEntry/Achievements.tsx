@@ -77,6 +77,11 @@ const Achievements = (props: AchievementsProps) => {
     { width: '80%' },
     { width: '100%', textAlign: 'center' }
   );
+  const mobileLabelTransform = useCSX(
+    'rotate(45deg) translate(-15%, 25%)',
+    'rotate(90deg) translate(-15%, 25%)',
+    'transform'
+  );
   if (!props.bestEfforts.length) return null;
 
   // Determing Slider
@@ -198,7 +203,7 @@ const Achievements = (props: AchievementsProps) => {
           onChange={(_e, value) => setCurrentSelectedDistance(value as number)}
           sx={{
             '& .MuiSlider-markLabel': {
-              transform: 'rotate(45deg) translate(-15%, 25%)',
+              ...mobileLabelTransform,
               // 1k Mile Marker
               '&:nth-of-type(8)': {
                 transform: 'rotate(45deg) translate(-20%, -50%)',
