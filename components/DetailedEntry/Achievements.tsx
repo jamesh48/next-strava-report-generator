@@ -74,13 +74,25 @@ const Achievements = (props: AchievementsProps) => {
   );
   const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
   const mobileTitleCentered = useCSX(
-    { width: '80%' },
+    { width: '50%' },
     { width: '100%', textAlign: 'center' }
   );
   const mobileLabelTransform = useCSX(
-    'rotate(45deg) translate(-15%, 25%)',
-    'rotate(90deg) translate(-15%, 25%)',
-    'transform'
+    {
+      transform: 'rotate(45deg) translate(-15%, 25%)',
+      '&:nth-of-type(8)': {
+        transform: 'rotate(45deg) translate(-20%, -50%)',
+      },
+    },
+    {
+      transform: 'rotate(90deg) translate(0%, 54%)',
+      '&:nth-of-type(6)': {
+        transform: 'rotate(90deg) translate(0%, 120%)',
+      },
+      '&:nth-last-of-type(2)': {
+        transform: 'rotate(90deg) translate(0%, 150%)',
+      },
+    }
   ) as CSSProperties;
   if (!props.bestEfforts.length) return null;
 
@@ -185,7 +197,7 @@ const Achievements = (props: AchievementsProps) => {
         sx={{
           width: '100%',
           display: 'flex',
-          alignItems: 'flex-end',
+          alignItems: 'center',
           paddingBottom: '1rem',
         }}
       >
@@ -202,13 +214,8 @@ const Achievements = (props: AchievementsProps) => {
           marks={marksForSlider}
           onChange={(_e, value) => setCurrentSelectedDistance(value as number)}
           sx={{
-            '& .MuiSlider-markLabel': {
-              ...mobileLabelTransform,
-              // 1k Mile Marker
-              '&:nth-of-type(8)': {
-                transform: 'rotate(45deg) translate(-20%, -50%)',
-              },
-            },
+            marginX: '2rem',
+            '& .MuiSlider-markLabel': { ...mobileLabelTransform },
           }}
         />
       </Box>
