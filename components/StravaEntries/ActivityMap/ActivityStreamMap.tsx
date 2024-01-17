@@ -5,6 +5,7 @@ import MapManager from './MapManager';
 import { useSelector } from '@redux/reduxHooks';
 import { getClientSideToken } from '@redux/slices';
 import axios from 'axios';
+import { useCSX } from '@lib';
 
 interface ActivityMapProps {
   startIndex?: number;
@@ -94,14 +95,15 @@ const ActivityStreamMap = (props: ActivityMapProps) => {
     return () => map.current.remove();
   }, [activityStream, props.startIndex, props.endIndex]);
 
-  // const canvasContainerWidth = useCSX('25rem', '21rem', 'width');
-
+  const mobileStyles = useCSX(
+    { width: '50%', height: '30rem' },
+    { width: '100%', height: '60%' }
+  );
   return (
     <Box
       ref={mapContainer}
       sx={{
-        height: '30rem',
-        width: '50%',
+        ...mobileStyles,
         // '.mapboxgl-canvas-container': canvasContainerWidth as CSSProperties,
       }}
     />

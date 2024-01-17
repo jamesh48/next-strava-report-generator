@@ -1,4 +1,5 @@
 import { BestEffort } from '@components/StravaEntries/EntryTypes';
+import { useCSX } from '@lib';
 import { Box, Typography, useTheme } from '@mui/material';
 
 const formatTime = (elapsedTime: number) => {
@@ -47,15 +48,20 @@ const AchievementList = (
   const formatter = new Intl.DateTimeFormat('en-US', options);
   const formattedStartTime = formatter.format(startOfEffort);
   const formattedEndTime = formatter.format(endOfEffort);
+
+  const mobileMsgCentered = useCSX(
+    { width: '50%' },
+    { width: '100%', flex: 1 }
+  );
   return props.achievements.length ? (
     <Box
       sx={{
-        width: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         color: theme.palette.strava.contrastText,
+        ...mobileMsgCentered,
       }}
     >
       <Typography variant="h4">
@@ -75,13 +81,13 @@ const AchievementList = (
   ) : (
     <Box
       sx={{
-        width: '50%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         height: '100%',
         color: theme.palette.strava.contrastText,
+        ...mobileMsgCentered,
       }}
     >
       <Typography variant="h5" sx={{ opacity: 0.9 }}>

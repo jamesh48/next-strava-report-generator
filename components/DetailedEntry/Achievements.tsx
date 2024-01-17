@@ -7,6 +7,7 @@ import { Wreath } from './Wreath';
 import { Box, Slider, Typography, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
+import { useCSX } from '@lib';
 
 const marks = [
   {
@@ -67,7 +68,15 @@ interface AchievementsProps {
 const Achievements = (props: AchievementsProps) => {
   const theme = useTheme();
   const [currentSelectedDistance, setCurrentSelectedDistance] = useState(400);
-
+  const mobileColumns = useCSX(
+    { flexDirection: 'row' },
+    { flexDirection: 'column', justifyContent: 'center' }
+  );
+  const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
+  const mobileTitleCentered = useCSX(
+    { width: '80%' },
+    { width: '100%', textAlign: 'center' }
+  );
   if (!props.bestEfforts.length) return null;
 
   // Determing Slider
@@ -82,6 +91,7 @@ const Achievements = (props: AchievementsProps) => {
   const currentAchievement = props.bestEfforts.find(
     (effort) => effort.distance === currentSelectedDistance
   );
+
   return (
     <Box
       sx={{
@@ -125,21 +135,21 @@ const Achievements = (props: AchievementsProps) => {
                   sx={{
                     borderBottom:
                       '1px solid ' + theme.palette.strava.contrastText,
-                    width: '80%',
                     color: theme.palette.strava.contrastText,
+                    ...mobileTitleCentered,
                   }}
                 >
                   {currentAchievement.name}
                 </Typography>
               </Box>
-              <Box sx={{ height: '100%' }}>
+              <Box sx={{ height: '100%', paddingY: '.5rem' }}>
                 <Box
                   sx={{
-                    width: '48.35%',
                     height: '30rem',
                     display: 'flex',
                     justifyContent: 'center',
                     position: 'absolute',
+                    ...mobileWreathWidth,
                   }}
                 >
                   <Wreath />
@@ -149,6 +159,7 @@ const Achievements = (props: AchievementsProps) => {
                     width: '100%',
                     display: 'flex',
                     height: '100%',
+                    ...mobileColumns,
                   }}
                 >
                   <AchievementList {...currentAchievement} />
