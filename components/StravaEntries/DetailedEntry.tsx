@@ -9,10 +9,15 @@ import {
   useTheme,
 } from '@mui/material';
 import { CurrentActivity, Format } from './EntryTypes';
-import { useLazyGetKudoersQuery } from '@redux/slices';
+import {
+  getAchievementEffortView,
+  useLazyGetKudoersQuery,
+} from '@redux/slices';
 import { useCSX } from '@lib';
 import ActivityMap from './ActivityMap/ActivityMap';
-import Achievements from '@components/DetailedEntry/Achievements';
+import AchievementsByEffort from '@components/DetailedEntry/AchievementsByEffort';
+import AchievementsBySegment from '@components/DetailedEntry/AchievementsBySegment';
+import { useSelector } from '@redux/reduxHooks';
 
 export interface DetailedEntryProps {
   editingDescription: boolean;
@@ -27,6 +32,8 @@ export interface DetailedEntryProps {
 
 const DetailedEntry = (props: DetailedEntryProps) => {
   const theme = useTheme();
+
+  const achievementEffortView = useSelector(getAchievementEffortView);
   const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
   const [currentStat, setCurrentStat] = useState<null | string>(null);
   const [currentKudoers, setCurrentKudoers] = useState<
@@ -493,12 +500,44 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
         </Box>
       ) : currentStat === 'achievements' ? (
-        <Achievements
-          bestEfforts={props.currentActivity.best_efforts}
-          bestSegments={props.currentActivity.segment_efforts}
-          activityId={props.currentActivity.id}
-        />
+        (() => {
+          // Not only should best_efforts have a length but also at least one bestEffort should have an achievement with a length
+          if (
+            achievementEffortView === 'best-effort' &&
+            props.currentActivity.best_efforts?.some(
+              (bestEffort) => bestEffort.achievements.length
+            )
+          ) {
+            return (
+              <AchievementsByEffort
+                bestEfforts={props.currentActivity.best_efforts.filter(
+                  (bestEffort) => bestEffort.achievements.length
+                )}
+                activityId={props.currentActivity.id}
+              />
+            );
+          }
+
+          if (
+            achievementEffortView === 'best-segment' &&
+            props.currentActivity.segment_efforts?.some(
+              (segmentEffort) => segmentEffort.achievements.length
+            )
+          ) {
+            return (
+              <AchievementsBySegment
+                bestSegments={props.currentActivity.segment_efforts.filter(
+                  (bestSegment) => bestSegment.achievements.length
+                )}
+                activityId={props.currentActivity.id}
+              />
+            );
+          }
+
+          return null;
+        })()
       ) : null}
+
       {!props.isSharedActivity ? (
         <Typography
           variant="h6"

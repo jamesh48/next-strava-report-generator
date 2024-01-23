@@ -87,7 +87,7 @@ export type CurrentActivity = {
   average_heartrate: number;
   max_heartrate: number;
   achievement_count: number;
-  best_efforts: BestEffort[];
+  best_efforts?: BestEffort[];
   segment_efforts: SegmentEffort[];
   description: string;
   device_name?: string;

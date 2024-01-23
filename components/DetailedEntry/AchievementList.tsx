@@ -1,6 +1,8 @@
 import { BestEffort } from '@components/StravaEntries/EntryTypes';
 import { useCSX } from '@lib';
 import { Box, Typography, useTheme } from '@mui/material';
+import { useSelector } from '@redux/reduxHooks';
+import { getAchievementEffortView } from '@redux/slices';
 
 const formatTime = (elapsedTime: number) => {
   const hours = Math.floor(elapsedTime / 3600);
@@ -44,7 +46,9 @@ const AchievementList = (
   const endOfEffort = new Date(
     new Date(props.start_date).getTime() + props.elapsed_time * 1000
   );
-
+  const achievementEffortView = useSelector(getAchievementEffortView);
+  const descriptor =
+    achievementEffortView === 'best-effort' ? 'Effort' : 'Segment';
   const formatter = new Intl.DateTimeFormat('en-US', options);
   const formattedStartTime = formatter.format(startOfEffort);
   const formattedEndTime = formatter.format(endOfEffort);
@@ -60,13 +64,13 @@ const AchievementList = (
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        color: theme.palette.strava.contrastText,
+        color: theme.palette.common.white,
         ...mobileMsgCentered,
       }}
     >
       <Typography variant="h4">
         {props.pr_rank}
-        {abbreviation} Best Effort!
+        {abbreviation} Best {descriptor}!
       </Typography>
       <Typography variant="h5">
         Elapsed Time: {formatTime(props.elapsed_time)}

@@ -15,6 +15,8 @@ interface PopupModalDetails {
 export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 
 export const appInitialState: {
+  achievementEffortView: 'best-effort' | 'best-segment';
+  achievementsOnly: boolean;
   sortCondition: string;
   sportCondition: Sport;
   darkMode: boolean;
@@ -25,6 +27,8 @@ export const appInitialState: {
   clientSideTokens: { mapbox: string };
   popupModalDetails: PopupModalDetails;
 } = {
+  achievementsOnly: false,
+  achievementEffortView: 'best-segment',
   sortCondition: 'speedDesc',
   sportCondition: 'Run',
   customDateCondition: false,
@@ -47,6 +51,13 @@ export const appSlice = createSlice({
   name: 'app',
   initialState: appInitialState,
   reducers: {
+    toggleAchievementEffortView: (state) => {
+      if (state.achievementEffortView === 'best-effort') {
+        state.achievementEffortView = 'best-segment';
+      } else {
+        state.achievementEffortView = 'best-effort';
+      }
+    },
     setPopupModalDetails: (
       state,
       action: PayloadAction<
@@ -70,6 +81,9 @@ export const appSlice = createSlice({
     setDarkMode: (state, action: PayloadAction<boolean>) => {
       state.darkMode = action.payload;
     },
+    setAchievementsOnlyCondition: (state, action: PayloadAction<boolean>) => {
+      state.achievementsOnly = action.payload;
+    },
     setDateCondition: (state, action: PayloadAction<DateCondition>) => {
       state.dateCondition = action.payload;
       state.customDateCondition = false;
@@ -86,6 +100,7 @@ export const appSlice = createSlice({
 });
 
 export const {
+  setAchievementsOnlyCondition,
   setSortCondition,
   setSportCondition,
   setDarkMode,
@@ -94,6 +109,7 @@ export const {
   setDateCondition,
   setModalState,
   setPopupModalDetails,
+  toggleAchievementEffortView,
 } = appSlice.actions;
 
 export const getDarkModeCondition = (state: RootState) => state.app.darkMode;
@@ -167,5 +183,11 @@ export const getPopupModalDetails = (state: RootState) =>
   state.app.popupModalDetails;
 export const getModalState = (state: RootState) =>
   state.app.popupModalDetails.state;
+
+export const getAchievementsOnlyCondition = (state: RootState) =>
+  state.app.achievementsOnly;
+
+export const getAchievementEffortView = (state: RootState) =>
+  state.app.achievementEffortView;
 
 export default appSlice.reducer;

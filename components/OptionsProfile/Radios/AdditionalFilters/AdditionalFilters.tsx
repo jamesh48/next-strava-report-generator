@@ -1,11 +1,19 @@
 import React from 'react';
 
-import { Box, OutlinedInput, SxProps, Theme, useTheme } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  OutlinedInput,
+  SxProps,
+  Theme,
+  useTheme,
+} from '@mui/material';
 import { useCSX } from '@lib';
 import { useDispatch, useSelector } from '@redux/reduxHooks';
 import {
   getDateCondition,
   setFromDateQuery,
+  setAchievementsOnlyCondition,
   setToDateQuery,
 } from '@redux/slices';
 
@@ -19,6 +27,9 @@ const muiAdditionalFilterContainerSx: (
   '&:first-of-type': {
     borderRight: '1px solid ' + theme.palette.strava.main,
   },
+  '&:last-of-type': {
+    borderLeft: '1px solid ' + theme.palette.strava.main,
+  },
   ...sxProps,
 });
 
@@ -27,7 +38,6 @@ const muiAdditionalFilterSx = (theme: Theme) => ({
   color: theme.palette.strava.contrastText,
   border: '1px solid ' + theme.palette.strava.main,
   // height: 'auto',
-  padding: '.25% 0',
   textAlign: 'center',
   height: '2rem',
   '&::placeholder': {
@@ -40,16 +50,21 @@ const muiDateFilterSx: (sxProps: SxProps, theme: Theme) => SxProps = (
   theme
 ) => ({
   display: 'flex',
-  flex: 0.25,
+  flex: 1,
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
   label: {
     color: theme.palette.strava.main,
     display: 'flex',
-    flex: 1,
-    margin: '.25rem',
-    alignItems: 'flex-end',
+    flex: 0.25,
+    height: '75%',
+    marginY: '.5rem',
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
-  justifyContent: 'flex-end',
-  margin: '1rem',
   ...sxProps,
 });
 
@@ -143,6 +158,26 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
             sx={muiAdditionalFilterSx(theme)}
           />
         </Box>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          ...muiAdditionalFilterContainerSx(mobileStyleContainer, theme),
+        }}
+      >
+        <label style={{ color: theme.palette.strava.main }}>
+          Show Activities with Achievements Only?
+        </label>
+        <Checkbox
+          sx={{ color: theme.palette.strava.main }}
+          aria-label="Achievements Only"
+          onChange={(_e, checked) =>
+            dispatch(setAchievementsOnlyCondition(checked))
+          }
+        />
       </Box>
     </Box>
   );

@@ -14,6 +14,7 @@ import {
   useLazyGetIndividualEntryQuery,
   getSortCondition,
   getDateCondition,
+  getAchievementsOnlyCondition,
 } from '@redux/slices';
 import { useSelector } from '@redux/reduxHooks';
 import { useMobileBrowserCheck } from '@lib';
@@ -35,6 +36,7 @@ const Report = (props: ReportProps) => {
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
   const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
+  const achievementsOnly = useSelector(getAchievementsOnlyCondition);
   const sortCondition = useSelector(getSortCondition);
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -109,7 +111,13 @@ const Report = (props: ReportProps) => {
         : sortCondition === 'dateAsc'
         ? (a, b) => (new Date(a.start_date) > new Date(b.start_date) && 1) || -1
         : undefined
-    );
+    )
+    .filter((entry) => {
+      if (achievementsOnly) {
+        return entry.achievement_count > 0;
+      }
+      return entry;
+    });
 
   const handlePaginationClick: ((event: SelectChangeEvent<string>) => void) &
     React.MouseEventHandler<HTMLLIElement> = (event) => {
