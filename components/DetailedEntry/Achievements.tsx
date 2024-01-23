@@ -61,7 +61,7 @@ function valuetext(value: number) {
 }
 
 interface AchievementsProps {
-  bestEfforts: BestEffort[];
+  bestEfforts?: BestEffort[];
   bestSegments: SegmentEffort[];
   activityId: number;
 }
@@ -94,7 +94,7 @@ const Achievements = (props: AchievementsProps) => {
       },
     }
   ) as CSSProperties;
-  if (!props.bestEfforts.length) return null;
+  if (!props.bestEfforts?.length) return null;
 
   // Determing Slider
   const furthestEffortDistance =

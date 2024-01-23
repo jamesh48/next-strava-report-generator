@@ -71,7 +71,9 @@ const ActivityMap = (props: ActivityMapProps) => {
           'line-opacity': 1,
         },
       });
-      map.current.resize();
+      setTimeout(() => {
+        map.current.resize();
+      }, 1000);
     });
 
     return () => map.current.remove();
