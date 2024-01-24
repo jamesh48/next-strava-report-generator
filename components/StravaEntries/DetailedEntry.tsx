@@ -8,9 +8,10 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { CurrentActivity, Format } from './EntryTypes';
+import { Format } from './EntryTypes';
 import {
   getAchievementEffortView,
+  getCurrentActivity,
   useLazyGetKudoersQuery,
 } from '@redux/slices';
 import { useCSX } from '@lib';
@@ -22,7 +23,6 @@ import { useSelector } from '@redux/reduxHooks';
 export interface DetailedEntryProps {
   editingDescription: boolean;
   editedDescription: string;
-  currentActivity: CurrentActivity;
   handleEditingDescriptionChange: () => void;
   handleDescriptionChange: (e: { target: { value: string } }) => void;
   format: Format;
@@ -32,7 +32,7 @@ export interface DetailedEntryProps {
 
 const DetailedEntry = (props: DetailedEntryProps) => {
   const theme = useTheme();
-
+  const currentActivity = useSelector(getCurrentActivity);
   const achievementEffortView = useSelector(getAchievementEffortView);
   const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
   const [currentStat, setCurrentStat] = useState<null | string>(null);
@@ -64,7 +64,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
   }, [kudoersResults]);
 
   const handleKudosClick = () => {
-    getKudoers(props.currentActivity.id);
+    getKudoers(currentActivity.id);
     setCurrentStat((prevStat) => {
       if (prevStat === 'kudosComments') {
         return null;
@@ -156,13 +156,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             }}
             onClick={props.handleEditingDescriptionChange}
           >
-            {props.currentActivity.description}
+            {currentActivity.description}
           </Typography>
         )}
       </Box>
       <Box sx={{ display: 'flex', width: '100%' }}>
         {/* Device */}
-        {props.currentActivity.device_name ? (
+        {currentActivity.device_name ? (
           <Box
             id="topActivityDevice"
             sx={{
@@ -174,11 +174,11 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               border: '1px solid ' + theme.palette.common.white,
             }}
           >
-            <Typography>Device: {props.currentActivity.device_name}</Typography>
+            <Typography>Device: {currentActivity.device_name}</Typography>
           </Box>
         ) : null}
         {/* Gear */}
-        {props.currentActivity.gear?.name ? (
+        {currentActivity.gear?.name ? (
           <Box
             id="topActivityDevice"
             sx={{
@@ -190,7 +190,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               border: '1px solid ' + theme.palette.common.white,
             }}
           >
-            <Typography>Gear: {props.currentActivity.gear.name}</Typography>
+            <Typography>Gear: {currentActivity.gear.name}</Typography>
           </Box>
         ) : (
           <Box sx={{ marginY: '.75rem' }}></Box>
@@ -203,7 +203,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           display: 'flex',
           flex: 1,
           width: '97.5%',
-          justifyContent: props.currentActivity.map.polyline
+          justifyContent: currentActivity.map.polyline
             ? 'center'
             : 'flex-start',
           alignItems: 'center',
@@ -216,7 +216,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             flexDirection: 'column',
             paddingX: '1rem',
             border: '1px solid white',
-            flex: 0.25,
+            flex: 0.4,
           }}
         >
           {/* Kudos & Comments */}
@@ -256,7 +256,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   Kudos-
                 </Typography>
                 <Typography variant="h6" color={theme.palette.common.white}>
-                  {props.currentActivity.kudos_count}
+                  {currentActivity.kudos_count}
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex' }}>
@@ -269,14 +269,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   Comments-
                 </Typography>
                 <Typography variant="h6" color={theme.palette.common.white}>
-                  {props.currentActivity.comment_count}
+                  {currentActivity.comment_count}
                 </Typography>
               </Box>
             </Box>
           </Box>
 
           {/* Heart Rate */}
-          {props.currentActivity.average_heartrate ? (
+          {currentActivity.average_heartrate ? (
             <Box
               id="goldenHeartRate"
               sx={{
@@ -317,7 +317,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   <Typography
                     variant="h6"
                     color={theme.palette.common.white}
-                  >{`${props.currentActivity.average_heartrate} bpm`}</Typography>
+                  >{`${currentActivity.average_heartrate} bpm`}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex' }}>
                   <Typography
@@ -331,7 +331,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   <Typography
                     variant="h6"
                     color={theme.palette.common.white}
-                  >{`${props.currentActivity.max_heartrate} bpm`}</Typography>
+                  >{`${currentActivity.max_heartrate} bpm`}</Typography>
                 </Box>
               </Box>
             </Box>
@@ -407,14 +407,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   Achievement Count-
                 </Typography>
                 <Typography variant="h6" color={theme.palette.common.white}>
-                  {props.currentActivity.achievement_count}
+                  {currentActivity.achievement_count}
                 </Typography>
               </Box>
             </Box>
           </Box>
         </Box>
 
-        {props.currentActivity.map.polyline ? (
+        {currentActivity.map.polyline ? (
           <Box
             sx={{
               flex: 1,
@@ -425,14 +425,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               marginX: '1rem',
             }}
           >
-            <ActivityMap polyline={props.currentActivity.map.polyline} />
+            <ActivityMap polyline={currentActivity.map.polyline} />
           </Box>
         ) : null}
         {/* Margin Left 1rem for entries without a map */}
         <Box sx={{ marginLeft: '1rem' }}>
-          {props.currentActivity.photos.primary?.urls['600'] ? (
+          {currentActivity.photos.primary?.urls['600'] ? (
             <Image
-              src={props.currentActivity.photos.primary.urls['600']}
+              src={currentActivity.photos.primary.urls['600']}
               height={400}
               width={320}
               layout="responsive"
@@ -444,7 +444,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       </Box>
       {currentStat === 'heartRate' ? (
         <HeartRateChart
-          currentActivity={props.currentActivity}
+          currentActivity={currentActivity}
           format={props.format}
           isSharedActivity={props.isSharedActivity}
         />
@@ -501,35 +501,37 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         </Box>
       ) : currentStat === 'achievements' ? (
         (() => {
+          const bestEffortsExist = !!currentActivity.best_efforts?.some(
+            (bestEffort) => bestEffort.achievements.length
+          );
+
+          const segmentEffortsExist = currentActivity.segment_efforts?.some(
+            (segmentEffort) => segmentEffort.achievements.length
+          );
           // Not only should best_efforts have a length but also at least one bestEffort should have an achievement with a length
-          if (
-            achievementEffortView === 'best-effort' &&
-            props.currentActivity.best_efforts?.some(
-              (bestEffort) => bestEffort.achievements.length
-            )
-          ) {
+          if (achievementEffortView === 'best-effort' && bestEffortsExist) {
             return (
               <AchievementsByEffort
-                bestEfforts={props.currentActivity.best_efforts.filter(
+                bestEfforts={currentActivity.best_efforts!.filter(
                   (bestEffort) => bestEffort.achievements.length
                 )}
-                activityId={props.currentActivity.id}
+                activityId={currentActivity.id}
+                toggleable={segmentEffortsExist}
               />
             );
           }
 
           if (
-            achievementEffortView === 'best-segment' &&
-            props.currentActivity.segment_efforts?.some(
-              (segmentEffort) => segmentEffort.achievements.length
-            )
+            (achievementEffortView === 'best-segment' && segmentEffortsExist) ||
+            (segmentEffortsExist && !bestEffortsExist)
           ) {
             return (
               <AchievementsBySegment
-                bestSegments={props.currentActivity.segment_efforts.filter(
+                bestSegments={currentActivity.segment_efforts.filter(
                   (bestSegment) => bestSegment.achievements.length
                 )}
-                activityId={props.currentActivity.id}
+                activityId={currentActivity.id}
+                toggleable={bestEffortsExist}
               />
             );
           }

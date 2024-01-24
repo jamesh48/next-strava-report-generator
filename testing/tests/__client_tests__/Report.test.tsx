@@ -44,6 +44,7 @@ describe('Report Component tests', () => {
           dateCondition: 'allTime',
           fromDate: '',
           toDate: '',
+          currentActivity: {},
         },
         entriesApi: {
           queries: {
@@ -70,6 +71,7 @@ describe('Report Component tests', () => {
           dateCondition: 'allTime',
           fromDate: '',
           toDate: '',
+          currentActivity: {},
         },
         entriesApi: {
           queries: {

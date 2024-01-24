@@ -20,7 +20,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     return res.send({ message: 'data' });
   } catch (err) {
     const typedErr = err as { message: string };
-    return res.send(typedErr.message);
+    return res.send({ error: typedErr.message });
   }
 });
 

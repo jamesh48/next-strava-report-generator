@@ -58,6 +58,7 @@ export const getServerSideProps: SRGSharedEventProps = async ({ query }) => {
 
 const SharedEntry = (props: { fetchedActivity: Entry & CurrentActivity }) => {
   const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -77,10 +78,6 @@ const SharedEntry = (props: { fetchedActivity: Entry & CurrentActivity }) => {
         handleCloseCurrentActivity={() => null}
         sport={'Run'}
         entry={props.fetchedActivity}
-        currentActivity={{
-          ...props.fetchedActivity,
-          id: Number(props.fetchedActivity.activityId),
-        }}
         format="kph"
         isSharedActivity={true}
       />

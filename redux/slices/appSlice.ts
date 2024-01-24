@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@redux/store';
-import { Sport } from '@components/StravaEntries/EntryTypes';
+import { CurrentActivity, Sport } from '@components/StravaEntries/EntryTypes';
 
 export type ModalSeverities = 'success' | 'info' | 'warning' | 'error';
 type ModalStates = 'closed' | 'confirmed' | 'canceled' | 'open';
@@ -17,6 +17,7 @@ export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 export const appInitialState: {
   achievementEffortView: 'best-effort' | 'best-segment';
   achievementsOnly: boolean;
+  currentActivity: CurrentActivity;
   sortCondition: string;
   sportCondition: Sport;
   darkMode: boolean;
@@ -29,6 +30,7 @@ export const appInitialState: {
 } = {
   achievementsOnly: false,
   achievementEffortView: 'best-segment',
+  currentActivity: {} as CurrentActivity,
   sortCondition: 'speedDesc',
   sportCondition: 'Run',
   customDateCondition: false,
@@ -57,6 +59,12 @@ export const appSlice = createSlice({
       } else {
         state.achievementEffortView = 'best-effort';
       }
+    },
+    setCurrentActivity: (state, action) => {
+      state.currentActivity = action.payload;
+    },
+    setCurrentActivityDescription: (state, action) => {
+      state.currentActivity.description = action.payload;
     },
     setPopupModalDetails: (
       state,
@@ -101,10 +109,12 @@ export const appSlice = createSlice({
 
 export const {
   setAchievementsOnlyCondition,
+  setCurrentActivity,
   setSortCondition,
   setSportCondition,
   setDarkMode,
   setToDateQuery,
+  setCurrentActivityDescription,
   setFromDateQuery,
   setDateCondition,
   setModalState,
@@ -112,6 +122,8 @@ export const {
   toggleAchievementEffortView,
 } = appSlice.actions;
 
+export const getCurrentActivity = (state: RootState) =>
+  state.app.currentActivity;
 export const getDarkModeCondition = (state: RootState) => state.app.darkMode;
 export const getSortCondition = (state: RootState) => state.app.sortCondition;
 export const getSportCondition = (state: RootState) => state.app.sportCondition;

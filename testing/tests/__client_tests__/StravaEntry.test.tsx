@@ -35,6 +35,7 @@ describe('StravaEntry Tests', () => {
           dateCondition: 'allTime',
           fromDate: '',
           toDate: '',
+          currentActivity: detailedEntryCurrentActivity,
         },
         entriesApi: {
           queries: {
@@ -48,7 +49,6 @@ describe('StravaEntry Tests', () => {
       {
         no: 1,
         showIndividualEntry: () => {},
-        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,
@@ -69,6 +69,7 @@ describe('StravaEntry Tests', () => {
           dateCondition: 'allTime',
           fromDate: '',
           toDate: '',
+          currentActivity: detailedEntryCurrentActivity,
         },
         entriesApi: {
           queries: {
@@ -82,7 +83,6 @@ describe('StravaEntry Tests', () => {
       {
         no: 1,
         showIndividualEntry: () => {},
-        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,
@@ -108,6 +108,7 @@ describe('StravaEntry Tests', () => {
           dateCondition: 'allTime',
           fromDate: '',
           toDate: '',
+          currentActivity: detailedEntryCurrentActivity,
         },
         entriesApi: {
           queries: {
@@ -121,7 +122,6 @@ describe('StravaEntry Tests', () => {
       {
         no: 1,
         showIndividualEntry: () => {},
-        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         sport: 'Run',
         entry: stravaEntryGeneralEntry,

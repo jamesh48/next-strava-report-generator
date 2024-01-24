@@ -9,6 +9,7 @@ import { useFetchData } from '@lib';
 import { appInitialState, getDarkModeCondition } from '@redux/slices';
 import GlobalStore from '@redux/store';
 import { useSelector } from '@redux/reduxHooks';
+import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
 
 const ThemeComponent = (props: AppProps & { initialDarkMode?: boolean }) => {
   const darkMode = useSelector(getDarkModeCondition);
@@ -36,7 +37,10 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
 };
 
 const StravaReportGenerator = (
-  props: AppProps<{ clientSideTokens?: { mapbox: string } }>
+  props: AppProps<{
+    clientSideTokens?: { mapbox: string };
+    fetchedActivity?: Entry & CurrentActivity;
+  }>
 ) => {
   const { data: userSettings } = useFetchData<{
     defaultFormat: string;
@@ -54,6 +58,17 @@ const StravaReportGenerator = (
           sportCondition: userSettings?.defaultSport,
           dateCondition: userSettings?.defaultDate,
           darkMode: userSettings?.darkMode,
+          ...(() => {
+            if (props.pageProps.fetchedActivity) {
+              return {
+                currentActivity: {
+                  ...props.pageProps.fetchedActivity,
+                  id: Number(props.pageProps.fetchedActivity.activityId),
+                },
+              };
+            }
+            return {};
+          })(),
           clientSideTokens: {
             mapbox: props.pageProps.clientSideTokens?.mapbox || '',
           },

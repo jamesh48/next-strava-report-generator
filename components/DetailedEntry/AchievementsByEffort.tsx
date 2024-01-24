@@ -1,13 +1,10 @@
 import { CSSProperties, useState } from 'react';
-import {
-  BestEffort,
-  SegmentEffort,
-} from '@components/StravaEntries/EntryTypes';
+import { BestEffort } from '@components/StravaEntries/EntryTypes';
 import { Wreath } from './Wreath';
-import { Box, Slider, Typography, useTheme } from '@mui/material';
+import { Box, Slider, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
-import { useCSX } from '@lib';
+import { useAlertOnMount, useCSX } from '@lib';
 import AchievementHeader from './AchievementHeader';
 
 const staticMarks = [
@@ -64,6 +61,7 @@ function valuetext(value: number) {
 interface AchievementsProps {
   bestEfforts: BestEffort[];
   activityId: number;
+  toggleable: boolean;
 }
 
 const calculateSliderValues = (bestEfforts: BestEffort[]) => {
@@ -160,7 +158,8 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           position={position}
           handleSetPosition={handleSetPosition}
           currentSegmentDataLength={currentAchievements.length}
-        />{' '}
+          toggleable={props.toggleable}
+        />
         <Box
           id="outer-slider"
           sx={{

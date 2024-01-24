@@ -10,6 +10,7 @@ import AchievementHeader from './AchievementHeader';
 interface AchievementsProps {
   bestSegments: SegmentEffort[];
   activityId: number;
+  toggleable: boolean;
 }
 
 const AchievementsBySegment = (props: AchievementsProps) => {
@@ -105,6 +106,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
           handleSetPosition={handleSetPosition}
           position={position}
           currentSegmentDataLength={currentSegment.data.length}
+          toggleable={props.toggleable}
         />
         <Box
           id="outer-slider"
@@ -175,7 +177,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
       >
         <Slider
           min={0}
-          max={30}
+          max={(marksForSlider.length - 1) * 10}
           value={currentlySelectedEffort}
           aria-label="Custom marks"
           defaultValue={currentlySelectedEffort}

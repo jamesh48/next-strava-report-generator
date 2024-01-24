@@ -17,13 +17,12 @@ const renderWithState = (
 describe('Detailed Entry Tests', () => {
   it('Should Render A Detailed Entry (non editing)', () => {
     renderWithState(
-      {},
+      { app: { currentActivity: detailedEntryCurrentActivity } },
       {
         editingDescription: false,
         editedDescription: '',
         handleEditingDescriptionChange: () => {},
         handleDescriptionChange: () => {},
-        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         handleCloseCurrentActivity: () => null,
       }
@@ -38,13 +37,12 @@ describe('Detailed Entry Tests', () => {
   });
   it('Should Render A Detailed Entry (Editing)', () => {
     renderWithState(
-      {},
+      { app: { currentActivity: detailedEntryCurrentActivity } },
       {
         editingDescription: true,
         editedDescription: 'Took it out fast came home slow',
         handleEditingDescriptionChange: () => {},
         handleDescriptionChange: () => {},
-        currentActivity: detailedEntryCurrentActivity,
         format: 'avgmpace',
         handleCloseCurrentActivity: () => null,
       }

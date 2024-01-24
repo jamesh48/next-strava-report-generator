@@ -12,6 +12,7 @@ interface AchievementHeaderProps {
   handleSetPosition: (p: number) => void;
   position: number;
   currentSegmentDataLength: number;
+  toggleable: boolean;
 }
 
 const AchievementHeader = (props: AchievementHeaderProps) => {
@@ -167,20 +168,22 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
               />
             </svg>
           </Button>
-          <Link
-            sx={{
-              flex: 1,
-              color: theme.palette.common.white,
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              dispatch(toggleAchievementEffortView());
-            }}
-          >
-            {achievementEffortView === 'best-segment'
-              ? 'Switch to Best Effort View?'
-              : 'Switch to Best Segment View?'}
-          </Link>
+          {props.toggleable ? (
+            <Link
+              sx={{
+                flex: 1,
+                color: theme.palette.common.white,
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                dispatch(toggleAchievementEffortView());
+              }}
+            >
+              {achievementEffortView === 'best-segment'
+                ? 'Switch to Best Effort View?'
+                : 'Switch to Best Segment View?'}
+            </Link>
+          ) : null}
         </Box>
       </Box>
     </Box>
