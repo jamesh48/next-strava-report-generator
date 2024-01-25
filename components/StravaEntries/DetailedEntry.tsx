@@ -209,7 +209,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             }}
             onClick={() => {
               // Edge case where shoes don't exist or user is rate limited
-              if (userProfile?.shoes.length && !props.isSharedActivity) {
+              if (!props.isSharedActivity && userProfile?.shoes.length) {
                 setEditingShoes(true);
               }
             }}
@@ -218,7 +218,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           </Box>
         ) : (
           <Box sx={{ marginY: '.75rem', marginX: '.5rem' }}>
-            {userProfile?.shoes.length ? (
+            {!props.isSharedActivity && userProfile?.shoes.length ? (
               <Select
                 ref={gearRef}
                 sx={{
