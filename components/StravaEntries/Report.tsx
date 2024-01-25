@@ -2,20 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, SelectChangeEvent } from '@mui/material';
 import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import {
-  CachedEntry,
-  CurrentActivity,
-  Entry,
-  Format,
-  Sport,
-} from './EntryTypes.js';
+import { CachedEntry, Entry, Format, Sport } from './EntryTypes.js';
 import {
   useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
   getSortCondition,
   getDateCondition,
+  getAchievementsOnlyCondition,
+  setCurrentActivity,
 } from '@redux/slices';
-import { useSelector } from '@redux/reduxHooks';
+import { useDispatch, useSelector } from '@redux/reduxHooks';
 import { useMobileBrowserCheck } from '@lib';
 
 export interface ReportProps {
@@ -31,17 +27,18 @@ export type CustomMouseEventHandler = (
 ) => void;
 
 const Report = (props: ReportProps) => {
+  const dispatch = useDispatch();
   const isMobile = useMobileBrowserCheck();
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
   const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
+  const achievementsOnly = useSelector(getAchievementsOnlyCondition);
   const sortCondition = useSelector(getSortCondition);
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage] = useState(7);
   // Entries
   const [invalidEntry, setInvalidEntry] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState({} as CurrentActivity);
   let { data: totalEntries } = useGetAllEntriesQuery(null);
 
   useEffect(() => {
@@ -109,7 +106,13 @@ const Report = (props: ReportProps) => {
         : sortCondition === 'dateAsc'
         ? (a, b) => (new Date(a.start_date) > new Date(b.start_date) && 1) || -1
         : undefined
-    );
+    )
+    .filter((entry) => {
+      if (achievementsOnly) {
+        return entry.achievement_count > 0;
+      }
+      return entry;
+    });
 
   const handlePaginationClick: ((event: SelectChangeEvent<string>) => void) &
     React.MouseEventHandler<HTMLLIElement> = (event) => {
@@ -117,12 +120,12 @@ const Report = (props: ReportProps) => {
   };
 
   const handleCloseCurrentActivity = () => {
-    setCurrentActivity({} as CurrentActivity);
+    dispatch(setCurrentActivity({}));
   };
 
   useEffect(() => {
     if (individualEntryResults && individualEntryResults.data) {
-      setCurrentActivity(individualEntryResults.data);
+      dispatch(setCurrentActivity(individualEntryResults.data));
     }
   }, [individualEntryResults]);
 
@@ -132,28 +135,30 @@ const Report = (props: ReportProps) => {
   ) => {
     event.preventDefault();
     if (cachedEntry) {
-      setCurrentActivity({
-        ...cachedEntry,
-        id: Number(cachedEntry.activityId),
-        best_efforts: JSON.parse(cachedEntry.bestEfforts),
-        device_name: cachedEntry.deviceName,
-        gear: {
-          name: cachedEntry.gearName,
-        },
-        laps: JSON.parse(cachedEntry.laps),
-        map: {
-          polyline: cachedEntry.mapPolyline,
-        },
-        photos: {
-          count: 1,
-          primary: {
-            urls: {
-              '600': cachedEntry.primaryPhotoUrl!,
+      dispatch(
+        setCurrentActivity({
+          ...cachedEntry,
+          id: Number(cachedEntry.activityId),
+          best_efforts: JSON.parse(cachedEntry.bestEfforts),
+          device_name: cachedEntry.deviceName,
+          gear: {
+            name: cachedEntry.gearName,
+          },
+          laps: JSON.parse(cachedEntry.laps),
+          map: {
+            polyline: cachedEntry.mapPolyline,
+          },
+          photos: {
+            count: 1,
+            primary: {
+              urls: {
+                '600': cachedEntry.primaryPhotoUrl!,
+              },
             },
           },
-        },
-        segment_efforts: JSON.parse(cachedEntry.segmentEfforts),
-      });
+          segment_efforts: JSON.parse(cachedEntry.segmentEfforts),
+        })
+      );
     } else {
       getIndividualEntry({
         entryid: Number(event.currentTarget.dataset.indentry),
@@ -178,7 +183,6 @@ const Report = (props: ReportProps) => {
         currentPage={currentPage}
         entries={totalEntries!}
         entriesPerPage={entriesPerPage}
-        currentActivity={currentActivity}
         showIndividualEntry={showIndividualEntry}
         handleCloseCurrentActivity={handleCloseCurrentActivity}
       />

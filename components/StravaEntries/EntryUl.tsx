@@ -2,7 +2,7 @@ import React from 'react';
 import { List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
-import { CurrentActivity, Entry, Format, Sport } from './EntryTypes.js';
+import { Entry, Format, Sport } from './EntryTypes.js';
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { useCSX } from '@lib';
 
@@ -10,7 +10,6 @@ interface EntryUIProps {
   entries: Entry[];
   entriesPerPage: number;
   currentPage: number;
-  currentActivity: CurrentActivity;
   invalidEntry: boolean;
   sport: Sport;
   format?: Format;
@@ -30,7 +29,6 @@ const EntryUI = (props: EntryUIProps) => {
     return (
       <ListItem key={index} sx={{ display: 'flex', padding: 0 }}>
         <StravaEntry
-          currentActivity={props.currentActivity}
           showIndividualEntry={props.showIndividualEntry}
           no={
             props.currentPage === 1 && index >= 0 && index <= 3

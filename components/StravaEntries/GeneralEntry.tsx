@@ -14,6 +14,7 @@ import {
 import { Share } from '@mui/icons-material';
 import { useCSX } from '@lib';
 import { useGetUserProfileQuery } from '@redux/slices';
+import { hasStatus } from '@components/UserProfile/UserProfile';
 
 interface GeneralEntryProps {
   no: number | undefined;
@@ -31,6 +32,13 @@ interface GeneralEntryProps {
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
+  const entryIsCached = props.entry.individualActivityCached;
+  const { isError, error } = useGetUserProfileQuery(null);
+
+  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429;
+
+  const preventDetailedEntryClick = rateLimitExceeded && !entryIsCached;
+
   const theme = useTheme();
   const { data: userProfile } = useGetUserProfileQuery(null);
   const m2y = 1.094;
@@ -185,11 +193,18 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 textDecorationColor: isTopThreeEntry
                   ? theme.palette.strava.contrastText
                   : theme.palette.strava.main,
-                cursor: props.isSharedActivity ? 'default' : 'pointer',
+                cursor: preventDetailedEntryClick
+                  ? 'not-allowed'
+                  : props.isSharedActivity
+                  ? 'default'
+                  : 'pointer',
               }}
               onClick={(e) => {
                 e.preventDefault();
-                props.handleEditingHeadlineChange(e);
+                // Prevent caching a entry when rate limit is exceeded
+                if (!preventDetailedEntryClick) {
+                  props.handleEditingHeadlineChange(e);
+                }
               }}
               data-indentry={props.entry.activityId}
             >

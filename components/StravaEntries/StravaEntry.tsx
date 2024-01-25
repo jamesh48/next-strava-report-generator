@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
+import { CachedEntry, Entry, Format, Sport } from './EntryTypes';
 import {
-  CachedEntry,
-  CurrentActivity,
-  Entry,
-  Format,
-  Sport,
-} from './EntryTypes';
-import { useUpdateIndividualEntryMutation } from '@redux/slices';
+  getCurrentActivity,
+  useUpdateIndividualEntryMutation,
+} from '@redux/slices';
 import { CustomMouseEventHandler } from './Report';
+import { useSelector } from '@redux/reduxHooks';
 
 export interface StravaEntryProps {
   showIndividualEntry: CustomMouseEventHandler;
@@ -18,7 +16,6 @@ export interface StravaEntryProps {
   entry: Entry;
   format: Format;
   no: number | undefined;
-  currentActivity: CurrentActivity;
   handleCloseCurrentActivity: () => void;
   isSharedActivity?: true;
 }
@@ -30,12 +27,14 @@ const StravaEntry = (props: StravaEntryProps) => {
   const [editedDescription, setEditedDescription] = useState('');
   const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation();
 
+  const currentActivity = useSelector(getCurrentActivity);
+
   useEffect(() => {
-    if (props.currentActivity.id === Number(props.entry.activityId)) {
-      setEditedName(props.currentActivity.name);
-      setEditedDescription(props.currentActivity.description);
+    if (currentActivity.id === Number(props.entry.activityId)) {
+      setEditedName(currentActivity.name);
+      setEditedDescription(currentActivity.description);
     }
-  }, [props.currentActivity, props.entry.activityId]);
+  }, [currentActivity, props.entry.activityId]);
 
   const handleDescriptionChange: (e: { target: { value: string } }) => void = (
     e
@@ -58,13 +57,13 @@ const StravaEntry = (props: StravaEntryProps) => {
     if (e === true) {
       setEditingHeadline(false);
       handleActivityUpdateMutation({
-        activityId: props.currentActivity.id,
+        activityId: currentActivity.id,
         name: editedName,
         description: editedDescription,
       });
     } else {
       e.preventDefault();
-      if (props.currentActivity.id === Number(props.entry.activityId)) {
+      if (currentActivity.id === Number(props.entry.activityId)) {
         setEditingHeadline(true);
       } else {
         if (props.entry.individualActivityCached) {
@@ -81,7 +80,7 @@ const StravaEntry = (props: StravaEntryProps) => {
     if (editingDescription) {
       setEditingDescription(false);
       handleActivityUpdateMutation({
-        activityId: props.currentActivity.id,
+        activityId: currentActivity.id,
         name: editedName,
         description: editedDescription,
       });
@@ -91,7 +90,7 @@ const StravaEntry = (props: StravaEntryProps) => {
   };
 
   const isCurrentActivity =
-    props.currentActivity.id === Number(props.entry.activityId);
+    currentActivity?.id === Number(props.entry.activityId);
   return (
     <Box sx={{ width: '100%' }}>
       <GeneralEntry
@@ -109,7 +108,6 @@ const StravaEntry = (props: StravaEntryProps) => {
       {isCurrentActivity && (
         <DetailedEntry
           editingDescription={editingDescription}
-          currentActivity={props.currentActivity}
           editedDescription={editedDescription}
           handleEditingDescriptionChange={handleEditingDesciptionChange}
           handleDescriptionChange={handleDescriptionChange}

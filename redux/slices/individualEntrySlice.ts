@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
 import { entriesApi } from './entriesSlice';
+import { setCurrentActivityField } from './appSlice';
 
 type Athlete = { firstname: string; lastname: string };
 
@@ -28,6 +29,42 @@ export const individualEntrySlice = createApi({
     >({
       query: (entryid) => ({ url: '/kudoers', params: { entryid } }),
     }),
+    updateShoeIndividualEntry: builder.mutation<
+      string,
+      {
+        shoeId: string;
+        shoeName: string;
+        activityId: number;
+      }
+    >({
+      query: (event) => ({
+        method: 'POST',
+        url: 'putShoeUpdate',
+        body: {
+          shoe_id: event.shoeId,
+          shoe_name: event.shoeName,
+          activityId: event.activityId,
+        },
+      }),
+      onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
+        dispatch(
+          setCurrentActivityField({
+            field: 'gear',
+            update: { name: payload.shoeName },
+          })
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (err) {
+          // Refetch all Activities and Individual Entry on Failure
+          dispatch(entriesApi.util.invalidateTags(['Activities']));
+          dispatch(
+            individualEntrySlice.util.invalidateTags(['IndividualEntry'])
+          );
+        }
+      },
+    }),
     updateIndividualEntry: builder.mutation<
       string,
       {
@@ -45,15 +82,6 @@ export const individualEntrySlice = createApi({
       // Optimistic Update for the new Activity Description and Name
       onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
         dispatch(
-          individualEntrySlice.util.updateQueryData(
-            'getIndividualEntry',
-            { entryid: payload.activityId },
-            (draft) => {
-              draft.description = payload.description;
-            }
-          )
-        );
-        dispatch(
           entriesApi.util.updateQueryData('getAllEntries', null, (draft) => {
             const draftIndex = draft.findIndex((existingActivity) => {
               return (
@@ -66,10 +94,16 @@ export const individualEntrySlice = createApi({
           })
         );
 
+        dispatch(
+          setCurrentActivityField({
+            field: 'description',
+            update: payload.description,
+          })
+        );
+
         try {
           await queryFulfilled;
         } catch (err) {
-          console.log(err);
           // Refetch all Activities and Individual Entry on Failure
           dispatch(entriesApi.util.invalidateTags(['Activities']));
           dispatch(
@@ -84,5 +118,6 @@ export const individualEntrySlice = createApi({
 export const {
   useLazyGetIndividualEntryQuery,
   useLazyGetKudoersQuery,
+  useUpdateShoeIndividualEntryMutation,
   useUpdateIndividualEntryMutation,
 } = individualEntrySlice;

@@ -86,5 +86,6 @@
     "moving_time": 0,
     "elapsed_time": 0,
     "elevation_gain": 0
-  }
+  },
+  "shoes": []
 }

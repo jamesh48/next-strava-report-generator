@@ -2,13 +2,14 @@
 import '../styles/globals.css';
 import { Provider } from 'react-redux';
 import { AppProps } from 'next/app';
-import { ThemeProvider, useTheme } from '@mui/material';
+import { ThemeProvider, createTheme, useTheme } from '@mui/material';
 import lightTheme from '../theme/muiLightTheme';
 import darkTheme from '../theme/muiDarkTheme';
 import { useFetchData } from '@lib';
 import { appInitialState, getDarkModeCondition } from '@redux/slices';
 import GlobalStore from '@redux/store';
 import { useSelector } from '@redux/reduxHooks';
+import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
 
 const ThemeComponent = (props: AppProps & { initialDarkMode?: boolean }) => {
   const darkMode = useSelector(getDarkModeCondition);
@@ -36,8 +37,12 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
 };
 
 const StravaReportGenerator = (
-  props: AppProps<{ clientSideTokens?: { mapbox: string } }>
+  props: AppProps<{
+    clientSideTokens?: { mapbox: string };
+    fetchedActivity?: Entry & CurrentActivity;
+  }>
 ) => {
+  const theme = createTheme();
   const { data: userSettings } = useFetchData<{
     defaultFormat: string;
     defaultSport: string;
@@ -46,22 +51,35 @@ const StravaReportGenerator = (
   }>('/api/userSettings');
 
   return (
-    <Provider
-      store={GlobalStore.prototype.configureGlobalStore({
-        app: {
-          ...appInitialState,
-          sortCondition: userSettings?.defaultFormat,
-          sportCondition: userSettings?.defaultSport,
-          dateCondition: userSettings?.defaultDate,
-          darkMode: userSettings?.darkMode,
-          clientSideTokens: {
-            mapbox: props.pageProps.clientSideTokens?.mapbox || '',
+    <ThemeProvider theme={theme}>
+      <Provider
+        store={GlobalStore.prototype.configureGlobalStore({
+          app: {
+            ...appInitialState,
+            sortCondition: userSettings?.defaultFormat,
+            sportCondition: userSettings?.defaultSport,
+            dateCondition: userSettings?.defaultDate,
+            darkMode: userSettings?.darkMode,
+            ...(() => {
+              if (props.pageProps.fetchedActivity) {
+                return {
+                  currentActivity: {
+                    ...props.pageProps.fetchedActivity,
+                    id: Number(props.pageProps.fetchedActivity.activityId),
+                  },
+                };
+              }
+              return {};
+            })(),
+            clientSideTokens: {
+              mapbox: props.pageProps.clientSideTokens?.mapbox || '',
+            },
           },
-        },
-      })}
-    >
-      <ThemeComponent {...props} initialDarkMode={userSettings?.darkMode} />
-    </Provider>
+        })}
+      >
+        <ThemeComponent {...props} initialDarkMode={userSettings?.darkMode} />
+      </Provider>
+    </ThemeProvider>
   );
 };
 

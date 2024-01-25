@@ -19,7 +19,19 @@ const muiOverrides = (
   return {
     MuiCssBaseline: {
       styleOverrides: {
-        ':root': {},
+        root: {
+          '.withWordBreak': {
+            /* These are technically the same, but use both */
+            overflowWrap: 'break-word',
+            wordWrap: 'break-word',
+            wordBreak: 'break-word',
+            '-ms-word-break': 'break-all',
+            '-ms-hyphens': 'auto',
+            '-moz-hyphens': 'auto',
+            '-webkit-hyphens': 'auto',
+            hyphens: 'auto',
+          },
+        },
       },
     },
   };

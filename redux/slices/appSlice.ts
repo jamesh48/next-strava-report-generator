@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@redux/store';
-import { Sport } from '@components/StravaEntries/EntryTypes';
+import { CurrentActivity, Sport } from '@components/StravaEntries/EntryTypes';
 
 export type ModalSeverities = 'success' | 'info' | 'warning' | 'error';
 type ModalStates = 'closed' | 'confirmed' | 'canceled' | 'open';
@@ -12,9 +12,17 @@ interface PopupModalDetails {
   state: ModalStates;
 }
 
+type UpdatePayload<T> = {
+  field: keyof T;
+  update: T[keyof T];
+};
+
 export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 
 export const appInitialState: {
+  achievementEffortView: 'best-effort' | 'best-segment';
+  achievementsOnly: boolean;
+  currentActivity: CurrentActivity;
   sortCondition: string;
   sportCondition: Sport;
   darkMode: boolean;
@@ -25,6 +33,9 @@ export const appInitialState: {
   clientSideTokens: { mapbox: string };
   popupModalDetails: PopupModalDetails;
 } = {
+  achievementsOnly: false,
+  achievementEffortView: 'best-effort',
+  currentActivity: {} as CurrentActivity,
   sortCondition: 'speedDesc',
   sportCondition: 'Run',
   customDateCondition: false,
@@ -47,6 +58,25 @@ export const appSlice = createSlice({
   name: 'app',
   initialState: appInitialState,
   reducers: {
+    toggleAchievementEffortView: (state) => {
+      if (state.achievementEffortView === 'best-effort') {
+        state.achievementEffortView = 'best-segment';
+      } else {
+        state.achievementEffortView = 'best-effort';
+      }
+    },
+    setCurrentActivity: (state, action) => {
+      state.currentActivity = action.payload;
+    },
+    setCurrentActivityField: <T extends Record<string, any>>(
+      state: { currentActivity: T },
+      action: PayloadAction<UpdatePayload<T>>
+    ) => {
+      const { field, update } = action.payload;
+      if (field in state.currentActivity) {
+        state.currentActivity[field] = update;
+      }
+    },
     setPopupModalDetails: (
       state,
       action: PayloadAction<
@@ -70,6 +100,9 @@ export const appSlice = createSlice({
     setDarkMode: (state, action: PayloadAction<boolean>) => {
       state.darkMode = action.payload;
     },
+    setAchievementsOnlyCondition: (state, action: PayloadAction<boolean>) => {
+      state.achievementsOnly = action.payload;
+    },
     setDateCondition: (state, action: PayloadAction<DateCondition>) => {
       state.dateCondition = action.payload;
       state.customDateCondition = false;
@@ -86,16 +119,22 @@ export const appSlice = createSlice({
 });
 
 export const {
+  setAchievementsOnlyCondition,
+  setCurrentActivity,
   setSortCondition,
   setSportCondition,
   setDarkMode,
   setToDateQuery,
+  setCurrentActivityField,
   setFromDateQuery,
   setDateCondition,
   setModalState,
   setPopupModalDetails,
+  toggleAchievementEffortView,
 } = appSlice.actions;
 
+export const getCurrentActivity = (state: RootState) =>
+  state.app.currentActivity;
 export const getDarkModeCondition = (state: RootState) => state.app.darkMode;
 export const getSortCondition = (state: RootState) => state.app.sortCondition;
 export const getSportCondition = (state: RootState) => state.app.sportCondition;
@@ -167,5 +206,11 @@ export const getPopupModalDetails = (state: RootState) =>
   state.app.popupModalDetails;
 export const getModalState = (state: RootState) =>
   state.app.popupModalDetails.state;
+
+export const getAchievementsOnlyCondition = (state: RootState) =>
+  state.app.achievementsOnly;
+
+export const getAchievementEffortView = (state: RootState) =>
+  state.app.achievementEffortView;
 
 export default appSlice.reducer;
