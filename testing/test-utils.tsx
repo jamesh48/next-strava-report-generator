@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { ThemeProvider } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material';
 import { act, render as rtlRender } from '@testing-library/react';
 import { AnyAction } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
@@ -49,9 +49,11 @@ function render(
 
   function Wrapper({ children }: { children: ReactNode }): JSX.Element {
     return (
-      <Provider store={testStore}>
-        <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
-      </Provider>
+      <ThemeProvider theme={createTheme()}>
+        <Provider store={testStore}>
+          <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+        </Provider>
+      </ThemeProvider>
     );
   }
   return rtlRender(ui, {
