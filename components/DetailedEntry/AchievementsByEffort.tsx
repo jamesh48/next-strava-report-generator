@@ -4,7 +4,7 @@ import { Wreath } from './Wreath';
 import { Box, Slider, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
-import { useAlertOnMount, useCSX } from '@lib';
+import { useCSX } from '@lib';
 import AchievementHeader from './AchievementHeader';
 
 const staticMarks = [

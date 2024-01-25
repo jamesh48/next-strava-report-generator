@@ -39,6 +39,7 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
         clearInterval(wholeNumber);
       };
     }
+    return;
   }, [direction]);
 
   const changeEffort = (event: React.MouseEvent<HTMLElement>) => {
