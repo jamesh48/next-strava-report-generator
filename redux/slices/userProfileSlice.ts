@@ -1,5 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
+interface Shoe {
+  name: string;
+  primary: boolean;
+  id: string;
+  retired: boolean;
+  nickname: string;
+  distance: number;
+}
 export interface UserProfile {
   id: number;
   profile: string;
@@ -8,6 +16,7 @@ export interface UserProfile {
   city: string;
   state: string;
   country: string;
+  shoes: Shoe[];
   ytd_run_totals: {
     distance: number;
     count: number;

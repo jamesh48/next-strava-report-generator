@@ -12,6 +12,11 @@ interface PopupModalDetails {
   state: ModalStates;
 }
 
+type UpdatePayload<T> = {
+  field: keyof T;
+  update: T[keyof T];
+};
+
 export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
 
 export const appInitialState: {
@@ -29,7 +34,7 @@ export const appInitialState: {
   popupModalDetails: PopupModalDetails;
 } = {
   achievementsOnly: false,
-  achievementEffortView: 'best-segment',
+  achievementEffortView: 'best-effort',
   currentActivity: {} as CurrentActivity,
   sortCondition: 'speedDesc',
   sportCondition: 'Run',
@@ -63,8 +68,14 @@ export const appSlice = createSlice({
     setCurrentActivity: (state, action) => {
       state.currentActivity = action.payload;
     },
-    setCurrentActivityDescription: (state, action) => {
-      state.currentActivity.description = action.payload;
+    setCurrentActivityField: <T extends Record<string, any>>(
+      state: { currentActivity: T },
+      action: PayloadAction<UpdatePayload<T>>
+    ) => {
+      const { field, update } = action.payload;
+      if (field in state.currentActivity) {
+        state.currentActivity[field] = update;
+      }
     },
     setPopupModalDetails: (
       state,
@@ -114,7 +125,7 @@ export const {
   setSportCondition,
   setDarkMode,
   setToDateQuery,
-  setCurrentActivityDescription,
+  setCurrentActivityField,
   setFromDateQuery,
   setDateCondition,
   setModalState,

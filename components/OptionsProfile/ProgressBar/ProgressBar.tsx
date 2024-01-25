@@ -21,7 +21,9 @@ import {
   incrementProgressBarProgress,
   resetProgressBarProgress,
   useGetAllEntriesQuery,
+  useGetUserProfileQuery,
 } from '@redux/slices';
+import { hasStatus } from '@components/UserProfile/UserProfile';
 
 const muiUpdateButtonContainerSx: SxProps = {
   minHeight: '5vmax',
@@ -72,6 +74,7 @@ const ProgressBar = () => {
   const [insertionRate, setInsertionRate] = useState(125);
   const dispatch = useDispatch();
   const { data: allEntries } = useGetAllEntriesQuery(null);
+  const { isError, error } = useGetUserProfileQuery(null);
   const sortCondition = useSelector(getSortCondition);
   useEffect(() => {
     const numberOfEntries = allEntries?.length;
@@ -148,6 +151,8 @@ const ProgressBar = () => {
   const mobileStyleSelect = useCSX('unset', '1', 'flex');
   const mobileStyleUpdateButton = useCSX('unset', '.5', 'flex');
 
+  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429;
+
   return progressBarProgress === 0 ? (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
       {sortCondition ? (
@@ -213,18 +218,20 @@ const ProgressBar = () => {
           }}
         />
       )}
-      <OutlinedInput
-        type="button"
-        className="updateButton"
-        value="Update!"
-        onClick={updateEntries}
-        // @ts-ignore
-        sx={{
-          ...muiUpdateButtonSx(theme),
-          ...mobileStyleUpdateButton,
-        }}
-        inputProps={{ sx: { cursor: 'pointer' } }}
-      />
+      {!rateLimitExceeded ? (
+        <OutlinedInput
+          type="button"
+          className="updateButton"
+          value="Fetch New Activities!"
+          onClick={updateEntries}
+          // @ts-ignore
+          sx={{
+            ...muiUpdateButtonSx(theme),
+            ...mobileStyleUpdateButton,
+          }}
+          inputProps={{ sx: { cursor: 'pointer' } }}
+        />
+      ) : null}
     </Box>
   ) : (
     <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>

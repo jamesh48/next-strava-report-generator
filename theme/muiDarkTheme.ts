@@ -1,4 +1,5 @@
-import { createTheme, ThemeOptions } from '@mui/material';
+import { ThemeOptions } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 import componentOverrides from './muiOverrides';
 
 const darkTheme: ThemeOptions = {

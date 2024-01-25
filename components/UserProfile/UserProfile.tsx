@@ -9,7 +9,7 @@ import SwimmingTotals from './SwimmingTotals';
 import { authorizeApp, useCSX } from '@lib';
 import { useGetUserProfileQuery } from '@redux/slices';
 
-const hasStatus = (error: any): error is { status: number } => {
+export const hasStatus = (error: any): error is { status: number } => {
   return typeof error?.status === 'number';
 };
 
