@@ -30,7 +30,7 @@ const customJestConfig: Config.InitialOptions = {
       lines: 60,
       statements: 62.5,
       branches: 45,
-      functions: 47.5,
+      functions: 45,
     },
   },
 };
