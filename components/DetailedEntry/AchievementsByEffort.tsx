@@ -155,10 +155,10 @@ const AchievementsByEffort = (props: AchievementsProps) => {
       >
         <AchievementHeader
           achievementHeaderTitle={currentAchievements[0]?.name || ''}
-          position={position}
-          handleSetPosition={handleSetPosition}
           currentSegmentDataLength={currentAchievements.length}
           toggleable={props.toggleable}
+          position={position}
+          handleSetPosition={handleSetPosition}
         />
         <Box
           id="outer-slider"

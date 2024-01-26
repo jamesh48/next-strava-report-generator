@@ -29,6 +29,7 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
       <style jsx global>{`
         html {
           height: 100vh;
+          width: 100vw;
           background-color: ${theme.palette.baseBackground.main};
         }
       `}</style>

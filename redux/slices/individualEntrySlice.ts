@@ -117,7 +117,7 @@ export const individualEntrySlice = createApi({
 
 export const {
   useLazyGetIndividualEntryQuery,
-  useLazyGetKudoersQuery,
+  useGetKudoersQuery,
   useUpdateShoeIndividualEntryMutation,
   useUpdateIndividualEntryMutation,
 } = individualEntrySlice;

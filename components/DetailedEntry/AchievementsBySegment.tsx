@@ -6,6 +6,7 @@ import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStr
 import AchievementList from './AchievementList';
 import { useCSX } from '@lib';
 import AchievementHeader from './AchievementHeader';
+import Swipeable from './Swipeable';
 
 interface AchievementsProps {
   bestSegments: SegmentEffort[];
@@ -15,7 +16,6 @@ interface AchievementsProps {
 
 const AchievementsBySegment = (props: AchievementsProps) => {
   const theme = useTheme();
-
   const [position, setPosition] = useState(0);
 
   const handleSetPosition = (p: number) => {
@@ -105,8 +105,8 @@ const AchievementsBySegment = (props: AchievementsProps) => {
           achievementHeaderTitle={currentSegmentName}
           handleSetPosition={handleSetPosition}
           position={position}
-          currentSegmentDataLength={currentSegment.data.length}
           toggleable={props.toggleable}
+          currentSegmentDataLength={currentSegment.data.length}
         />
         <Box
           id="outer-slider"
@@ -126,43 +126,46 @@ const AchievementsBySegment = (props: AchievementsProps) => {
               width: '100%',
             }}
           >
-            {currentSegment.data?.map((currentEffort, key) => {
-              return (
-                <Box
-                  sx={{ height: '100%', paddingY: '.5rem', minWidth: '100%' }}
-                  key={key}
-                >
+            <Swipeable>
+              {currentSegment.data?.map((currentEffort, key) => {
+                return (
                   <Box
-                    sx={{
-                      height: '30rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      position: 'absolute',
-                      ...mobileWreathWidth,
-                    }}
+                    sx={{ height: '100%', paddingY: '.5rem', minWidth: '100%' }}
+                    key={key}
                   >
-                    <Wreath />
+                    <Box
+                      sx={{
+                        height: '30rem',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        position: 'absolute',
+                        ...mobileWreathWidth,
+                      }}
+                    >
+                      <Wreath />
+                    </Box>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        height: '100%',
+                        ...mobileColumns,
+                      }}
+                    >
+                      <AchievementList {...currentEffort} />
+
+                      {currentEffort?.achievements.length ? (
+                        <ActivityStreamMap
+                          startIndex={currentEffort.start_index}
+                          endIndex={currentEffort.end_index}
+                          activityId={props.activityId}
+                        />
+                      ) : null}
+                    </Box>
                   </Box>
-                  <Box
-                    sx={{
-                      width: '100%',
-                      display: 'flex',
-                      height: '100%',
-                      ...mobileColumns,
-                    }}
-                  >
-                    <AchievementList {...currentEffort} />
-                    {currentEffort?.achievements.length ? (
-                      <ActivityStreamMap
-                        startIndex={currentEffort.start_index}
-                        endIndex={currentEffort.end_index}
-                        activityId={props.activityId}
-                      />
-                    ) : null}
-                  </Box>
-                </Box>
-              );
-            })}
+                );
+              })}
+            </Swipeable>
           </Box>
         </Box>
       </Box>

@@ -16,7 +16,7 @@ import {
   getAchievementEffortView,
   getCurrentActivity,
   useGetUserProfileQuery,
-  useLazyGetKudoersQuery,
+  useGetKudoersQuery,
   useUpdateShoeIndividualEntryMutation,
 } from '@redux/slices';
 import { useCSX } from '@lib';
@@ -24,6 +24,7 @@ import ActivityMap from './ActivityMap/ActivityMap';
 import AchievementsByEffort from '@components/DetailedEntry/AchievementsByEffort';
 import AchievementsBySegment from '@components/DetailedEntry/AchievementsBySegment';
 import { useSelector } from '@redux/reduxHooks';
+import PlusOneBox from './PlusOneBox';
 
 export interface DetailedEntryProps {
   editingDescription: boolean;
@@ -38,23 +39,16 @@ export interface DetailedEntryProps {
 const DetailedEntry = (props: DetailedEntryProps) => {
   const theme = useTheme();
   const currentActivity = useSelector(getCurrentActivity);
+  const { data: kudoersResults } = useGetKudoersQuery(currentActivity.id);
+
   const [editingShoes, setEditingShoes] = useState(false);
   const [updateShoeIndividualEntryMutation] =
     useUpdateShoeIndividualEntryMutation();
 
   const { data: userProfile } = useGetUserProfileQuery(null);
   const achievementEffortView = useSelector(getAchievementEffortView);
-  const [getKudoers, kudoersResults] = useLazyGetKudoersQuery();
+
   const [currentStat, setCurrentStat] = useState<null | string>(null);
-  const [currentKudoers, setCurrentKudoers] = useState<
-    { firstname: string; lastname: string }[]
-  >([]);
-  const [currentComments, setCurrentComments] = useState<
-    {
-      text: string;
-      athlete: { firstname: string; lastname: string };
-    }[]
-  >([]);
 
   const descriptionRef = useRef<HTMLInputElement>(null);
   const gearRef = useRef<HTMLSelectElement>(null);
@@ -72,15 +66,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     }
   }, [editingShoes]);
 
-  useEffect(() => {
-    if (kudoersResults && kudoersResults.data) {
-      setCurrentKudoers(kudoersResults.data.kudos);
-      setCurrentComments(kudoersResults.data.comments);
-    }
-  }, [kudoersResults]);
-
   const handleKudosClick = () => {
-    getKudoers(currentActivity.id);
     setCurrentStat((prevStat) => {
       if (prevStat === 'kudosComments') {
         return null;
@@ -314,20 +300,32 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 flexDirection: 'column',
               }}
             >
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography
                   variant="h6"
                   id="kudosCount"
                   className="kudos"
                   color={theme.palette.common.white}
                 >
-                  Kudos-
+                  Kudos:
                 </Typography>
                 <Typography variant="h6" color={theme.palette.common.white}>
-                  {currentActivity.kudos_count}
+                  {kudoersResults?.kudos.length !== undefined
+                    ? kudoersResults.kudos.length
+                    : currentActivity.kudos_count}
                 </Typography>
+                <PlusOneBox
+                  incomingCount={kudoersResults?.kudos.length}
+                  cachedCount={Number(currentActivity.kudos_count)}
+                />
               </Box>
-              <Box sx={{ display: 'flex' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  // makes the rising slightly higher
+                  alignItems: 'flex-start',
+                }}
+              >
                 <Typography
                   variant="h6"
                   id="commentCount"
@@ -337,8 +335,15 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   Comments-
                 </Typography>
                 <Typography variant="h6" color={theme.palette.common.white}>
-                  {currentActivity.comment_count}
+                  {kudoersResults?.comments.length !== undefined
+                    ? kudoersResults.comments.length
+                    : currentActivity.comment_count}
                 </Typography>
+
+                <PlusOneBox
+                  incomingCount={kudoersResults?.comments.length}
+                  cachedCount={Number(currentActivity.comment_count)}
+                />
               </Box>
             </Box>
           </Box>
@@ -526,7 +531,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             ...mobileColumns,
           }}
         >
-          {currentKudoers.length ? (
+          {kudoersResults?.kudos.length ? (
             <Box
               sx={{
                 display: 'flex',
@@ -541,7 +546,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 Kudoers
               </Typography>
               <Box>
-                {currentKudoers.map((x, index) => (
+                {kudoersResults?.kudos.map((x, index) => (
                   <Typography key={index}>
                     {x.firstname} {x.lastname}
                   </Typography>
@@ -549,13 +554,13 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               </Box>
             </Box>
           ) : null}
-          {currentComments.length ? (
+          {kudoersResults?.comments.length ? (
             <Box sx={{ marginLeft: '1rem' }}>
               <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
                 Comments
               </Typography>
               <Box>
-                {currentComments.map((x, index) => (
+                {kudoersResults.comments.map((x, index) => (
                   <Box key={index} sx={{ display: 'flex' }}>
                     <Typography>
                       {x.athlete.firstname} {x.athlete.lastname}:

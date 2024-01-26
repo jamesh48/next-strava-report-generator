@@ -74,7 +74,14 @@ export default function App() {
   };
 
   return (
-    <Box id="mainContainer">
+    <Box
+      id="mainContainer"
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Box
         id="upperSection"
         sx={{

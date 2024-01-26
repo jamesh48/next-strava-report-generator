@@ -79,7 +79,6 @@ const UserSettings = (props: UserSettingsProps) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          width: '25rem',
           top: '10rem',
 
           bgcolor: theme.palette.mainBackground.main,
@@ -131,7 +130,7 @@ const UserSettings = (props: UserSettingsProps) => {
             }}
           >
             <Typography
-              sx={{ cursor: 'default', flex: 1 }}
+              sx={{ cursor: 'default', flex: 1, mr: '1rem' }}
               color={theme.palette.strava.main}
             >
               Default Sport
@@ -164,7 +163,7 @@ const UserSettings = (props: UserSettingsProps) => {
           >
             <Typography
               color={theme.palette.strava.main}
-              sx={{ cursor: 'default', flex: 1 }}
+              sx={{ cursor: 'default', flex: 1, mr: '1rem' }}
             >
               Default Sort
             </Typography>
@@ -204,7 +203,7 @@ const UserSettings = (props: UserSettingsProps) => {
           >
             <Typography
               color={theme.palette.strava.main}
-              sx={{ cursor: 'default', flex: 1 }}
+              sx={{ cursor: 'default', flex: 1, mr: '1rem' }}
             >
               Default Date
             </Typography>
