@@ -1,26 +1,8 @@
 import { BestEffort } from '@components/StravaEntries/EntryTypes';
-import { useCSX } from '@lib';
+import { formatElapsedTime, useCSX } from '@lib';
 import { Box, Typography, useTheme } from '@mui/material';
 import { useSelector } from '@redux/reduxHooks';
 import { getAchievementEffortView } from '@redux/slices';
-
-const formatTime = (elapsedTime: number) => {
-  const hours = Math.floor(elapsedTime / 3600);
-  const minutes = Math.floor((elapsedTime % 3600) / 60);
-  const seconds = elapsedTime % 60;
-
-  let formattedTime = '';
-
-  if (hours > 0) {
-    formattedTime += `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${
-      seconds < 10 ? '0' : ''
-    }${seconds}`;
-  } else {
-    formattedTime += `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  }
-
-  return formattedTime;
-};
 
 const AchievementList = (
   props: Omit<BestEffort, 'start_index' | 'end_index'>
@@ -73,10 +55,10 @@ const AchievementList = (
         {abbreviation} Best {descriptor}!
       </Typography>
       <Typography variant="h5">
-        Elapsed Time: {formatTime(props.elapsed_time)}
+        Elapsed Time: {formatElapsedTime(props.elapsed_time)}
       </Typography>
       <Typography variant="h5">
-        Moving Time: {formatTime(props.moving_time)}
+        Moving Time: {formatElapsedTime(props.moving_time)}
       </Typography>
       <Typography>
         {formattedStartTime}-{formattedEndTime}

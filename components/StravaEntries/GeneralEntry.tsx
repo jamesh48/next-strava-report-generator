@@ -265,15 +265,15 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           />
         )}
 
-        <EntryDescriptor
+        {/* <EntryDescriptor
           title="Time Elapsed- "
           value={handleTime(props.entry.elapsed_time)}
-        />
+        /> */}
 
-        <EntryDescriptor
+        {/* <EntryDescriptor
           title="Moving Time- "
           value={handleTime(props.entry.moving_time)}
-        />
+        /> */}
 
         {/* For Debugging  */}
         {/* <p className="entry-descriptor">id = {entry.activityId}</p> */}

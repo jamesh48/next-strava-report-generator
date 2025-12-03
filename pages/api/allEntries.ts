@@ -6,20 +6,26 @@ const handler = nextConnect();
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const srg_athlete_id = req.cookies.athleteId;
+    const { limit, activityType, lastKey } = req.query;
+
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
       method: 'GET',
       params: {
         srg_athlete_id,
+        activity_type: activityType,
+        limit: limit ? parseInt(limit as string, 10) : 50,
+        lastKey: lastKey ? lastKey : undefined,
       },
     });
 
-    return res.send(
-      data.sort(
+    return res.send({
+      ...data,
+      items: data.items.sort(
         (a: any, b: any) =>
           b.distance / b.moving_time - a.distance / a.moving_time
-      )
-    );
+      ),
+    });
   } catch (err) {
     res.send([]);
   }

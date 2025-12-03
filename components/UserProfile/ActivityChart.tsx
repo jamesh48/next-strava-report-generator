@@ -23,6 +23,7 @@ ChartJS.register(
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { useState } from 'react';
 import { Button, Box, useTheme } from '@mui/material';
+import { Sport } from '@components/StravaEntries/EntryTypes';
 
 interface CalendarDates {
   jan: { count: number; distance: number };
@@ -40,7 +41,7 @@ interface CalendarDates {
 }
 
 export interface ActivityChartProps {
-  activityType: 'Run' | 'Swim' | 'Ride' | 'Walk';
+  activityType: Sport;
 }
 
 const ActivityChart = (props: ActivityChartProps) => {
@@ -78,10 +79,10 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
   };
 
-  const { data: allEntries } = useGetAllEntriesQuery(null);
+  const { data: allEntries } = useGetAllEntriesQuery({ limit: 50 });
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const activities = allEntries?.filter(
+  const activities = allEntries?.items.filter(
     (entry) => entry.type === props.activityType
   );
   const thisYearsActivities =

@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "fsh-components": {
+      "signature": "1ae26937b8266cff4a06e05490c57f73",
+      "file": true
+    }
+  }
+}

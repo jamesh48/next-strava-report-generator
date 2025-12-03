@@ -4,7 +4,6 @@ import EntryUl from './EntryUl';
 import PageNoUl from '@components/PaginationContainer/PageNoUl';
 import { CachedEntry, Entry, Format, Sport } from './EntryTypes.js';
 import {
-  useGetAllEntriesQuery,
   useLazyGetIndividualEntryQuery,
   getSortCondition,
   getDateCondition,
@@ -39,7 +38,6 @@ const Report = (props: ReportProps) => {
   const [entriesPerPage] = useState(7);
   // Entries
   const [invalidEntry, setInvalidEntry] = useState(false);
-  let { data: totalEntries } = useGetAllEntriesQuery(null);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -53,71 +51,71 @@ const Report = (props: ReportProps) => {
     }
   }, [props.distance]);
 
-  totalEntries = totalEntries
-    ?.filter((entry: Entry) => Number(props.distance) <= Number(entry.distance))
-    .filter((remainingEntry: Entry) => props.sport === remainingEntry.type)
-    .filter(
-      (remainingEntry: Entry) =>
-        remainingEntry.name.indexOf(props.titleQuery) > -1
-    )
-    .filter((remainingEntry: Entry) => {
-      if (fromDateQuery === '' && toDateQuery === '') {
-        return remainingEntry;
-      }
+  // totalEntries = totalEntries
+  //   ?.filter((entry: Entry) => Number(props.distance) <= Number(entry.distance))
+  //   .filter((remainingEntry: Entry) => props.sport === remainingEntry.type)
+  //   .filter(
+  //     (remainingEntry: Entry) =>
+  //       remainingEntry.name.indexOf(props.titleQuery) > -1
+  //   )
+  //   .filter((remainingEntry: Entry) => {
+  //     if (fromDateQuery === '' && toDateQuery === '') {
+  //       return remainingEntry;
+  //     }
 
-      const candidateDate = new Date(remainingEntry.start_date.slice(0, 10));
-      // If Only From Date is specified
-      if (toDateQuery === '') {
-        const filterFrom = new Date(fromDateQuery);
-        return filterFrom <= candidateDate;
-      }
+  //     const candidateDate = new Date(remainingEntry.start_date.slice(0, 10));
+  //     // If Only From Date is specified
+  //     if (toDateQuery === '') {
+  //       const filterFrom = new Date(fromDateQuery);
+  //       return filterFrom <= candidateDate;
+  //     }
 
-      // If Only 'to Date' is specified
-      if (fromDateQuery === '') {
-        const filterTo = new Date(toDateQuery);
-        return filterTo >= candidateDate;
-      }
+  //     // If Only 'to Date' is specified
+  //     if (fromDateQuery === '') {
+  //       const filterTo = new Date(toDateQuery);
+  //       return filterTo >= candidateDate;
+  //     }
 
-      // If both From and To Dates are specified
-      const filterFrom = new Date(fromDateQuery);
-      const filterTo = new Date(toDateQuery);
-      return filterFrom <= candidateDate && filterTo >= candidateDate;
-    })
-    .slice()
-    .sort(
-      sortCondition === 'speedDesc'
-        ? (a, b) => b.distance / b.moving_time - a.distance / a.moving_time
-        : sortCondition === 'startDate'
-        ? (a, b) => {
-            return Number(b.start_date) - Number(a.start_date);
-          }
-        : sortCondition === 'timeElapsedDesc'
-        ? (a, b) => {
-            return b.elapsed_time - a.elapsed_time;
-          }
-        : sortCondition === 'timeElapsedAsc'
-        ? (a, b) => a.elapsed_time - b.elapsed_time
-        : sortCondition === 'movingTimeDesc'
-        ? (a, b) => b.moving_time - a.moving_time
-        : sortCondition === 'movingTimeAsc'
-        ? (a, b) => a.moving_time - b.moving_time
-        : sortCondition === 'dateDesc'
-        ? (a, b) => (new Date(b.start_date) > new Date(a.start_date) && 1) || -1
-        : sortCondition === 'dateAsc'
-        ? (a, b) => (new Date(a.start_date) > new Date(b.start_date) && 1) || -1
-        : undefined
-    )
-    .filter((entry) => {
-      if (achievementsOnly) {
-        return entry.achievement_count > 0;
-      }
-      return entry;
-    });
+  //     // If both From and To Dates are specified
+  //     const filterFrom = new Date(fromDateQuery);
+  //     const filterTo = new Date(toDateQuery);
+  //     return filterFrom <= candidateDate && filterTo >= candidateDate;
+  //   })
+  //   .slice()
+  //   .sort(
+  //     sortCondition === 'speedDesc'
+  //       ? (a, b) => b.distance / b.moving_time - a.distance / a.moving_time
+  //       : sortCondition === 'startDate'
+  //       ? (a, b) => {
+  //           return Number(b.start_date) - Number(a.start_date);
+  //         }
+  //       : sortCondition === 'timeElapsedDesc'
+  //       ? (a, b) => {
+  //           return b.elapsed_time - a.elapsed_time;
+  //         }
+  //       : sortCondition === 'timeElapsedAsc'
+  //       ? (a, b) => a.elapsed_time - b.elapsed_time
+  //       : sortCondition === 'movingTimeDesc'
+  //       ? (a, b) => b.moving_time - a.moving_time
+  //       : sortCondition === 'movingTimeAsc'
+  //       ? (a, b) => a.moving_time - b.moving_time
+  //       : sortCondition === 'dateDesc'
+  //       ? (a, b) => (new Date(b.start_date) > new Date(a.start_date) && 1) || -1
+  //       : sortCondition === 'dateAsc'
+  //       ? (a, b) => (new Date(a.start_date) > new Date(b.start_date) && 1) || -1
+  //       : undefined
+  //   )
+  //   .filter((entry) => {
+  //     if (achievementsOnly) {
+  //       return entry.achievement_count > 0;
+  //     }
+  //     return entry;
+  //   });
 
-  const handlePaginationClick: ((event: SelectChangeEvent<string>) => void) &
-    React.MouseEventHandler<HTMLLIElement> = (event) => {
-    setCurrentPage(Number((event.target as HTMLSelectElement).value));
-  };
+  // const handlePaginationClick: ((event: SelectChangeEvent<string>) => void) &
+  //   React.MouseEventHandler<HTMLLIElement> = (event) => {
+  //   setCurrentPage(Number((event.target as HTMLSelectElement).value));
+  // };
 
   const handleCloseCurrentActivity = () => {
     dispatch(setCurrentActivity({}));
@@ -168,7 +166,7 @@ const Report = (props: ReportProps) => {
 
   return (
     <Box id="report" sx={{ width: '95%' }}>
-      {isMobile ? (
+      {/* {isMobile ? (
         <PageNoUl
           {...props}
           entriesPerPage={entriesPerPage}
@@ -176,17 +174,16 @@ const Report = (props: ReportProps) => {
           handleClick={handlePaginationClick}
           currentPage={currentPage}
         />
-      ) : null}
+      ) : null} */}
       <EntryUl
         {...props}
         invalidEntry={invalidEntry}
         currentPage={currentPage}
-        entries={totalEntries!}
         entriesPerPage={entriesPerPage}
         showIndividualEntry={showIndividualEntry}
         handleCloseCurrentActivity={handleCloseCurrentActivity}
       />
-      {!isMobile ? (
+      {/* {!isMobile ? (
         <PageNoUl
           {...props}
           entriesPerPage={entriesPerPage}
@@ -194,7 +191,7 @@ const Report = (props: ReportProps) => {
           handleClick={handlePaginationClick}
           currentPage={currentPage}
         />
-      ) : null}
+      ) : null} */}
     </Box>
   );
 };

@@ -25,7 +25,8 @@ export interface RadiosProps {
 
 const Radios = (props: RadiosProps) => {
   const theme = useTheme();
-  const { isSuccess } = useGetAllEntriesQuery(null);
+  // const { isSuccess } = useGetAllEntriesQuery(null);
+  const isSuccess = true;
   const initArr = [
     {
       title: 'Choose Sport',
