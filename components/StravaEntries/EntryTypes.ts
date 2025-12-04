@@ -13,7 +13,7 @@ export type Format =
   | 'mph'
   | undefined;
 
-export type Entry = {
+export type APIEntry = {
   activityId: number;
   name: string;
   start_date: string;
@@ -30,6 +30,12 @@ export type Entry = {
   achievement_count: number;
   // Cached Detailed Entry
   individualActivityCached?: true;
+};
+
+export type UIEntry = Omit<APIEntry, 'distance' | 'elapsed_time'> & {
+  average_pace: string;
+  distance: string;
+  elapsed_time: string
 };
 
 export type CachedEntry = {

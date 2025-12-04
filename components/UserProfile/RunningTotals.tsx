@@ -48,7 +48,7 @@ const RunningTotals = (props: RunningTotalsProps) => {
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Number of Runs: {props.profile.ytd_run_totals.count}
+        Number of Runs: {props.profile.ytd_run_totals.count.toLocaleString()}
       </Typography>
       <Typography
         variant="h6"
@@ -56,7 +56,8 @@ const RunningTotals = (props: RunningTotalsProps) => {
         color={theme.palette.strava.main}
         sx={{ cursor: 'default', marginY: 1 }}
       >
-        Total Distance: {props.profile.ytd_run_totals.distance} Meters
+        Total Distance: {props.profile.ytd_run_totals.distance.toLocaleString()}{' '}
+        Meters
       </Typography>
       <Typography
         variant="h6"

@@ -5,7 +5,7 @@ import { NextApiRequest, GetServerSidePropsContext, PreviewData } from 'next';
 import { IncomingMessage } from 'http';
 import axios from 'axios';
 import StravaEntry from '@components/StravaEntries/StravaEntry';
-import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
+import { CurrentActivity, UIEntry } from '@components/StravaEntries/EntryTypes';
 import Head from 'next/head';
 
 type SRGReq = IncomingMessage & {
@@ -56,7 +56,7 @@ export const getServerSideProps: SRGSharedEventProps = async ({ query }) => {
   };
 };
 
-const SharedEntry = (props: { fetchedActivity: Entry & CurrentActivity }) => {
+const SharedEntry = (props: { fetchedActivity: UIEntry & CurrentActivity }) => {
   const theme = useTheme();
 
   return (

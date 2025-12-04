@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import GeneralEntry from './GeneralEntry';
 import DetailedEntry from './DetailedEntry';
-import { CachedEntry, Entry, Format, Sport } from './EntryTypes';
+import { CachedEntry, Format, Sport, UIEntry } from './EntryTypes';
 import {
   getCurrentActivity,
   useUpdateIndividualEntryMutation,
@@ -13,7 +13,7 @@ import { useSelector } from '@redux/reduxHooks';
 export interface StravaEntryProps {
   showIndividualEntry: CustomMouseEventHandler;
   sport: Sport;
-  entry: Entry;
+  entry: UIEntry;
   format: Format;
   no: number | undefined;
   handleCloseCurrentActivity: () => void;
@@ -67,7 +67,7 @@ const StravaEntry = (props: StravaEntryProps) => {
         setEditingHeadline(true);
       } else {
         if (props.entry.individualActivityCached) {
-          const cachedEntry = props.entry as Entry & CachedEntry;
+          const cachedEntry = props.entry as UIEntry & CachedEntry;
           props.showIndividualEntry(e, cachedEntry);
         } else {
           props.showIndividualEntry(e);

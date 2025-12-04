@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, SelectChangeEvent } from '@mui/material';
+import { Box } from '@mui/material';
 import EntryUl from './EntryUl';
-import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import { CachedEntry, Entry, Format, Sport } from './EntryTypes.js';
+// import PageNoUl from '@components/PaginationContainer/PageNoUl';
+import { CachedEntry, Format, Sport, UIEntry } from './EntryTypes.js';
 import {
   useLazyGetIndividualEntryQuery,
   getSortCondition,
@@ -22,12 +22,12 @@ export interface ReportProps {
 
 export type CustomMouseEventHandler = (
   event: React.MouseEvent<HTMLAnchorElement>,
-  cachedEntry?: Entry & CachedEntry
+  cachedEntry?: UIEntry & CachedEntry
 ) => void;
 
 const Report = (props: ReportProps) => {
   const dispatch = useDispatch();
-  const isMobile = useMobileBrowserCheck();
+  const _isMobile = useMobileBrowserCheck();
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery();
   const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
@@ -129,7 +129,7 @@ const Report = (props: ReportProps) => {
 
   const showIndividualEntry: CustomMouseEventHandler = async (
     event,
-    cachedEntry?: Entry & CachedEntry
+    cachedEntry?: UIEntry & CachedEntry
   ) => {
     event.preventDefault();
     if (cachedEntry) {

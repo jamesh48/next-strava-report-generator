@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { IconButton, List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
-import { Entry, Format, Sport } from './EntryTypes.js';
+import { Format, Sport, UIEntry } from './EntryTypes.js';
 import { useGetAllEntriesQuery } from '@redux/slices';
 import { formatTime, useCSX } from '@lib';
 import { Button, Table, useCursorPagination } from 'fsh-components';
@@ -23,7 +23,7 @@ interface EntryUIProps {
 }
 
 const EntryUI = (props: EntryUIProps) => {
-  const [currEntry, setCurrEntry] = useState<undefined | Entry>();
+  const [currEntry, setCurrEntry] = useState<undefined | UIEntry>();
   const theme = useTheme();
 
   const {
@@ -40,6 +40,7 @@ const EntryUI = (props: EntryUIProps) => {
       limit: 50,
       lastKey: getCurrentToken(),
       activityType: props.sport,
+      format: props.format,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -76,7 +77,7 @@ const EntryUI = (props: EntryUIProps) => {
 
   const openActivityDetail = Boolean(currEntry);
 
-  const handleOpenActivityDetail = (entry: Entry) => {
+  const handleOpenActivityDetail = (entry: UIEntry) => {
     setCurrEntry(entry);
   };
 
@@ -87,7 +88,7 @@ const EntryUI = (props: EntryUIProps) => {
   const mobileStyles = useCSX({}, { marginBottom: '15%', marginTop: '2.5%' });
 
   const tableColumns = useMemo(() => {
-    const columnHelper = createColumnHelper<Entry>();
+    const columnHelper = createColumnHelper<UIEntry>();
 
     return [
       columnHelper.accessor('name', {
@@ -107,6 +108,10 @@ const EntryUI = (props: EntryUIProps) => {
       }),
       columnHelper.accessor('elapsed_time', {
         header: 'Time Elapsed',
+      }),
+      columnHelper.accessor('average_pace', { header: 'Average Pace' }),
+      columnHelper.accessor('max_speed', {
+        header: 'Max Speed',
       }),
       columnHelper.display({
         header: 'Detail',
@@ -165,6 +170,19 @@ const EntryUI = (props: EntryUIProps) => {
         hasMore={hasMore}
         canGoBack={canGoBack}
         onNextPage={handleNextPage}
+        sx={{
+          header: {
+            backgroundColor: theme.palette.primary.light,
+          },
+          row: {
+            '&:nth-of-type(odd)': {
+              backgroundColor: theme.palette.grey[400],
+            },
+            '&:hover': {
+              backgroundColor: theme.palette.mainBackground.main,
+            },
+          },
+        }}
         onPreviousPage={handlePreviousPage}
       />
       {(entries?.count === 0 && entries?.items.length) ||

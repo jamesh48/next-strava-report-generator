@@ -50,7 +50,7 @@ const SwimmingTotals = ({
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Number of Swims: {ytd_swim_totals.count}
+        Number of Swims: {ytd_swim_totals.count.toLocaleString()}
       </Typography>
       <Typography
         variant="h6"
@@ -58,7 +58,7 @@ const SwimmingTotals = ({
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Total Distance: {ytd_swim_totals.distance} Meters
+        Total Distance: {ytd_swim_totals.distance.toLocaleString()} Meters
       </Typography>
       <Typography
         variant="h6"

@@ -16,8 +16,7 @@ const NestedEntryDescriptor = (props: NestedEntryDescriptorProps) => {
       <Typography sx={{ display: 'inline' }}>{props.title} </Typography>
       <Typography className="speed" sx={{ display: 'inline' }}>
         {props.value}
-      </Typography>{' '}
-      <Typography sx={{ display: 'inline' }}>{props.extra}</Typography>
+      </Typography>
     </Box>
   );
 };
