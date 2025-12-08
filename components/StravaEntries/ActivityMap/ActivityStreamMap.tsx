@@ -96,7 +96,7 @@ const ActivityStreamMap = (props: ActivityMapProps) => {
   }, [activityStream, props.startIndex, props.endIndex]);
 
   const mobileStyles = useCSX(
-    { width: '50%', height: '30rem' },
+    { width: '50%', maxHeight: '40rem' },
     { width: '100%', height: '60%' }
   );
   return (

@@ -25,7 +25,7 @@ export const individualEntrySlice = createApi({
           athlete: Athlete;
         }[];
       },
-      number
+      number | undefined
     >({
       query: (entryid) => ({ url: '/kudoers', params: { entryid } }),
     }),
@@ -83,14 +83,14 @@ export const individualEntrySlice = createApi({
       onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
         dispatch(
           entriesApi.util.updateQueryData('getAllEntries', null, (draft) => {
-            const draftIndex = draft.findIndex((existingActivity) => {
+            const draftIndex = draft.items.findIndex((existingActivity) => {
               return (
                 String(existingActivity.activityId) ===
                 String(payload.activityId)
               );
             });
 
-            draft[draftIndex].name = payload.name;
+            draft.items[draftIndex].name = payload.name;
           })
         );
 

@@ -46,22 +46,69 @@ const AchievementList = (
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-        color: theme.palette.common.white,
+        gap: '1rem',
+        padding: '2rem',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '.5rem',
         ...mobileMsgCentered,
       }}
     >
-      <Typography variant="h4">
+      <Typography
+        variant="h3"
+        sx={{
+          color: theme.palette.strava.main,
+          fontWeight: 700,
+          textAlign: 'center',
+        }}
+      >
         {props.pr_rank}
         {abbreviation} Best {descriptor}!
       </Typography>
-      <Typography variant="h5">
-        Elapsed Time: {formatElapsedTime(props.elapsed_time)}
-      </Typography>
-      <Typography variant="h5">
-        Moving Time: {formatElapsedTime(props.moving_time)}
-      </Typography>
-      <Typography>
-        {formattedStartTime}-{formattedEndTime}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          width: '100%',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0.75rem 1rem',
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            border: '1px solid #e0e0e0',
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 500, color: theme.palette.text.secondary }}>
+            Elapsed Time:
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+            {formatElapsedTime(props.elapsed_time)}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0.75rem 1rem',
+            backgroundColor: 'white',
+            borderRadius: '4px',
+            border: '1px solid #e0e0e0',
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 500, color: theme.palette.text.secondary }}>
+            Moving Time:
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+            {formatElapsedTime(props.moving_time)}
+          </Typography>
+        </Box>
+      </Box>
+      <Typography variant="body2" sx={{ color: theme.palette.text.secondary, marginTop: '0.5rem' }}>
+        {formattedStartTime} - {formattedEndTime}
       </Typography>
     </Box>
   ) : (
@@ -72,11 +119,14 @@ const AchievementList = (
         justifyContent: 'center',
         flexDirection: 'column',
         height: '100%',
-        color: theme.palette.strava.contrastText,
+        padding: '2rem',
+        backgroundColor: '#fafafa',
+        borderRadius: '8px',
+        border: '1px solid #e0e0e0',
         ...mobileMsgCentered,
       }}
     >
-      <Typography variant="h5" sx={{ opacity: 0.9 }}>
+      <Typography variant="h5" sx={{ color: theme.palette.text.secondary }}>
         Nothing to see here Champ!
       </Typography>
     </Box>

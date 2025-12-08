@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from 'react';
+import { useState } from 'react';
 import { SegmentEffort } from '@components/StravaEntries/EntryTypes';
 import { Wreath } from './Wreath';
 import { Box, Slider, useTheme } from '@mui/material';
@@ -9,8 +9,8 @@ import AchievementHeader from './AchievementHeader';
 import Swipeable from './Swipeable';
 
 interface AchievementsProps {
-  bestSegments: SegmentEffort[];
-  activityId: number;
+  bestSegments: SegmentEffort[] | undefined;
+  activityId: number | undefined;
   toggleable: boolean;
 }
 
@@ -22,7 +22,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
     setPosition(p);
   };
 
-  const reduced = props.bestSegments.reduce(
+  const reduced = props.bestSegments?.reduce(
     (total, item, index) => {
       if (!total[item.name]) {
         total[item.name] = {
@@ -59,25 +59,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
   );
   const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
 
-  const mobileLabelTransform = useCSX(
-    {
-      transform: 'rotate(45deg) translate(-15%, 25%)',
-      '&:nth-of-type(8)': {
-        transform: 'rotate(45deg) translate(-20%, -50%)',
-      },
-    },
-    {
-      transform: 'rotate(90deg) translate(0%, 54%)',
-      '&:nth-of-type(6)': {
-        transform: 'rotate(90deg) translate(0%, 120%)',
-      },
-      '&:nth-last-of-type(2)': {
-        transform: 'rotate(90deg) translate(0%, 150%)',
-      },
-    }
-  ) as CSSProperties;
-
-  const entries = Object.entries(reduced);
+  const entries = Object.entries(reduced || {});
   const [currentSegmentName, currentSegment] = entries.find(
     (segmentArr) => segmentArr[1].value === currentlySelectedEffort
   )!;
@@ -85,8 +67,8 @@ const AchievementsBySegment = (props: AchievementsProps) => {
   return (
     <Box
       sx={{
-        height: '40rem',
-        width: '97.5%',
+        height: '50rem',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -96,24 +78,28 @@ const AchievementsBySegment = (props: AchievementsProps) => {
       <Box
         sx={{
           flex: 1,
+          boxSizing: 'border-box',
           width: '100%',
           height: '100%',
           zIndex: 2,
         }}
       >
-        <AchievementHeader
-          achievementHeaderTitle={currentSegmentName}
-          handleSetPosition={handleSetPosition}
-          position={position}
-          toggleable={props.toggleable}
-          currentSegmentDataLength={currentSegment.data.length}
-        />
+        <Box sx={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
+          <AchievementHeader
+            achievementHeaderTitle={currentSegmentName}
+            handleSetPosition={handleSetPosition}
+            position={position}
+            toggleable={props.toggleable}
+            currentSegmentDataLength={currentSegment.data.length}
+          />
+        </Box>
         <Box
           id="outer-slider"
           sx={{
             overflow: 'hidden',
             position: 'relative',
             height: '80%',
+            boxSizing: 'border-box',
           }}
         >
           <Box
@@ -130,14 +116,21 @@ const AchievementsBySegment = (props: AchievementsProps) => {
               {currentSegment.data?.map((currentEffort, key) => {
                 return (
                   <Box
-                    sx={{ height: '100%', paddingY: '.5rem', minWidth: '100%' }}
                     key={key}
+                    sx={{
+                      display: 'flex',
+                      flex: 1,
+                      flexDirection: 'column',
+                      height: '100%',
+                      paddingY: '.5rem',
+                      minWidth: '100%',
+                      padding: '.5rem',
+                    }}
                   >
                     <Box
                       sx={{
                         height: '30rem',
-                        display: 'flex',
-                        justifyContent: 'center',
+                        left: '50px',
                         position: 'absolute',
                         ...mobileWreathWidth,
                       }}
@@ -146,21 +139,31 @@ const AchievementsBySegment = (props: AchievementsProps) => {
                     </Box>
                     <Box
                       sx={{
-                        width: '100%',
+                        height: '95%',
+                        paddingY: '.5rem',
                         display: 'flex',
-                        height: '100%',
-                        ...mobileColumns,
+                        justifyContent: 'center',
                       }}
                     >
-                      <AchievementList {...currentEffort} />
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          height: '100%',
+                          width: '95%',
+                          border: '2px solid ' + theme.palette.strava.main,
+                          ...mobileColumns,
+                        }}
+                      >
+                        <AchievementList {...currentEffort} />
 
-                      {currentEffort?.achievements.length ? (
-                        <ActivityStreamMap
-                          startIndex={currentEffort.start_index}
-                          endIndex={currentEffort.end_index}
-                          activityId={props.activityId}
-                        />
-                      ) : null}
+                        {currentEffort?.achievements.length ? (
+                          <ActivityStreamMap
+                            startIndex={currentEffort.start_index}
+                            endIndex={currentEffort.end_index}
+                            activityId={props.activityId}
+                          />
+                        ) : null}
+                      </Box>
                     </Box>
                   </Box>
                 );
@@ -175,6 +178,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
+          paddingTop: '3rem',
           paddingBottom: '1rem',
         }}
       >
@@ -217,9 +221,13 @@ const AchievementsBySegment = (props: AchievementsProps) => {
               }
               return {};
             })(),
-            marginY: '1rem',
             marginX: '2rem',
-            '& .MuiSlider-markLabel': { ...mobileLabelTransform },
+            '& .MuiSlider-markLabel': {
+              top: '-1.5rem',
+              color: theme.palette.text.primary,
+              fontWeight: 500,
+              transform: 'translateX(-0.5rem)',
+            },
           }}
         />
       </Box>

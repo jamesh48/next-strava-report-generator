@@ -8,12 +8,11 @@ import {
 const SwitchLink = () => {
   const dispatch = useDispatch();
   const achievementEffortView = useSelector(getAchievementEffortView);
-  const theme = useTheme();
+
   return (
     <Link
       sx={{
         flex: 1,
-        color: theme.palette.common.white,
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'flex-end',

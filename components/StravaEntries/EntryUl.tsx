@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState } from 'react';
-import { IconButton, List, ListItem, useTheme } from '@mui/material';
+import { Box, IconButton, List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { Format, Sport, UIEntry } from './EntryTypes.js';
@@ -131,8 +131,15 @@ const EntryUI = (props: EntryUIProps) => {
                 <StandardDialog
                   height="auto"
                   title={selectedEntry.name}
+                  maxWidth="lg"
                   actions={
-                    <Button onClick={handleCloseActivityDetail} label="Close" />
+                    <>
+                      <Box />
+                      <Button
+                        onClick={handleCloseActivityDetail}
+                        label="Close"
+                      />
+                    </>
                   }
                   open={
                     openActivityDetail &&
@@ -143,6 +150,7 @@ const EntryUI = (props: EntryUIProps) => {
                   <EntryDetail
                     activityId={currEntry?.activityId!}
                     sport={props.sport}
+                    format={props.format}
                   />
                 </StandardDialog>
               </When>

@@ -1,14 +1,13 @@
-import { CSSProperties, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import polyline from '@mapbox/polyline';
 import { Box } from '@mui/material';
 import MapManager from './MapManager';
 import { useSelector } from '@redux/reduxHooks';
 import { getClientSideToken } from '@redux/slices';
-import { useCSX } from '@lib';
 
 interface ActivityMapProps {
-  polyline: string;
+  polyline: string | undefined;
   activityId?: number;
 }
 
@@ -21,7 +20,7 @@ const ActivityMap = (props: ActivityMapProps) => {
   useEffect(() => {
     if (!mapboxgl.accessToken) return; // initialize map only if token exists
 
-    const latLong = polyline.decode(props.polyline);
+    const latLong = polyline.decode(props.polyline || '');
 
     const coordinates = latLong.map((point) => [point[1], point[0]]);
     // Calculate the southwest and northeast corners of the bounding box
@@ -72,22 +71,25 @@ const ActivityMap = (props: ActivityMapProps) => {
         },
       });
       setTimeout(() => {
-        map.current.resize();
+        if (map.current) {
+          map.current?.resize();
+        }
       }, 1000);
     });
 
     return () => map.current.remove();
   }, [props.polyline]);
 
-  const canvasContainerWidth = useCSX('25rem', '21rem', 'width');
-
   return (
     <Box
       ref={mapContainer}
       sx={{
         height: '25rem',
-        flex: 1,
-        '.mapboxgl-canvas-container': canvasContainerWidth as CSSProperties,
+        width: '100%',
+        '.mapboxgl-canvas-container': {
+          width: '100%',
+          height: '100%',
+        },
       }}
     />
   );

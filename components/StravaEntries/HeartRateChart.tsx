@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 interface HeartRateChartProps {
-  currentActivity: CurrentActivity;
+  currentActivity: CurrentActivity | undefined;
   format: Format;
   isSharedActivity?: true;
 }
@@ -64,7 +64,7 @@ const HeartRateChart = (props: HeartRateChartProps) => {
   })();
 
   useEffect(() => {
-    if (props.currentActivity.laps) {
+    if (props.currentActivity?.laps) {
       let cumulativeDistance = 0;
       const maxHeartRateDataSet = {
         label: 'Max Heart Rate',
@@ -108,7 +108,7 @@ const HeartRateChart = (props: HeartRateChartProps) => {
         })(),
       });
     }
-  }, [props.currentActivity.laps, hrData, props.format, currentMeasurement]);
+  }, [props.currentActivity?.laps, hrData, props.format, currentMeasurement]);
 
   return data ? (
     <Box

@@ -77,7 +77,7 @@ const ProgressBar = () => {
   const { isError, error } = useGetUserProfileQuery(null);
   const sortCondition = useSelector(getSortCondition);
   useEffect(() => {
-    const numberOfEntries = allEntries?.length;
+    const numberOfEntries = allEntries?.count;
     if (numberOfEntries) {
       const currentDeletionRate =
         (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100;
@@ -86,7 +86,7 @@ const ProgressBar = () => {
       setInsertionRate(currentInsertionRate);
       setDeletionRate(currentDeletionRate);
     }
-  }, [allEntries?.length]);
+  }, [allEntries?.count]);
 
   const progressBarProgress = useSelector(getProgressBarProgress);
   const [
