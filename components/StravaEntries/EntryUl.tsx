@@ -3,7 +3,7 @@ import { Box, IconButton, List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { Format, Sport, UIEntry } from './EntryTypes.js';
-import { useGetAllEntriesQuery } from '@redux/slices';
+import { getDateCondition, useGetAllEntriesQuery } from '@redux/slices';
 import { formatTime, useCSX } from '@lib';
 import { Button, Table, useCursorPagination } from 'fsh-components';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -11,6 +11,7 @@ import { Visibility } from '@mui/icons-material';
 import StandardDialog from '@components/StandardDialog';
 import EntryDetail from '@components/StravaEntries/EntryDetail';
 import { When } from 'react-if';
+import { useSelector } from '@redux/reduxHooks';
 
 interface EntryUIProps {
   entriesPerPage: number;
@@ -23,8 +24,10 @@ interface EntryUIProps {
 }
 
 const EntryUI = (props: EntryUIProps) => {
-  const [currEntry, setCurrEntry] = useState<undefined | UIEntry>();
   const theme = useTheme();
+  const [afterDate, beforeDate] = useSelector(getDateCondition);
+
+  const [currEntry, setCurrEntry] = useState<undefined | UIEntry>();
 
   const {
     hasMore,
@@ -41,6 +44,8 @@ const EntryUI = (props: EntryUIProps) => {
       lastKey: getCurrentToken(),
       activityType: props.sport,
       format: props.format,
+      afterDate,
+      beforeDate,
     },
     {
       refetchOnMountOrArgChange: true,

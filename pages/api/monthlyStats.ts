@@ -17,7 +17,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         activity_type: activityType,
       },
     });
-    console.info(monthlyStats)
+
     return res.send(monthlyStats.data);
   } catch (err) {
     const typedErr = err as {

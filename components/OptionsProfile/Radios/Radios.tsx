@@ -6,7 +6,6 @@ import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
 import { Box, useTheme } from '@mui/material';
 import { Format } from '@components/StravaEntries/EntryTypes';
 import { useCSX } from '@lib';
-import { useGetAllEntriesQuery } from '@redux/slices';
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLLabelElement> &

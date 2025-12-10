@@ -64,8 +64,6 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
   };
 
-  // const { data: allEntries } = useGetAllEntriesQuery({ limit: 50 });
-
   const { data: monthlyStats } = useGetMonthlyStatsQuery(
     {
       activityType: props.activityType,

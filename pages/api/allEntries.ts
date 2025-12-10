@@ -6,7 +6,7 @@ const handler = nextConnect();
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const srg_athlete_id = req.cookies.athleteId;
-    const { limit, activityType, lastKey } = req.query;
+    const { limit, activityType, lastKey, beforeDate, afterDate } = req.query;
 
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
@@ -16,6 +16,8 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         activity_type: activityType,
         limit: limit ? parseInt(limit as string, 10) : 50,
         lastKey: lastKey ? lastKey : undefined,
+        ...(beforeDate ? { before_date: beforeDate } : {}),
+        ...(afterDate ? { after_date: afterDate } : {}),
       },
     });
 

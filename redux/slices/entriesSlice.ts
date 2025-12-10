@@ -35,14 +35,24 @@ export const entriesApi = createApi({
         activityType: Sport;
         lastKey: string | null;
         format: Format;
+        beforeDate?: string;
+        afterDate?: string;
       }
     >({
-      query: ({ limit = 50, activityType, lastKey }) => ({
+      query: ({
+        limit = 50,
+        activityType,
+        afterDate,
+        beforeDate,
+        lastKey,
+      }) => ({
         url: '/allEntries',
         params: {
           limit,
           activityType,
           lastKey,
+          beforeDate,
+          afterDate,
         },
       }),
       transformResponse: (
