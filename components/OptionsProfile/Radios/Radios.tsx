@@ -79,11 +79,9 @@ const Radios = (props: RadiosProps) => {
           justifyContent: 'center',
           width: '95%',
           margin: '2.5% auto 0 auto',
-          border: '1px solid ' + theme.palette.strava.main,
-          borderTop: 'none',
-          borderLeft: 'none',
           backgroundColor: theme.palette.mainBackground.main,
-          boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
+          border: `1px solid ${theme.palette.strava.main}`,
+          boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         }}
       >
         {initArr.map((radioColumn, index) => {

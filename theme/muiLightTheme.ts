@@ -75,10 +75,11 @@ const lightTheme: ThemeOptions = {
     common: { black: 'black', white: ivory },
     // Turquoise, Dark Turquoise, Pale Turquoise
     mainBackground: {
-      main: '#52fff3',
-      dark: '#00ced1',
+      // White Smoke
+      main: '#F5F5F5',
+      dark: '#FFFFFF',
       light: '#AFEEEE',
-      accent: 'deepskyblue',
+      accent: '#FFFFFF',
       entry: 'coral',
     },
   },

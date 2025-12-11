@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SegmentEffort } from '@components/StravaEntries/EntryTypes';
 import { Wreath } from './Wreath';
-import { Box, Slider, useTheme } from '@mui/material';
+import { Box, Slider, Tooltip, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
 import { useCSX } from '@lib';
@@ -46,8 +46,13 @@ const AchievementsBySegment = (props: AchievementsProps) => {
 
   let marksForSlider = [];
   for (let key in reduced) {
+    const markLabel = reduced[key].name;
     marksForSlider.push({
-      label: reduced[key].name,
+      label: (
+        <Tooltip title={markLabel} arrow placement="top">
+          <span>{markLabel}</span>
+        </Tooltip>
+      ),
       value: reduced[key].value,
     });
   }
@@ -81,7 +86,6 @@ const AchievementsBySegment = (props: AchievementsProps) => {
           boxSizing: 'border-box',
           width: '100%',
           height: '100%',
-          zIndex: 2,
         }}
       >
         <Box sx={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
@@ -178,8 +182,8 @@ const AchievementsBySegment = (props: AchievementsProps) => {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          paddingTop: '3rem',
-          paddingBottom: '1rem',
+          paddingTop: '1rem',
+          paddingBottom: '8rem',
         }}
       >
         <Slider
@@ -200,6 +204,7 @@ const AchievementsBySegment = (props: AchievementsProps) => {
             '.MuiSlider-thumb': {
               border: `1px solid ${theme.palette.common.white}`,
             },
+            marginBottom: 0,
             ...(() => {
               if (entries.length === 1) {
                 return {
@@ -221,12 +226,27 @@ const AchievementsBySegment = (props: AchievementsProps) => {
               }
               return {};
             })(),
-            marginX: '2rem',
+            marginX: '6rem',
+            width: 'calc(100% - 8rem)',
             '& .MuiSlider-markLabel': {
-              top: '-1.5rem',
+              top: '3rem !important',
               color: theme.palette.text.primary,
               fontWeight: 500,
-              transform: 'translateX(-0.5rem)',
+              fontSize: '0.75rem',
+              transform: 'rotate(-35deg) translateX(-8rem) !important',
+              transformOrigin: 'top left !important',
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              textAlign: 'right',
+              '&:nth-of-type(even)': {
+                top: '2rem !important',
+              },
+              '& span': {
+                display: 'inline-block',
+                color: theme.palette.text.primary,
+              },
             },
           }}
         />

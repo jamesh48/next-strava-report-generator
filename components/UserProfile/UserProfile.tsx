@@ -29,10 +29,8 @@ const LoadingContainer = () => {
         margin: '2.5% 0',
         width: '95%',
         backgroundColor: theme.palette.mainBackground.main,
-        border: '1px solid ' + theme.palette.strava.main,
-        borderTop: 'none',
-        borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
+        border: `1px solid ${theme.palette.strava.main}`,
+        boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         ...userProfileCSX,
       }}
     >
@@ -65,11 +63,9 @@ const RateLimitContainer = () => {
         display: 'flex',
         margin: '2.5% 0',
         width: '95%',
-        borderTop: 'none',
-        borderLeft: 'none',
+        border: `1px solid ${theme.palette.strava.main}`,
+        boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         backgroundColor: theme.palette.mainBackground.main,
-        border: '1px solid ' + theme.palette.strava.main,
-        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
         ...userProfileCSX,
       }}
     >
@@ -153,10 +149,8 @@ const UserProfile = () => {
         margin: '2.5% 0',
         width: '95%',
         backgroundColor: theme.palette.mainBackground.main,
-        border: '1px solid ' + theme.palette.strava.main,
-        borderTop: 'none',
-        borderLeft: 'none',
-        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
+        border: `1px solid ${theme.palette.strava.main}`,
+        boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         ...userProfileCSX,
       }}
     >

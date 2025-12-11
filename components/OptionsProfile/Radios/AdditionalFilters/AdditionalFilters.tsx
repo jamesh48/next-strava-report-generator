@@ -24,6 +24,7 @@ const muiAdditionalFilterContainerSx: (
   display: 'flex',
   flex: 1,
   justifyContent: 'center',
+  padding: 1,
   '&:first-of-type': {
     borderRight: '1px solid ' + theme.palette.strava.main,
   },
@@ -35,13 +36,13 @@ const muiAdditionalFilterContainerSx: (
 
 const muiAdditionalFilterSx = (theme: Theme) => ({
   backgroundColor: theme.palette.mainBackground.accent,
-  color: theme.palette.strava.contrastText,
+  color: theme.palette.strava.main,
   border: '1px solid ' + theme.palette.strava.main,
   // height: 'auto',
   textAlign: 'center',
   height: '2rem',
   '&::placeholder': {
-    color: theme.palette.strava.contrastText,
+    color: theme.palette.strava.main,
   },
 });
 
@@ -103,10 +104,8 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
         width: '95%',
         margin: '2.5% auto 0 auto',
         padding: '.5% 0',
-        borderTop: 'none',
-        borderLeft: 'none',
-        border: '1px solid ' + theme.palette.strava.main,
-        boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
+        border: `1px solid ${theme.palette.strava.main}`,
+        boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         ...mobileStyleContainer,
       }}
     >
@@ -149,12 +148,13 @@ const AdditionalFilters = (props: AdditionalFilterProps) => {
           className="dateFilter"
           sx={muiDateFilterSx(mobileStyleInput, theme)}
         >
+          <label>Title Includes...</label>
           <OutlinedInput
             className="additionalFilter"
-            placeholder="Title Includes..."
             onChange={props.setTitleQuery}
             value={props.titleQuery}
             type="text"
+            label="Test"
             sx={muiAdditionalFilterSx(theme)}
           />
         </Box>

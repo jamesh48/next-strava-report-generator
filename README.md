@@ -18,7 +18,7 @@ The purpose of Strava Report Generator or SRG, is to fill a niche that the nativ
 - Provision the following environment variables in the root of this project, in a `.env.local` file:
 - CLIENT_ID=\<Strava Client ID\>
 - REDIRECT_URI_HOST=http://localhost:8000
-- DATA_BASE_URL=http://127.0.0.1:5000
+- DATA_BASE_URL=http://127.0.0.1:4000
   OR
 - DATA_BASE_URL=https://data.stravareportgenerator.com
 - MAPBOX_ACCESS_TOKEN=\<mapbox access token\>

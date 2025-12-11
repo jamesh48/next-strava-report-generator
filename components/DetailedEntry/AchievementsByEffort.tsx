@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from 'react';
 import { BestEffort } from '@components/StravaEntries/EntryTypes';
 import { Wreath } from './Wreath';
-import { Box, Slider, useTheme } from '@mui/material';
+import { Box, Slider, Tooltip, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
 import { useCSX } from '@lib';
@@ -87,7 +87,7 @@ const calculateSliderValues = (bestEfforts: BestEffort[]) => {
 const AchievementsByEffort = (props: AchievementsProps) => {
   const theme = useTheme();
 
-  const [closestEffortDistance, furthestEffortDistance, marksForSlider] =
+  const [closestEffortDistance, furthestEffortDistance, baseMarks] =
     calculateSliderValues(props.bestEfforts || []) as [
       number,
       number,
@@ -96,6 +96,15 @@ const AchievementsByEffort = (props: AchievementsProps) => {
         label: string;
       }[]
     ];
+
+  const marksForSlider = baseMarks.map((mark) => ({
+    value: mark.value,
+    label: (
+      <Tooltip title={mark.label} arrow placement="top">
+        <span>{mark.label}</span>
+      </Tooltip>
+    ),
+  }));
 
   const [currentSelectedDistance, setCurrentSelectedDistance] = useState(
     closestEffortDistance
@@ -112,7 +121,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
   );
   const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
 
-  const mobileLabelTransform = useCSX(
+  const _mobileLabelTransform = useCSX(
     {
       transform: 'rotate(45deg) translate(-15%, 25%)',
       '&:nth-of-type(8)': {
@@ -151,7 +160,6 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           boxSizing: 'border-box',
           width: '100%',
           height: '100%',
-          zIndex: 2,
         }}
       >
         <Box sx={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
@@ -248,8 +256,8 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          paddingTop: '3rem',
-          paddingBottom: '1rem',
+          paddingTop: '1rem',
+          paddingBottom: '8rem',
         }}
       >
         <Slider
@@ -289,12 +297,27 @@ const AchievementsByEffort = (props: AchievementsProps) => {
               }
               return {};
             })(),
-            marginX: '2rem',
+            marginX: '4rem',
+            width: 'calc(100% - 8rem)',
             '& .MuiSlider-markLabel': {
-              top: '-1.5rem',
+              top: '3rem !important',
               color: theme.palette.text.primary,
               fontWeight: 500,
-              transform: 'translateX(-0.5rem)',
+              fontSize: '0.75rem',
+              transform: 'rotate(-35deg) translateX(-4rem) !important',
+              transformOrigin: 'top left !important',
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              textAlign: 'right',
+              '&:nth-of-type(even)': {
+                top: '4rem !important',
+              },
+              '& span': {
+                display: 'inline-block',
+                color: theme.palette.text.primary,
+              },
             },
           }}
         />

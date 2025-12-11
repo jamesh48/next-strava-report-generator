@@ -172,7 +172,8 @@ const EntryUI = (props: EntryUIProps) => {
       disablePadding
       sx={{
         listStyleType: 'none',
-        boxShadow: '0 0 10px ' + theme.palette.strava.contrastColor,
+        border: `1px solid ${theme.palette.strava.main}`,
+        boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         ...mobileStyles,
       }}
     >
@@ -185,7 +186,7 @@ const EntryUI = (props: EntryUIProps) => {
         onNextPage={handleNextPage}
         sx={{
           header: {
-            backgroundColor: theme.palette.primary.light,
+            backgroundColor: theme.palette.mainBackground.main,
           },
           row: {
             '&:nth-of-type(odd)': {
