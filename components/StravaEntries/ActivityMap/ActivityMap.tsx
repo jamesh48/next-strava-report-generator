@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import polyline from '@mapbox/polyline';
-import { Box } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import MapManager from './MapManager';
 import { useSelector } from '@redux/reduxHooks';
 import { getClientSideToken } from '@redux/slices';
+import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 
 interface ActivityMapProps {
   polyline: string | undefined;
@@ -16,6 +17,7 @@ const ActivityMap = (props: ActivityMapProps) => {
   mapboxgl.accessToken = mapboxAccessToken;
   const mapContainer = useRef(null);
   const map: React.MutableRefObject<MapManager> = useRef({} as MapManager);
+  const originalBounds = useRef<[[number, number], [number, number]] | null>(null);
 
   useEffect(() => {
     if (!mapboxgl.accessToken) return; // initialize map only if token exists
@@ -32,6 +34,9 @@ const ActivityMap = (props: ActivityMapProps) => {
       Math.max(...coordinates.map((coord) => coord[0])) - 0.01,
       Math.max(...coordinates.map((coord) => coord[1])) + 0.01,
     ] as [number, number];
+
+    // Store the original bounds for reset functionality
+    originalBounds.current = [southwest, northeast];
 
     map.current = new MapManager({
       container: mapContainer.current || '',
@@ -80,18 +85,46 @@ const ActivityMap = (props: ActivityMapProps) => {
     return () => map.current.remove();
   }, [props.polyline]);
 
+  const handleResetView = () => {
+    if (map.current && originalBounds.current) {
+      map.current.fitBounds(originalBounds.current, {
+        padding: 20,
+        duration: 800,
+      });
+    }
+  };
+
   return (
-    <Box
-      ref={mapContainer}
-      sx={{
-        height: '25rem',
-        width: '100%',
-        '.mapboxgl-canvas-container': {
-          width: '100%',
+    <Box sx={{ position: 'relative', height: '25rem', width: '100%' }}>
+      <Box
+        ref={mapContainer}
+        sx={{
           height: '100%',
-        },
-      }}
-    />
+          width: '100%',
+          '.mapboxgl-canvas-container': {
+            width: '100%',
+            height: '100%',
+          },
+        }}
+      />
+      <Tooltip title="Reset map view" placement="left">
+        <IconButton
+          onClick={handleResetView}
+          sx={{
+            position: 'absolute',
+            bottom: 16,
+            right: 16,
+            backgroundColor: 'background.paper',
+            boxShadow: 2,
+            '&:hover': {
+              backgroundColor: 'action.hover',
+            },
+          }}
+        >
+          <CenterFocusStrongIcon />
+        </IconButton>
+      </Tooltip>
+    </Box>
   );
 };
 

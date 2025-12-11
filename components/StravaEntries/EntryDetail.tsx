@@ -52,7 +52,7 @@ const EntryDetail = ({
   const [editingDescription, setEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState('');
   const theme = useTheme();
-  const { data: entryDetail } = useGetIndividualEntryQuery({
+  const { data: entryDetail, isLoading: isLoadingEntry } = useGetIndividualEntryQuery({
     entryid: activityId,
   });
   const { data: kudoersResults } = useGetKudoersQuery(entryDetail?.id);
@@ -63,6 +63,7 @@ const EntryDetail = ({
   const [updateIndividualEntryMutation, { isLoading: isUpdatingEntry }] =
     useUpdateIndividualEntryMutation();
 
+  const isLoading = isLoadingEntry || isUpdatingEntry;
   const mobileColumns = useCSX('row', 'column', 'flexDirection');
 
   useEffect(() => {
@@ -148,10 +149,7 @@ const EntryDetail = ({
         }}
       >
         <Card sx={{ flex: 1, padding: '1rem' }}>
-          <Typography variant="h6" sx={{ textDecoration: 'underline', marginBottom: '0.5rem' }}>
-            Description:
-          </Typography>
-          <If condition={isUpdatingEntry}>
+          <If condition={isLoading}>
             <Then>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <Skeleton variant="text" width="100%" height={24} />
@@ -186,15 +184,19 @@ const EntryDetail = ({
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'center',
+                      alignItems: entryDetail?.description ? 'flex-start' : 'center',
+                      textAlign: entryDetail?.description ? 'left' : 'center',
                       whiteSpace: 'pre-line',
                       cursor: isSharedActivity ? 'default' : 'pointer',
                       '&:hover': isSharedActivity ? {} : {
                         opacity: 0.7,
                       },
+                      fontStyle: entryDetail?.description ? 'normal' : 'italic',
+                      color: entryDetail?.description ? 'inherit' : theme.palette.text.secondary,
                     }}
                     onClick={handleEditingDescriptionChange}
                   >
-                    {entryDetail?.description}
+                    {entryDetail?.description || 'No Description Available'}
                   </Typography>
                 </Else>
               </If>
@@ -203,123 +205,36 @@ const EntryDetail = ({
         </Card>
         {/* Margin Left 1rem for entries without a map */}
         <Card sx={{ marginLeft: '1rem', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1rem' }}>
-          <When condition={entryDetail?.photos.primary?.urls['600']}>
-            <Image
-              src={entryDetail?.photos.primary?.urls['600'] || ''}
-              width={300}
-              height={200}
-              alt="highlight-photo"
-              priority={true}
-              style={{ objectFit: 'contain', borderRadius: '.25rem' }}
-            />
-          </When>
-        </Card>
-      </Stack>
-      <Stack
-        sx={{
-          marginX: '1%',
-          width: '100%',
-        }}
-      >
-        <Card sx={{ padding: '1rem' }}>
-          <Box sx={{ display: 'flex', width: '100%' }}>
-          {/* Device */}
-          <When condition={entryDetail?.device_name}>
-            <Box
-              id="topActivityDevice"
-              sx={{
-                alignSelf: 'flex-start',
-                padding: '.75rem 1rem',
-                marginY: '.75rem',
-                cursor: 'default',
-                backgroundColor: theme.palette.action.hover,
-                borderRadius: '4px',
-              }}
-            >
-              <Typography variant="body1">
-                <strong>Device:</strong> {entryDetail?.device_name}
-              </Typography>
-            </Box>
-          </When>
-          {/* Gear - Shoes */}
-          <When condition={['Run', 'Walk'].includes(sport)}>
-            {entryDetail?.gear?.name && !editingShoes ? (
-              <Box
-                id="topActivityGear"
-                sx={{
-                  alignSelf: 'flex-start',
-                  marginLeft: '1rem',
-                  padding: '.75rem 1rem',
-                  marginY: '.75rem',
-                  backgroundColor: theme.palette.action.hover,
-                  borderRadius: '4px',
-                  cursor: isSharedActivity || !userProfile?.shoes.length ? 'default' : 'pointer',
-                  '&:hover': isSharedActivity || !userProfile?.shoes.length ? {} : {
-                    backgroundColor: theme.palette.action.selected,
-                  },
-                }}
-                onClick={() => {
-                  // Edge case where shoes don't exist or user is rate limited
-                  if (!isSharedActivity && userProfile?.shoes.length) {
-                    setEditingShoes(true);
-                  }
-                }}
-              >
-                <Typography variant="body1">
-                  <strong>Gear:</strong> {entryDetail.gear.name}
-                </Typography>
-              </Box>
-            ) : (
-              <Box sx={{ marginY: '.75rem', marginLeft: '1rem' }}>
-                <When condition={!isSharedActivity && userProfile?.shoes.length}>
-                  <Select
-                    ref={gearRef}
-                    open={editingShoes}
-                    onClose={() => setEditingShoes(false)}
+          <If condition={isLoadingEntry}>
+            <Then>
+              <Skeleton variant="rectangular" width={300} height={200} sx={{ borderRadius: '.25rem' }} />
+            </Then>
+            <Else>
+              <If condition={entryDetail?.photos.primary?.urls['600']}>
+                <Then>
+                  <Image
+                    src={entryDetail?.photos.primary?.urls['600'] || ''}
+                    width={300}
+                    height={200}
+                    alt="highlight-photo"
+                    priority={true}
+                    style={{ objectFit: 'contain', borderRadius: '.25rem' }}
+                  />
+                </Then>
+                <Else>
+                  <Typography
+                    variant="body1"
                     sx={{
-                      height: '3rem',
-                      minWidth: '15rem',
-                    }}
-                    defaultValue="shoeChoose"
-                    onChange={(e: SelectChangeEvent<string>) => {
-                      if (e.target.value === 'shoeChoose') {
-                        setEditingShoes(false);
-                        return;
-                      }
-                      const shoeId = e.target.value;
-                      const shoeName = userProfile?.shoes.find(
-                        (shoe) => shoe.id === shoeId
-                      )?.name;
-                      if (!shoeName) {
-                        return;
-                      }
-                      if (entryDetail?.id) {
-                        updateShoeIndividualEntryMutation({
-                          shoeId,
-                          activityId: entryDetail?.id,
-                          shoeName,
-                        });
-                      }
-                      setEditingShoes(false);
+                      fontStyle: 'italic',
+                      color: theme.palette.text.secondary,
                     }}
                   >
-                    {[
-                      <MenuItem key={-1} value="shoeChoose">
-                        Cancel
-                      </MenuItem>,
-                    ].concat(
-                      userProfile?.shoes.map((shoe, index) => (
-                        <MenuItem value={shoe.id} key={index}>
-                          {shoe.name}
-                        </MenuItem>
-                      )) || []
-                    )}
-                  </Select>
-                </When>
-              </Box>
-            )}
-          </When>
-        </Box>
+                    No Photo Available
+                  </Typography>
+                </Else>
+              </If>
+            </Else>
+          </If>
         </Card>
       </Stack>
       <Stack
@@ -329,28 +244,157 @@ const EntryDetail = ({
         }}
       >
         <Card sx={{ padding: '1rem' }}>
-        <Box
-          id="funStats"
-          sx={{
-            display: 'flex',
-            flex: 1,
-            width: '100%',
-            justifyContent: entryDetail?.map.polyline ? 'center' : 'flex-start',
-            alignItems: 'stretch',
-            ...mobileColumns,
-          }}
-        >
-          <Box
-            sx={{
-              paddingX: '2rem',
-              paddingY: '1.5rem',
-              flex: 1,
-              display: 'flex',
-              gap: '2rem',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-            }}
-          >
+          <If condition={isLoadingEntry}>
+            <Then>
+              <Box sx={{ display: 'flex', gap: '1rem', width: '100%' }}>
+                <Skeleton variant="rectangular" width={200} height={48} sx={{ borderRadius: '4px' }} />
+                <Skeleton variant="rectangular" width={200} height={48} sx={{ borderRadius: '4px' }} />
+              </Box>
+            </Then>
+            <Else>
+              <Box sx={{ display: 'flex', width: '100%' }}>
+              {/* Device */}
+              <When condition={entryDetail?.device_name}>
+                <Box
+                  id="topActivityDevice"
+                  sx={{
+                    alignSelf: 'flex-start',
+                    padding: '.75rem 1rem',
+                    marginY: '.75rem',
+                    cursor: 'default',
+                    backgroundColor: theme.palette.action.hover,
+                    borderRadius: '4px',
+                  }}
+                >
+                  <Typography variant="body1">
+                    <strong>Device:</strong> {entryDetail?.device_name}
+                  </Typography>
+                </Box>
+              </When>
+              {/* Gear - Shoes */}
+              <When condition={['Run', 'Walk'].includes(sport)}>
+                {entryDetail?.gear?.name && !editingShoes ? (
+                  <Box
+                    id="topActivityGear"
+                    sx={{
+                      alignSelf: 'flex-start',
+                      marginLeft: '1rem',
+                      padding: '.75rem 1rem',
+                      marginY: '.75rem',
+                      backgroundColor: theme.palette.action.hover,
+                      borderRadius: '4px',
+                      cursor: isSharedActivity || !userProfile?.shoes.length ? 'default' : 'pointer',
+                      '&:hover': isSharedActivity || !userProfile?.shoes.length ? {} : {
+                        backgroundColor: theme.palette.action.selected,
+                      },
+                    }}
+                    onClick={() => {
+                      // Edge case where shoes don't exist or user is rate limited
+                      if (!isSharedActivity && userProfile?.shoes.length) {
+                        setEditingShoes(true);
+                      }
+                    }}
+                  >
+                    <Typography variant="body1">
+                      <strong>Gear:</strong> {entryDetail.gear.name}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ marginY: '.75rem', marginLeft: '1rem' }}>
+                    <When condition={!isSharedActivity && userProfile?.shoes.length}>
+                      <Select
+                        ref={gearRef}
+                        open={editingShoes}
+                        onClose={() => setEditingShoes(false)}
+                        sx={{
+                          height: '3rem',
+                          minWidth: '15rem',
+                        }}
+                        defaultValue="shoeChoose"
+                        onChange={(e: SelectChangeEvent<string>) => {
+                          if (e.target.value === 'shoeChoose') {
+                            setEditingShoes(false);
+                            return;
+                          }
+                          const shoeId = e.target.value;
+                          const shoeName = userProfile?.shoes.find(
+                            (shoe) => shoe.id === shoeId
+                          )?.name;
+                          if (!shoeName) {
+                            return;
+                          }
+                          if (entryDetail?.id) {
+                            updateShoeIndividualEntryMutation({
+                              shoeId,
+                              activityId: entryDetail?.id,
+                              shoeName,
+                            });
+                          }
+                          setEditingShoes(false);
+                        }}
+                      >
+                        {[
+                          <MenuItem key={-1} value="shoeChoose">
+                            Cancel
+                          </MenuItem>,
+                        ].concat(
+                          userProfile?.shoes.map((shoe, index) => (
+                            <MenuItem value={shoe.id} key={index}>
+                              {shoe.name}
+                            </MenuItem>
+                          )) || []
+                        )}
+                      </Select>
+                    </When>
+                  </Box>
+                )}
+              </When>
+            </Box>
+            </Else>
+          </If>
+        </Card>
+      </Stack>
+      <Stack
+        sx={{
+          marginX: '1%',
+          width: '100%',
+        }}
+      >
+        <Card sx={{ padding: '1rem' }}>
+        <If condition={isLoadingEntry}>
+          <Then>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem' }}>
+              <Box sx={{ display: 'flex', gap: '2rem', justifyContent: 'space-evenly' }}>
+                <Skeleton variant="rectangular" width={150} height={100} sx={{ borderRadius: '4px' }} />
+                <Skeleton variant="rectangular" width={150} height={100} sx={{ borderRadius: '4px' }} />
+                <Skeleton variant="rectangular" width={150} height={100} sx={{ borderRadius: '4px' }} />
+              </Box>
+              <Skeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: '4px' }} />
+            </Box>
+          </Then>
+          <Else>
+            <Box
+              id="funStats"
+              sx={{
+                display: 'flex',
+                flex: 1,
+                width: '100%',
+                justifyContent: entryDetail?.map.polyline ? 'center' : 'flex-start',
+                alignItems: 'stretch',
+                ...mobileColumns,
+              }}
+            >
+              <Box
+                sx={{
+                  paddingX: '2rem',
+                  paddingY: '1.5rem',
+                  flex: 1,
+                  display: 'flex',
+                  gap: '2rem',
+                  justifyContent: 'space-evenly',
+                  alignItems: 'center',
+                }}
+              >
           {/* Kudos & Comments */}
           <Box
             id="kudosX"
@@ -857,6 +901,8 @@ const EntryDetail = ({
           </If>
         </Else>
       </If>
+          </Else>
+        </If>
       </Card>
       </Stack>
     </Stack>

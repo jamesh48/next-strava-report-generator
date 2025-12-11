@@ -203,7 +203,7 @@ const EntryUI = (props: EntryUIProps) => {
           },
           row: {
             '&:nth-of-type(odd)': {
-              backgroundColor: theme.palette.grey[400],
+              backgroundColor: theme.palette.grey[200],
             },
             '&:hover': {
               backgroundColor: theme.palette.mainBackground.main,
