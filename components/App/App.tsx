@@ -87,11 +87,9 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: '95%',
-          margin: '2.5% auto',
-          paddingTop: '25px',
+          margin: '1%',
           border: `1px solid ${theme.palette.strava.contrastColor}`,
-          boxShadow: `0 0 10px ${theme.palette.strava.contrastColor}`,
+          boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
           backgroundColor: theme.palette.mainBackground.dark,
         }}
       >

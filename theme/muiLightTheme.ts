@@ -1,7 +1,7 @@
 import { ThemeOptions } from '@mui/material';
 import componentOverrides from './muiOverrides';
 import { createTheme } from '@mui/material/styles';
-import { darkSlateGray, ivory } from 'theme/muiDarkTheme';
+import { ivory } from 'theme/muiDarkTheme';
 
 // const _typography = {
 //   htmlFontSize: 16,
@@ -66,7 +66,7 @@ export const orangered = '#FF5349';
 const lightTheme: ThemeOptions = {
   palette: {
     mode: 'light',
-    baseBackground: { main: darkSlateGray },
+    baseBackground: { main: '#F5F5F5' },
     strava: {
       main: orangered,
       contrastText: ivory,
