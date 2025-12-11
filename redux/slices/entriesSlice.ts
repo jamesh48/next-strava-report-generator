@@ -37,6 +37,8 @@ export const entriesApi = createApi({
         format: Format;
         beforeDate?: string;
         afterDate?: string;
+        hasAchievements?: boolean;
+        search: string;
       }
     >({
       query: ({
@@ -45,6 +47,8 @@ export const entriesApi = createApi({
         afterDate,
         beforeDate,
         lastKey,
+        hasAchievements,
+        search,
       }) => ({
         url: '/allEntries',
         params: {
@@ -53,6 +57,8 @@ export const entriesApi = createApi({
           lastKey,
           beforeDate,
           afterDate,
+          hasAchievements,
+          search,
         },
       }),
       transformResponse: (

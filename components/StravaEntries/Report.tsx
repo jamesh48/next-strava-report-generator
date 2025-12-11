@@ -182,6 +182,7 @@ const Report = (props: ReportProps) => {
         entriesPerPage={entriesPerPage}
         showIndividualEntry={showIndividualEntry}
         handleCloseCurrentActivity={handleCloseCurrentActivity}
+        titleQuery={props.titleQuery}
       />
       {/* {!isMobile ? (
         <PageNoUl

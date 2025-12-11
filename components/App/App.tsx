@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Box, useTheme } from '@mui/material';
 //
 import UserProfile from '@components/UserProfile/UserProfile';
@@ -50,11 +50,10 @@ export default function App() {
     setFormat(value as Format);
   };
 
-  const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTitleQuery(event.currentTarget.value);
-  };
+  const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> =
+    useCallback((event) => {
+      setTitleQuery(event.currentTarget.value);
+    }, []);
 
   const setDistanceCallback: React.MouseEventHandler<HTMLLabelElement> &
     React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {

@@ -3,7 +3,11 @@ import { Box, IconButton, List, ListItem, useTheme } from '@mui/material';
 import StravaEntry from './StravaEntry';
 import EmptyEntry from './EmptyEntry';
 import { Format, Sport, UIEntry } from './EntryTypes.js';
-import { getDateCondition, useGetAllEntriesQuery } from '@redux/slices';
+import {
+  getAchievementsOnlyCondition,
+  getDateCondition,
+  useGetAllEntriesQuery,
+} from '@redux/slices';
 import { formatTime, useCSX } from '@lib';
 import { Button, Table, useCursorPagination } from 'fsh-components';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -21,11 +25,13 @@ interface EntryUIProps {
   format?: Format;
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
   handleCloseCurrentActivity: () => void;
+  titleQuery: string;
 }
 
 const EntryUI = (props: EntryUIProps) => {
   const theme = useTheme();
   const [afterDate, beforeDate] = useSelector(getDateCondition);
+  const hasAchievements = useSelector(getAchievementsOnlyCondition);
 
   const [currEntry, setCurrEntry] = useState<undefined | UIEntry>();
 
@@ -36,7 +42,12 @@ const EntryUI = (props: EntryUIProps) => {
     handlePreviousPage,
     updatePagination,
     getCurrentToken,
+    reset,
   } = useCursorPagination();
+
+  useEffect(() => {
+    reset();
+  }, [props.sport, hasAchievements]);
 
   const { data: entries } = useGetAllEntriesQuery(
     {
@@ -46,6 +57,8 @@ const EntryUI = (props: EntryUIProps) => {
       format: props.format,
       afterDate,
       beforeDate,
+      hasAchievements,
+      search: props.titleQuery,
     },
     {
       refetchOnMountOrArgChange: true,

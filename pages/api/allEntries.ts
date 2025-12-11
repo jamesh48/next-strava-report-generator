@@ -6,7 +6,7 @@ const handler = nextConnect();
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const srg_athlete_id = req.cookies.athleteId;
-    const { limit, activityType, lastKey, beforeDate, afterDate } = req.query;
+    const { hasAchievements, limit, search, activityType, lastKey, beforeDate, afterDate } = req.query;
 
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
@@ -18,6 +18,10 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         lastKey: lastKey ? lastKey : undefined,
         ...(beforeDate ? { before_date: beforeDate } : {}),
         ...(afterDate ? { after_date: afterDate } : {}),
+        ...(search ? { search: search } : {}),
+        has_achievements: hasAchievements,
+        // TODO: PAss from Frontend
+        sort_condition: 'speedDesc'
       },
     });
 
