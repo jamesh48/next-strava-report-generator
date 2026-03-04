@@ -6,6 +6,7 @@ import { Format, Sport, UIEntry } from './EntryTypes.js';
 import {
   getAchievementsOnlyCondition,
   getDateCondition,
+  getSortCondition,
   useGetAllEntriesQuery,
 } from '@redux/slices';
 import { formatTime, useCSX } from '@lib';
@@ -26,10 +27,12 @@ interface EntryUIProps {
   showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
   handleCloseCurrentActivity: () => void;
   titleQuery: string;
+  distance?: number;
 }
 
 const EntryUI = (props: EntryUIProps) => {
   const theme = useTheme();
+  const sortCondition = useSelector(getSortCondition);
   const [afterDate, beforeDate] = useSelector(getDateCondition);
   const hasAchievements = useSelector(getAchievementsOnlyCondition);
 
@@ -59,6 +62,8 @@ const EntryUI = (props: EntryUIProps) => {
       beforeDate,
       hasAchievements,
       search: props.titleQuery,
+      sortCondition,
+      minDistance: props.distance,
     },
     {
       refetchOnMountOrArgChange: true,
@@ -130,6 +135,9 @@ const EntryUI = (props: EntryUIProps) => {
       columnHelper.accessor('average_pace', { header: 'Average Pace' }),
       columnHelper.accessor('max_speed', {
         header: 'Max Speed',
+      }),
+      columnHelper.accessor('achievement_count', {
+        header: 'Achievement Count',
       }),
       columnHelper.display({
         header: 'Detail',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   MenuItem,
@@ -57,11 +57,12 @@ const menuItemStyles = (indicator: boolean, theme: Theme) => ({
   display: 'flex',
   justifyContent: 'center',
   bgcolor: indicator
-    ? `${theme.palette.mainBackground.main} !important`
-    : `${theme.palette.mainBackground.light} !important`,
-  color: indicator
-    ? theme.palette.strava.main
-    : theme.palette.strava.contrastText,
+    ? `${theme.palette.strava.main} !important`
+    : theme.palette.common.white,
+  color: indicator ? theme.palette.common.white : theme.palette.strava.main,
+  '&:hover': {
+    backgroundColor: theme.palette.mainBackground.main,
+  },
 });
 
 // time it takes to delete one dynamodb record in ms
@@ -76,6 +77,7 @@ const ProgressBar = () => {
   const { data: allEntries } = useGetAllEntriesQuery(null);
   const { isError, error } = useGetUserProfileQuery(null);
   const sortCondition = useSelector(getSortCondition);
+
   useEffect(() => {
     const numberOfEntries = allEntries?.count;
     if (numberOfEntries) {
@@ -145,9 +147,10 @@ const ProgressBar = () => {
     await addAllActivities(null);
   };
 
-  const setSortConditionCallback = (event: SelectChangeEvent) => {
+  const setSortConditionCallback = useCallback((event: SelectChangeEvent) => {
     dispatch(setSortCondition(event.target.value));
-  };
+  }, [dispatch, setSortCondition]);
+
   const mobileStyleSelect = useCSX('unset', '1', 'flex');
   const mobileStyleUpdateButton = useCSX('unset', '.5', 'flex');
 
@@ -166,6 +169,12 @@ const ProgressBar = () => {
           }}
           value={sortCondition || 'speedDesc'}
         >
+          <MenuItem
+            value={'distanceDesc'}
+            sx={menuItemStyles(sortCondition === 'distanceDesc', theme)}
+          >
+            Distance: Furthest First
+          </MenuItem>
           <MenuItem
             value="speedDesc"
             sx={menuItemStyles(sortCondition === 'speedDesc', theme)}

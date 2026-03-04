@@ -6,7 +6,18 @@ const handler = nextConnect();
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const srg_athlete_id = req.cookies.athleteId;
-    const { hasAchievements, limit, search, activityType, lastKey, beforeDate, afterDate } = req.query;
+    const {
+      hasAchievements,
+      limit,
+      search,
+      activityType,
+      lastKey,
+      minDistance,
+      maxDistance,
+      beforeDate,
+      afterDate,
+      sortCondition,
+    } = req.query;
 
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
@@ -20,18 +31,12 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         ...(afterDate ? { after_date: afterDate } : {}),
         ...(search ? { search: search } : {}),
         has_achievements: hasAchievements,
-        // TODO: PAss from Frontend
-        sort_condition: 'speedDesc'
+        sort_condition: sortCondition,
+        ...(minDistance ? { min_distance: minDistance } : {}),
+        ...(maxDistance ? { min_distance: maxDistance } : {}),
       },
     });
-
-    return res.send({
-      ...data,
-      items: data.items.sort(
-        (a: any, b: any) =>
-          b.distance / b.moving_time - a.distance / a.moving_time
-      ),
-    });
+    return res.send(data);
   } catch (err) {
     res.send([]);
   }

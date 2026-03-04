@@ -39,6 +39,8 @@ export const entriesApi = createApi({
         afterDate?: string;
         hasAchievements?: boolean;
         search: string;
+        sortCondition: string;
+        minDistance?: number;
       }
     >({
       query: ({
@@ -49,6 +51,8 @@ export const entriesApi = createApi({
         lastKey,
         hasAchievements,
         search,
+        sortCondition,
+        minDistance,
       }) => ({
         url: '/allEntries',
         params: {
@@ -59,6 +63,8 @@ export const entriesApi = createApi({
           afterDate,
           hasAchievements,
           search,
+          sortCondition,
+          minDistance,
         },
       }),
       transformResponse: (
@@ -91,10 +97,14 @@ export const entriesApi = createApi({
               return entry.max_speed;
             })(),
             distance: (() => {
+              // Swimming
               if (arg.format === 'avgypace') {
-                return `${(entry.distance * m2y).toFixed()} Yards`;
+                return `${(entry.distance * m2y).toLocaleString(undefined, {
+                  maximumFractionDigits: 0,
+                })} Yards`;
               }
-              return `${entry.distance} Meters`;
+
+              return `${Number(entry.distance).toLocaleString()} Meters`;
             })(),
             average_pace: (() => {
               if (arg.format === 'kph') {

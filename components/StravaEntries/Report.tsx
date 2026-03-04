@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
-import EntryUl from './EntryUl';
+import EntryUI from './EntryUl';
 // import PageNoUl from '@components/PaginationContainer/PageNoUl';
 import { CachedEntry, Format, Sport, UIEntry } from './EntryTypes.js';
 import {
@@ -175,7 +175,7 @@ const Report = (props: ReportProps) => {
           currentPage={currentPage}
         />
       ) : null} */}
-      <EntryUl
+      <EntryUI
         {...props}
         invalidEntry={invalidEntry}
         currentPage={currentPage}

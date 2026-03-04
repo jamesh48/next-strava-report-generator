@@ -89,15 +89,20 @@ export type CurrentActivity = {
   id: number;
   name: string;
   kudos_count: number;
+  calories: number
   comment_count: number;
   average_heartrate: number;
+  distance: number
   max_heartrate: number;
   achievement_count: number;
   best_efforts?: BestEffort[];
   segment_efforts: SegmentEffort[];
   description: string;
   device_name?: string;
+  start_date: string;
+  start_date_local: string;
   gear?: {
+    id: string;
     name: string;
   };
   laps:
