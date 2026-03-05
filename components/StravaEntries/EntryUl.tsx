@@ -1,42 +1,43 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import { Box, IconButton, List, ListItem, useTheme } from '@mui/material';
-import StravaEntry from './StravaEntry';
-import EmptyEntry from './EmptyEntry';
-import { Format, Sport, UIEntry } from './EntryTypes.js';
+import StandardDialog from '@components/StandardDialog'
+import EntryDetail from '@components/StravaEntries/EntryDetail'
+import { formatTime, useCSX } from '@lib'
+import { Visibility } from '@mui/icons-material'
+import { Box, IconButton, List, ListItem, useTheme } from '@mui/material'
+import { useSelector } from '@redux/reduxHooks'
 import {
   getAchievementsOnlyCondition,
   getDateCondition,
   getSortCondition,
   useGetAllEntriesQuery,
-} from '@redux/slices';
-import { formatTime, useCSX } from '@lib';
-import { Button, Table, useCursorPagination } from 'fsh-components';
-import { createColumnHelper } from '@tanstack/react-table';
-import { Visibility } from '@mui/icons-material';
-import StandardDialog from '@components/StandardDialog';
-import EntryDetail from '@components/StravaEntries/EntryDetail';
-import { When } from 'react-if';
-import { useSelector } from '@redux/reduxHooks';
+} from '@redux/slices'
+import { createColumnHelper } from '@tanstack/react-table'
+import { Button, Table, useCursorPagination } from 'fsh-components'
+import type React from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { When } from 'react-if'
+import EmptyEntry from './EmptyEntry'
+import type { Format, Sport, UIEntry } from './EntryTypes.js'
+import StravaEntry from './StravaEntry'
 
 interface EntryUIProps {
-  entriesPerPage: number;
-  currentPage: number;
-  invalidEntry: boolean;
-  sport: Sport;
-  format?: Format;
-  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>;
-  handleCloseCurrentActivity: () => void;
-  titleQuery: string;
-  distance?: number;
+  entriesPerPage: number
+  currentPage: number
+  invalidEntry: boolean
+  sport: Sport
+  format?: Format
+  showIndividualEntry: React.MouseEventHandler<HTMLAnchorElement>
+  handleCloseCurrentActivity: () => void
+  titleQuery: string
+  distance?: number
 }
 
 const EntryUI = (props: EntryUIProps) => {
-  const theme = useTheme();
-  const sortCondition = useSelector(getSortCondition);
-  const [afterDate, beforeDate] = useSelector(getDateCondition);
-  const hasAchievements = useSelector(getAchievementsOnlyCondition);
+  const theme = useTheme()
+  const sortCondition = useSelector(getSortCondition)
+  const [afterDate, beforeDate] = useSelector(getDateCondition)
+  const hasAchievements = useSelector(getAchievementsOnlyCondition)
 
-  const [currEntry, setCurrEntry] = useState<undefined | UIEntry>();
+  const [currEntry, setCurrEntry] = useState<undefined | UIEntry>()
 
   const {
     hasMore,
@@ -46,11 +47,11 @@ const EntryUI = (props: EntryUIProps) => {
     updatePagination,
     getCurrentToken,
     reset,
-  } = useCursorPagination();
+  } = useCursorPagination()
 
   useEffect(() => {
-    reset();
-  }, [props.sport, hasAchievements]);
+    reset()
+  }, [props.sport, hasAchievements, reset])
 
   const { data: entries } = useGetAllEntriesQuery(
     {
@@ -67,21 +68,23 @@ const EntryUI = (props: EntryUIProps) => {
     },
     {
       refetchOnMountOrArgChange: true,
-    }
-  );
+    },
+  )
+
+  console.info(entries)
 
   useEffect(() => {
     if (entries) {
       updatePagination(
         JSON.stringify(entries.lastKey) || null,
-        !!entries.lastKey
-      );
+        !!entries.lastKey,
+      )
     }
-  }, [entries, updatePagination]);
+  }, [entries, updatePagination])
 
-  const renderEntries = entries?.items?.map((entry, index) => {
+  const renderEntries = entries?.results?.map((entry, index) => {
     return (
-      <ListItem key={index} sx={{ display: 'flex', padding: 0 }}>
+      <ListItem key={entry.activityId} sx={{ display: 'flex', padding: 0 }}>
         <StravaEntry
           showIndividualEntry={props.showIndividualEntry}
           no={
@@ -95,75 +98,75 @@ const EntryUI = (props: EntryUIProps) => {
           handleCloseCurrentActivity={props.handleCloseCurrentActivity}
         />
       </ListItem>
-    );
-  });
+    )
+  })
 
-  const openActivityDetail = Boolean(currEntry);
+  const openActivityDetail = Boolean(currEntry)
 
   const handleOpenActivityDetail = (entry: UIEntry) => {
-    setCurrEntry(entry);
-  };
+    setCurrEntry(entry)
+  }
 
   const handleCloseActivityDetail = () => {
-    setCurrEntry(undefined);
-  };
+    setCurrEntry(undefined)
+  }
 
-  const mobileStyles = useCSX({}, { marginBottom: '15%', marginTop: '2.5%' });
+  const mobileStyles = useCSX({}, { marginBottom: '15%', marginTop: '2.5%' })
 
   const tableColumns = useMemo(() => {
-    const columnHelper = createColumnHelper<UIEntry>();
+    const columnHelper = createColumnHelper<UIEntry>()
 
     return [
       columnHelper.accessor('name', {
         header: 'Name',
       }),
-      columnHelper.accessor('start_date', {
+      columnHelper.accessor('startDate', {
         header: 'Date',
         cell: (cellProps) => {
-          return formatTime(cellProps.getValue());
+          return formatTime(cellProps.getValue())
         },
       }),
       columnHelper.display({
         header: 'Distance',
         cell: (cellProps) => {
-          return cellProps.row.original.distance;
+          return cellProps.row.original.distance
         },
       }),
       columnHelper.accessor('elapsed_time', {
         header: 'Time Elapsed',
       }),
-      columnHelper.accessor('average_pace', { header: 'Average Pace' }),
-      columnHelper.accessor('max_speed', {
+      columnHelper.accessor('averagePace', { header: 'Average Pace' }),
+      columnHelper.accessor('maxSpeed', {
         header: 'Max Speed',
       }),
-      columnHelper.accessor('achievement_count', {
+      columnHelper.accessor('achievementCount', {
         header: 'Achievement Count',
       }),
       columnHelper.display({
         header: 'Detail',
         cell: (cellProps) => {
-          const selectedEntry = cellProps.row.original;
+          const selectedEntry = cellProps.row.original
 
           return (
             <>
               <IconButton
                 onClick={() => {
-                  handleOpenActivityDetail(selectedEntry);
+                  handleOpenActivityDetail(selectedEntry)
                 }}
               >
                 <Visibility />
               </IconButton>
               <When condition={!!open}>
                 <StandardDialog
-                  height="auto"
+                  height='auto'
                   title={selectedEntry.name}
-                  maxWidth="lg"
+                  maxWidth='lg'
                   actions={
                     <>
                       <Box />
                       <Button
                         onClick={handleCloseActivityDetail}
-                        label="Close"
+                        label='Close'
                       />
                     </>
                   }
@@ -174,22 +177,22 @@ const EntryUI = (props: EntryUIProps) => {
                   onClose={handleCloseActivityDetail}
                 >
                   <EntryDetail
-                    activityId={currEntry?.activityId!}
+                    activityId={currEntry?.activityId}
                     sport={props.sport}
                     format={props.format}
                   />
                 </StandardDialog>
               </When>
             </>
-          );
+          )
         },
       }),
-    ];
-  }, [openActivityDetail]);
+    ]
+  }, [openActivityDetail])
 
   return (
     <List
-      className="entryUls"
+      className='entryUls'
       disablePadding
       sx={{
         listStyleType: 'none',
@@ -199,9 +202,9 @@ const EntryUI = (props: EntryUIProps) => {
       }}
     >
       <Table
-        data={entries?.items || []}
+        data={entries?.results || []}
         columns={tableColumns}
-        paginationType="cursor"
+        paginationType='numbered'
         hasMore={hasMore}
         canGoBack={canGoBack}
         onNextPage={handleNextPage}
@@ -220,14 +223,14 @@ const EntryUI = (props: EntryUIProps) => {
         }}
         onPreviousPage={handlePreviousPage}
       />
-      {(entries?.count === 0 && entries?.items.length) ||
+      {(entries?.count === 0 && entries?.results.length) ||
       props.invalidEntry === true ? (
         <EmptyEntry />
       ) : (
         renderEntries
       )}
     </List>
-  );
-};
+  )
+}
 
-export default EntryUI;
+export default EntryUI

@@ -1,96 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import GeneralEntry from './GeneralEntry';
-import DetailedEntry from './DetailedEntry';
-import { CachedEntry, Format, Sport, UIEntry } from './EntryTypes';
+import { Box } from '@mui/material'
+import { useSelector } from '@redux/reduxHooks'
 import {
   getCurrentActivity,
   useUpdateIndividualEntryMutation,
-} from '@redux/slices';
-import { CustomMouseEventHandler } from './Report';
-import { useSelector } from '@redux/reduxHooks';
+} from '@redux/slices'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+import DetailedEntry from './DetailedEntry'
+import type { CachedEntry, Format, Sport, UIEntry } from './EntryTypes'
+import GeneralEntry from './GeneralEntry'
+import type { CustomMouseEventHandler } from './Report'
 
 export interface StravaEntryProps {
-  showIndividualEntry: CustomMouseEventHandler;
-  sport: Sport;
-  entry: UIEntry;
-  format: Format;
-  no: number | undefined;
-  handleCloseCurrentActivity: () => void;
-  isSharedActivity?: true;
+  showIndividualEntry: CustomMouseEventHandler
+  sport: Sport
+  entry: UIEntry
+  format: Format
+  no: number | undefined
+  handleCloseCurrentActivity: () => void
+  isSharedActivity?: true
 }
 
 const StravaEntry = (props: StravaEntryProps) => {
-  const [editingDescription, setEditingDescription] = useState(false);
-  const [editingHeadline, setEditingHeadline] = useState(false);
-  const [editedName, setEditedName] = useState('');
-  const [editedDescription, setEditedDescription] = useState('');
-  const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation();
+  const [editingDescription, setEditingDescription] = useState(false)
+  const [editingHeadline, setEditingHeadline] = useState(false)
+  const [editedName, setEditedName] = useState('')
+  const [editedDescription, setEditedDescription] = useState('')
+  const [handleActivityUpdateMutation] = useUpdateIndividualEntryMutation()
 
-  const currentActivity = useSelector(getCurrentActivity);
+  const currentActivity = useSelector(getCurrentActivity)
 
   useEffect(() => {
     if (currentActivity.id === Number(props.entry.activityId)) {
-      setEditedName(currentActivity.name);
-      setEditedDescription(currentActivity.description);
+      setEditedName(currentActivity.name)
+      setEditedDescription(currentActivity.description)
     }
-  }, [currentActivity, props.entry.activityId]);
+  }, [currentActivity, props.entry.activityId])
 
   const handleDescriptionChange: (e: { target: { value: string } }) => void = (
-    e
+    e,
   ) => {
-    setEditedDescription(e.target.value);
-  };
+    setEditedDescription(e.target.value)
+  }
 
   const handleNameChange: (e: { target: { value: string } }) => void = (e) => {
-    setEditedName(e.target.value);
-  };
+    setEditedName(e.target.value)
+  }
 
   const handleEditingHeadlineChange = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true,
   ) => {
     // Page Refresh is Prevented at the ground level
     if (props.isSharedActivity) {
-      return;
+      return
     }
     // If Clickaway Event Happens while editing, send api request.
     if (e === true) {
-      setEditingHeadline(false);
+      setEditingHeadline(false)
       handleActivityUpdateMutation({
         activityId: currentActivity.id,
         name: editedName,
         description: editedDescription,
-      });
+      })
     } else {
-      e.preventDefault();
+      e.preventDefault()
       if (currentActivity.id === Number(props.entry.activityId)) {
-        setEditingHeadline(true);
+        setEditingHeadline(true)
       } else {
         if (props.entry.individualActivityCached) {
-          const cachedEntry = props.entry as UIEntry & CachedEntry;
-          props.showIndividualEntry(e, cachedEntry);
+          const cachedEntry = props.entry as UIEntry & CachedEntry
+          props.showIndividualEntry(e, cachedEntry)
         } else {
-          props.showIndividualEntry(e);
+          props.showIndividualEntry(e)
         }
       }
     }
-  };
+  }
 
   const handleEditingDesciptionChange = () => {
     if (editingDescription) {
-      setEditingDescription(false);
+      setEditingDescription(false)
       handleActivityUpdateMutation({
         activityId: currentActivity.id,
         name: editedName,
         description: editedDescription,
-      });
+      })
     } else {
-      setEditingDescription(true);
+      setEditingDescription(true)
     }
-  };
+  }
 
   const isCurrentActivity =
-    currentActivity?.id === Number(props.entry.activityId);
+    currentActivity?.id === Number(props.entry.activityId)
   return (
     <Box sx={{ width: '100%' }}>
       <GeneralEntry
@@ -117,7 +118,7 @@ const StravaEntry = (props: StravaEntryProps) => {
         />
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default StravaEntry;
+export default StravaEntry

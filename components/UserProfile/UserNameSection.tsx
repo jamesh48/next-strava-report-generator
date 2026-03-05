@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import { Box, Button, Typography, useTheme } from '@mui/material';
-import UserSettings from './UserSettings';
+import { Box, Button, Typography, useTheme } from '@mui/material'
+import { useState } from 'react'
+import UserSettings from './UserSettings'
 
 interface UserNameSectionProps {
   profile: {
-    firstname: string;
-    lastname: string;
-    city: string;
-    state: string;
-    country: string;
-  };
+    firstname: string
+    lastname: string
+    city: string
+    state: string
+    country: string
+  }
 }
 
 const UserNameSection = (props: UserNameSectionProps) => {
-  const theme = useTheme();
-  const [showPreferences, setShowPreferences] = useState(false);
+  const theme = useTheme()
+  const [showPreferences, setShowPreferences] = useState(false)
 
   const closeUserSettingsCB = () => {
-    setShowPreferences(false);
-  };
+    setShowPreferences(false)
+  }
 
   return (
     <Box
-      className="profileBoxes"
-      id="userInfo"
+      className='profileBoxes'
+      id='userInfo'
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -34,8 +34,8 @@ const UserNameSection = (props: UserNameSectionProps) => {
       }}
     >
       <Typography
-        variant="h4"
-        id="userName"
+        variant='h4'
+        id='userName'
         color={theme.palette.strava.main}
         sx={{
           cursor: 'default',
@@ -45,8 +45,8 @@ const UserNameSection = (props: UserNameSectionProps) => {
         {props.profile.firstname} {props.profile.lastname}
       </Typography>
       <Typography
-        id="userLocation"
-        variant="h5"
+        id='userLocation'
+        variant='h5'
         sx={{ cursor: 'default', textAlign: 'center' }}
         color={theme.palette.strava.main}
       >
@@ -108,7 +108,7 @@ const UserNameSection = (props: UserNameSectionProps) => {
         <UserSettings closeUserSettingsCB={closeUserSettingsCB} />
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default UserNameSection;
+export default UserNameSection

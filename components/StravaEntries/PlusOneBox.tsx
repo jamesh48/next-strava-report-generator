@@ -1,37 +1,38 @@
-import { useEffect, useRef, useState } from 'react';
-import { Box, Typography, Slide } from '@mui/material';
+import { Box, Slide, Typography } from '@mui/material'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface PlusOneBoxProps {
-  cachedCount: number;
-  incomingCount?: number;
+  cachedCount: number
+  incomingCount?: number
 }
 
 const PlusOneBox = (props: PlusOneBoxProps) => {
-  const containerRef = useRef();
+  const containerRef = useRef()
 
-  const [isVisible, setIsVisible] = useState(false);
-  const setPlusOne = (state: boolean) => {
-    setIsVisible(state);
-  };
+  const [isVisible, setIsVisible] = useState(false)
+  const setPlusOne = useCallback((state: boolean) => {
+    setIsVisible(state)
+  }, [])
 
   useEffect(() => {
     if (!props.incomingCount && props.incomingCount !== 0) {
-      return;
+      return
     }
     // Kudos Count is a string for some reason
     if (Number(props.cachedCount) !== Number(props.incomingCount)) {
-      setPlusOne(true);
-      setTimeout(() => setPlusOne(false), 1500);
+      setPlusOne(true)
+      setTimeout(() => setPlusOne(false), 1500)
     }
-  }, [props.cachedCount, props.incomingCount]);
+  }, [props.cachedCount, props.incomingCount, setPlusOne])
 
-  let color, content;
+  let color: string = '',
+    content: string = ''
   if (props.incomingCount || props.incomingCount === 0) {
-    color = props.incomingCount > props.cachedCount ? 'lightgreen' : 'red';
+    color = props.incomingCount > props.cachedCount ? 'lightgreen' : 'red'
     content =
       props.incomingCount > props.cachedCount
         ? `+${props.incomingCount - props.cachedCount}`
-        : `-${props.cachedCount - props.incomingCount}`;
+        : `-${props.cachedCount - props.incomingCount}`
   }
 
   return (
@@ -46,12 +47,12 @@ const PlusOneBox = (props: PlusOneBoxProps) => {
         <Slide
           in
           container={containerRef.current}
-          direction="up"
+          direction='up'
           timeout={1000}
         >
           <Box
             sx={{
-              border: '1px solid ' + color,
+              border: `1px solid ${color}`,
               borderRadius: '50%',
               height: '1rem',
               width: '1rem',
@@ -62,14 +63,14 @@ const PlusOneBox = (props: PlusOneBoxProps) => {
               marginLeft: '.25rem',
               top: 0,
             }}
-            className="risingElement"
+            className='risingElement'
           >
             <Typography color={color}>{content}</Typography>
           </Box>
         </Slide>
       ) : null}
     </Box>
-  );
-};
+  )
+}
 
-export default PlusOneBox;
+export default PlusOneBox

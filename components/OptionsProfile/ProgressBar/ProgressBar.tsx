@@ -1,29 +1,30 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { hasStatus } from '@components/UserProfile/UserProfile'
+import { useCSX, useInterval } from '@lib'
 import {
   Box,
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
-  SxProps,
-  Theme,
+  type SelectChangeEvent,
+  type SxProps,
+  type Theme,
   useTheme,
-} from '@mui/material';
-import { useCSX, useInterval } from '@lib';
-import { useDispatch, useSelector } from '@redux/reduxHooks';
+} from '@mui/material'
+import { useDispatch, useSelector } from '@redux/reduxHooks'
 import {
-  setSortCondition,
-  getSortCondition,
-  useAddAllActivitiesMutation,
-  useDestroyUserAndActivitiesMutation,
   completeProgressBarProgress,
   getProgressBarProgress,
+  getSortCondition,
   incrementProgressBarProgress,
   resetProgressBarProgress,
+  SortCondition,
+  setSortCondition,
+  useAddAllActivitiesMutation,
+  useDestroyUserAndActivitiesMutation,
   useGetAllEntriesQuery,
   useGetUserProfileQuery,
-} from '@redux/slices';
-import { hasStatus } from '@components/UserProfile/UserProfile';
+} from '@redux/slices'
+import { useCallback, useEffect, useState } from 'react'
 
 const muiUpdateButtonContainerSx: SxProps = {
   minHeight: '5vmax',
@@ -31,15 +32,15 @@ const muiUpdateButtonContainerSx: SxProps = {
   justifyContent: 'center',
   alignItems: 'center',
   width: '95%',
-};
+}
 
 const muiUpdateButtonSx = (theme: Theme) => ({
   cursor: 'pointer',
   textRendering: 'geometricPrecision',
   backgroundColor: theme.palette.mainBackground.main,
   color: theme.palette.strava.main,
-  border: '2px solid ' + theme.palette.strava.contrastColor,
-  boxShadow: '0 0 5px ' + theme.palette.strava.contrastColor,
+  border: `2px solid ${theme.palette.strava.contrastColor}`,
+  boxShadow: `0 0 5px  ${theme.palette.strava.contrastColor}`,
   padding: '0.5vmax 1vmax',
   minWidth: '10%',
   margin: '1rem 0.5rem',
@@ -47,10 +48,10 @@ const muiUpdateButtonSx = (theme: Theme) => ({
   '&:hover': {
     backgroundColor: theme.palette.strava.contrastColor,
     color: theme.palette.strava.contrastText,
-    border: '2px solid ' + theme.palette.strava.contrastText,
+    border: `2px solid ${theme.palette.strava.contrastText}`,
     cursor: 'pointer',
   },
-});
+})
 
 const menuItemStyles = (indicator: boolean, theme: Theme) => ({
   textAlign: 'center !important',
@@ -63,34 +64,34 @@ const menuItemStyles = (indicator: boolean, theme: Theme) => ({
   '&:hover': {
     backgroundColor: theme.palette.mainBackground.main,
   },
-});
+})
 
 // time it takes to delete one dynamodb record in ms
-const dynamoDBDeletionRatePerRecord = 110;
-const dynamoDBInsertionRatePerRecord = 30;
+const dynamoDBDeletionRatePerRecord = 110
+const dynamoDBInsertionRatePerRecord = 30
 
 const ProgressBar = () => {
-  const theme = useTheme();
-  const [deletionRate, setDeletionRate] = useState(75);
-  const [insertionRate, setInsertionRate] = useState(125);
-  const dispatch = useDispatch();
-  const { data: allEntries } = useGetAllEntriesQuery(null);
-  const { isError, error } = useGetUserProfileQuery(null);
-  const sortCondition = useSelector(getSortCondition);
+  const theme = useTheme()
+  const [deletionRate, setDeletionRate] = useState(75)
+  const [insertionRate, setInsertionRate] = useState(125)
+  const dispatch = useDispatch()
+  const { data: allEntries } = useGetAllEntriesQuery(null)
+  const { isError, error } = useGetUserProfileQuery(null)
+  const sortCondition = useSelector(getSortCondition)
 
   useEffect(() => {
-    const numberOfEntries = allEntries?.count;
+    const numberOfEntries = allEntries?.count
     if (numberOfEntries) {
       const currentDeletionRate =
-        (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100;
+        (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100
       const currentInsertionRate =
-        (numberOfEntries * dynamoDBInsertionRatePerRecord) / 100;
-      setInsertionRate(currentInsertionRate);
-      setDeletionRate(currentDeletionRate);
+        (numberOfEntries * dynamoDBInsertionRatePerRecord) / 100
+      setInsertionRate(currentInsertionRate)
+      setDeletionRate(currentDeletionRate)
     }
-  }, [allEntries?.count]);
+  }, [allEntries?.count])
 
-  const progressBarProgress = useSelector(getProgressBarProgress);
+  const progressBarProgress = useSelector(getProgressBarProgress)
   const [
     addAllActivities,
     {
@@ -98,7 +99,7 @@ const ProgressBar = () => {
       isLoading: isLoadingAdd,
       isUninitialized: isUninitializedAdd,
     },
-  ] = useAddAllActivitiesMutation();
+  ] = useAddAllActivitiesMutation()
   const [
     _,
     {
@@ -108,61 +109,64 @@ const ProgressBar = () => {
     },
   ] = useDestroyUserAndActivitiesMutation({
     fixedCacheKey: 'destroy-user-key',
-  });
+  })
 
   useInterval(
     () => {
       if (isSuccessAdd) {
-        dispatch(completeProgressBarProgress());
+        dispatch(completeProgressBarProgress())
         setTimeout(() => {
-          dispatch(resetProgressBarProgress());
-        }, 750);
+          dispatch(resetProgressBarProgress())
+        }, 750)
       } else if (isLoadingAdd) {
-        dispatch(incrementProgressBarProgress(progressBarProgress));
+        dispatch(incrementProgressBarProgress(progressBarProgress))
       }
     },
-    isSuccessAdd || isUninitializedAdd ? -1 : insertionRate
-  );
+    isSuccessAdd || isUninitializedAdd ? -1 : insertionRate,
+  )
 
   useInterval(
     () => {
       if (isSuccessDestroy) {
-        dispatch(completeProgressBarProgress());
+        dispatch(completeProgressBarProgress())
         setTimeout(() => {
-          dispatch(resetProgressBarProgress());
-          window.location.reload();
-        }, 1000);
+          dispatch(resetProgressBarProgress())
+          window.location.reload()
+        }, 1000)
       } else if (isLoadingDestroy) {
-        dispatch(incrementProgressBarProgress(progressBarProgress));
+        dispatch(incrementProgressBarProgress(progressBarProgress))
       }
     },
-    isSuccessDestroy || isUninitializedDestroy ? -1 : deletionRate
-  );
+    isSuccessDestroy || isUninitializedDestroy ? -1 : deletionRate,
+  )
 
   const fillerStyles = {
     width: `${progressBarProgress}%`,
-  };
+  }
 
   const updateEntries: () => Promise<void> = async () => {
-    await addAllActivities(null);
-  };
+    await addAllActivities(null)
+  }
 
-  const setSortConditionCallback = useCallback((event: SelectChangeEvent) => {
-    dispatch(setSortCondition(event.target.value));
-  }, [dispatch, setSortCondition]);
+  const setSortConditionCallback = useCallback(
+    (event: SelectChangeEvent<SortCondition>) => {
+      dispatch(setSortCondition(event.target.value))
+    },
+    [dispatch],
+  )
 
-  const mobileStyleSelect = useCSX('unset', '1', 'flex');
-  const mobileStyleUpdateButton = useCSX('unset', '.5', 'flex');
+  const mobileStyleSelect = useCSX('unset', '1', 'flex')
+  const mobileStyleUpdateButton = useCSX('unset', '.5', 'flex')
 
-  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429;
+  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429
 
   return progressBarProgress === 0 ? (
-    <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
+    <Box className='updateButtonContainer' sx={muiUpdateButtonContainerSx}>
       {sortCondition ? (
         <Select
-          className="updateButton"
+          className='updateButton'
           onChange={setSortConditionCallback}
-          // @ts-ignore
+          // @ts-expect-error
           sx={{
             ...muiUpdateButtonSx(theme),
             ...mobileStyleSelect,
@@ -170,50 +174,71 @@ const ProgressBar = () => {
           value={sortCondition || 'speedDesc'}
         >
           <MenuItem
-            value={'distanceDesc'}
-            sx={menuItemStyles(sortCondition === 'distanceDesc', theme)}
+            value={SortCondition.DISTANCE_DESC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.DISTANCE_DESC,
+              theme,
+            )}
           >
             Distance: Furthest First
           </MenuItem>
           <MenuItem
-            value="speedDesc"
-            sx={menuItemStyles(sortCondition === 'speedDesc', theme)}
+            value={SortCondition.SPEED_DESC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.SPEED_DESC,
+              theme,
+            )}
           >
             Speed: Fastest First
           </MenuItem>
           <MenuItem
-            value="dateDesc"
-            sx={menuItemStyles(sortCondition === 'dateDesc', theme)}
+            value={SortCondition.DATE_DESC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.DATE_DESC,
+              theme,
+            )}
           >
             Date: Most Recent
           </MenuItem>
           <MenuItem
-            value="dateAsc"
-            sx={menuItemStyles(sortCondition === 'dateAsc', theme)}
+            value={SortCondition.DATE_ASC}
+            sx={menuItemStyles(sortCondition === SortCondition.DATE_ASC, theme)}
           >
             Date: Least Recent
           </MenuItem>
           <MenuItem
-            value="movingTimeDesc"
-            sx={menuItemStyles(sortCondition === 'movingTimeDesc', theme)}
+            value={SortCondition.MOVING_TIME_DESC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.MOVING_TIME_DESC,
+              theme,
+            )}
           >
             Moving Time: Longest First
           </MenuItem>
           <MenuItem
-            value="movingTimeAsc"
-            sx={menuItemStyles(sortCondition === 'movingTimeAsc', theme)}
+            value={SortCondition.MOVING_TIME_ASC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.MOVING_TIME_ASC,
+              theme,
+            )}
           >
             Moving Time: Shortest First
           </MenuItem>
           <MenuItem
-            value="timeElapsedDesc"
-            sx={menuItemStyles(sortCondition === 'timeElaspedDesc', theme)}
+            value={SortCondition.TIME_ELAPSED_DESC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.TIME_ELAPSED_DESC,
+              theme,
+            )}
           >
             Time Elapsed: Longest First
           </MenuItem>
           <MenuItem
-            value="timeElapsedAsc"
-            sx={menuItemStyles(sortCondition === 'timeElaspedAsc', theme)}
+            value={SortCondition.TIME_ELAPSED_ASC}
+            sx={menuItemStyles(
+              sortCondition === SortCondition.TIME_ELAPSED_ASC,
+              theme,
+            )}
           >
             Time Elapsed: Shortest First
           </MenuItem>
@@ -229,11 +254,11 @@ const ProgressBar = () => {
       )}
       {!rateLimitExceeded ? (
         <OutlinedInput
-          type="button"
-          className="updateButton"
-          value="Fetch New Activities!"
+          type='button'
+          className='updateButton'
+          value='Fetch New Activities!'
           onClick={updateEntries}
-          // @ts-ignore
+          // @ts-expect-error
           sx={{
             ...muiUpdateButtonSx(theme),
             ...mobileStyleUpdateButton,
@@ -243,20 +268,20 @@ const ProgressBar = () => {
       ) : null}
     </Box>
   ) : (
-    <Box className="updateButtonContainer" sx={muiUpdateButtonContainerSx}>
+    <Box className='updateButtonContainer' sx={muiUpdateButtonContainerSx}>
       <Box
-        id="progressBarContainer"
+        id='progressBarContainer'
         sx={{
           width: '95%',
-          border: '1px solid ' + theme.palette.strava.contrastColor,
-          boxShadow: '0 0 5px ' + theme.palette.strava.contrastColor,
+          border: `1px solid ${theme.palette.strava.contrastColor}`,
+          boxShadow: `0 0 5px ${theme.palette.strava.contrastColor}`,
           backgroundColor: theme.palette.strava.contrastColor,
           borderRadius: '50px',
           margin: '1% 2.5%',
         }}
       >
         <Box
-          className="progressBarFiller"
+          className='progressBarFiller'
           style={fillerStyles}
           sx={{
             height: '100%',
@@ -271,7 +296,7 @@ const ProgressBar = () => {
           }}
         >
           <Box
-            className="progressBarCounter"
+            className='progressBarCounter'
             sx={{
               padding: 5,
               color: theme.palette.strava.contrastText,
@@ -281,7 +306,7 @@ const ProgressBar = () => {
         </Box>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default ProgressBar;
+export default ProgressBar

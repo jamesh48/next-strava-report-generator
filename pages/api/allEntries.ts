@@ -1,11 +1,12 @@
-import axios from 'axios';
-import nextConnect from 'next-connect';
-import { NextApiRequest, NextApiResponse } from 'next';
-const handler = nextConnect();
+import axios from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+
+const handler = nextConnect()
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const srg_athlete_id = req.cookies.athleteId;
+    const srg_athlete_id = req.cookies.athleteId
     const {
       hasAchievements,
       limit,
@@ -17,7 +18,7 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       beforeDate,
       afterDate,
       sortCondition,
-    } = req.query;
+    } = req.query
 
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/allActivities`,
@@ -35,10 +36,10 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
         ...(minDistance ? { min_distance: minDistance } : {}),
         ...(maxDistance ? { min_distance: maxDistance } : {}),
       },
-    });
-    return res.send(data);
-  } catch (err) {
-    res.send([]);
+    })
+    return res.send(data)
+  } catch (_err) {
+    res.send([])
   }
-});
-export default handler;
+})
+export default handler

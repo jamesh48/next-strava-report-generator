@@ -16,24 +16,24 @@ export type Format =
 export type APIEntry = {
   activityId: number;
   name: string;
-  start_date: string;
-  max_speed: string;
+  startDate: string;
+  maxSpeed: string;
   distance: number;
-  moving_time: number;
-  elapsed_time: number;
+  movingTime: number;
+  elapsedTime: number;
   type: string;
   // Shared Details
-  average_heartrate: number;
+  averageHeartrate: number;
   max_heartrate: number;
-  kudos_count: number;
-  comment_count: number;
-  achievement_count: number;
+  kudosCount: number;
+  commentCount: number;
+  achievementCount: number;
   // Cached Detailed Entry
   individualActivityCached?: true;
 };
 
 export type UIEntry = Omit<APIEntry, 'distance' | 'elapsed_time'> & {
-  average_pace: string;
+  averagePace: string;
   distance: string;
   elapsed_time: string
 };

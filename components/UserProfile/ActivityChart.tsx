@@ -1,14 +1,14 @@
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from 'chart.js'
+import { Line } from 'react-chartjs-2'
 
 ChartJS.register(
   CategoryScale,
@@ -17,20 +17,20 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
-);
+  Legend,
+)
 
-import { useGetMonthlyStatsQuery } from '@redux/slices';
-import { useState } from 'react';
-import { Button, Box, useTheme } from '@mui/material';
-import { Sport } from '@components/StravaEntries/EntryTypes';
+import type { Sport } from '@components/StravaEntries/EntryTypes'
+import { Box, Button, useTheme } from '@mui/material'
+import { useGetMonthlyStatsQuery } from '@redux/slices'
+import { useState } from 'react'
 
 export interface ActivityChartProps {
-  activityType: Sport;
+  activityType: Sport
 }
 
 const ActivityChart = (props: ActivityChartProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
   const dataMap = {
     count: {
       title: 'Number of Activities',
@@ -40,9 +40,9 @@ const ActivityChart = (props: ActivityChartProps) => {
       title: 'Distance of Activities',
       color: theme.palette.baseBackground.main,
     },
-  };
+  }
   const [currentlyShownChart, setCurrentlyShownChart] =
-    useState<string>('count');
+    useState<string>('count')
 
   const options = {
     color: theme.palette.strava.main,
@@ -58,11 +58,11 @@ const ActivityChart = (props: ActivityChartProps) => {
       },
       title: {
         display: true,
-        text: props.activityType + ' Activities',
+        text: `${props.activityType} Activities`,
         color: theme.palette.strava.main,
       },
     },
-  };
+  }
 
   const { data: monthlyStats } = useGetMonthlyStatsQuery(
     {
@@ -70,23 +70,23 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
     {
       selectFromResult: ({ data, ...rest }) => {
-        return { data: Object.entries(data || {}), ...rest };
+        return { data: Object.entries(data || {}), ...rest }
       },
-    }
-  );
+    },
+  )
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
 
   const thisYearsActivities =
     monthlyStats.filter((entry) =>
-      entry[0].startsWith(currentYear.toString())
-    ) || [];
+      entry[0].startsWith(currentYear.toString()),
+    ) || []
 
   // Create a map of year-month to activity data for quick lookup
   const activityMap = new Map(
-    thisYearsActivities.map(([key, value]) => [key, value])
-  );
+    thisYearsActivities.map(([key, value]) => [key, value]),
+  )
 
   // Generate all 12 months for the current year
   const monthNames = [
@@ -102,16 +102,16 @@ const ActivityChart = (props: ActivityChartProps) => {
     'Oct',
     'Nov',
     'Dec',
-  ];
+  ]
   const allMonths = Array.from({ length: 12 }, (_, i) => {
-    const monthNum = (i + 1).toString().padStart(2, '0');
-    const yearMonth = `${currentYear}-${monthNum}`;
+    const monthNum = (i + 1).toString().padStart(2, '0')
+    const yearMonth = `${currentYear}-${monthNum}`
     return {
       key: yearMonth,
       label: monthNames[i],
       data: activityMap.get(yearMonth) || { count: 0, distance: 0 },
-    };
-  });
+    }
+  })
 
   const data = {
     labels: allMonths.map((month) => month.label),
@@ -119,14 +119,14 @@ const ActivityChart = (props: ActivityChartProps) => {
       {
         label: dataMap[currentlyShownChart as 'count'].title,
         data: allMonths.map(
-          (month) => month.data[currentlyShownChart as 'count' | 'distance']
+          (month) => month.data[currentlyShownChart as 'count' | 'distance'],
         ),
         borderColor: dataMap[currentlyShownChart as 'count'].color,
         backgroundColor: theme.palette.strava.contrastColor,
         yAxisId: 'y',
       },
     ],
-  };
+  }
   return (
     <Box>
       <Line options={options} data={data} />
@@ -137,7 +137,7 @@ const ActivityChart = (props: ActivityChartProps) => {
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default ActivityChart;
+export default ActivityChart

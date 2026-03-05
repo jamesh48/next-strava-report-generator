@@ -1,75 +1,75 @@
+import type { Sport } from '@components/StravaEntries/EntryTypes'
+import { usePopupModal } from '@lib'
+import { Close, Warning } from '@mui/icons-material'
 import {
   Box,
-  Dialog,
-  Typography,
   Button,
-  Select,
-  MenuItem,
-  Divider,
   Collapse,
-  useTheme,
+  Dialog,
+  Divider,
   FormControlLabel,
+  MenuItem,
+  Select,
   Switch,
-} from '@mui/material';
-import { Close, Warning } from '@mui/icons-material';
-import { useDispatch, useSelector } from '@redux/reduxHooks';
+  Typography,
+  useTheme,
+} from '@mui/material'
+import { useDispatch, useSelector } from '@redux/reduxHooks'
 import {
-  getSortCondition,
-  getSportCondition,
+  type DateCondition,
   getDarkModeCondition,
   getDateCondition,
+  getSortCondition,
+  getSportCondition,
+  setDarkMode,
+  setDateCondition,
   setSortCondition,
   setSportCondition,
-  setDateCondition,
   useDestroyUserAndActivitiesMutation,
-  DateCondition,
-  setDarkMode,
-} from '@redux/slices';
-import axios from 'axios';
-import { useState } from 'react';
-import { usePopupModal } from '@lib';
-import { Sport } from '@components/StravaEntries/EntryTypes';
+} from '@redux/slices'
+import axios from 'axios'
+import { useState } from 'react'
 
 interface UserSettingsProps {
-  closeUserSettingsCB: () => void;
+  closeUserSettingsCB: () => void
 }
 const UserSettings = (props: UserSettingsProps) => {
-  const theme = useTheme();
-  const dispatch = useDispatch();
+  const theme = useTheme()
+  const dispatch = useDispatch()
   const [destroyUserAndActivities] = useDestroyUserAndActivitiesMutation({
     fixedCacheKey: 'destroy-user-key',
-  });
+  })
 
-  const defaultSortCondition = useSelector(getSortCondition);
-  const defaultSportCondition = useSelector(getSportCondition);
-  const defaultDarkModeCondition = useSelector(getDarkModeCondition);
+  const defaultSortCondition = useSelector(getSortCondition)
+  const defaultSportCondition = useSelector(getSportCondition)
+  const defaultDarkModeCondition = useSelector(getDarkModeCondition)
   const [_fromDate, _toDate, defaultDateCondition] =
-    useSelector(getDateCondition);
+    useSelector(getDateCondition)
   const [selectedDarkMode, setSelectedDarkMode] = useState(
-    defaultDarkModeCondition
-  );
-  const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition);
+    defaultDarkModeCondition,
+  )
+  const [selectedFormat, setSelectedFormat] = useState(defaultSortCondition)
   const [selectedSport, setSelectedSport] = useState<Sport>(
-    defaultSportCondition
-  );
+    defaultSportCondition,
+  )
   const [selectedDate, setSelectedDate] = useState<DateCondition>(
-    defaultDateCondition as DateCondition
-  );
-  const [dangerArea, setDangerArea] = useState(false);
+    defaultDateCondition as DateCondition,
+  )
+  const [dangerArea, setDangerArea] = useState(false)
 
   const destroyUser = async () => {
-    await destroyUserAndActivities(null);
-  };
+    await destroyUserAndActivities(null)
+  }
 
-  const [open] = usePopupModal();
+  const [open] = usePopupModal()
 
   return (
     <Dialog
       open={true}
       PaperProps={{
         sx: {
-          border: '1px solid ' + theme.palette.strava.main,
-          boxShadow: '2.5px 2.5px .25rem 0px ' + theme.palette.strava.main,
+          border: `1px solid ${theme.palette.strava.main}`,
+          boxShadow: `2.5px 2.5px .25rem 0px ${theme.palette.strava.main}`,
         },
       }}
     >
@@ -95,7 +95,7 @@ const UserSettings = (props: UserSettingsProps) => {
           }}
         >
           <Typography
-            variant="h6"
+            variant='h6'
             sx={{
               flex: 1,
               display: 'flex',
@@ -111,13 +111,13 @@ const UserSettings = (props: UserSettingsProps) => {
             sx={{
               display: 'flex',
               height: '1.5rem',
-              outline: '1px solid ' + theme.palette.strava.main,
+              outline: `1px solid ${theme.palette.strava.main}`,
               padding: '1rem .5rem',
               margin: '.5rem',
               color: theme.palette.strava.main,
             }}
           >
-            <Close data-testid="userpreferences-closebutton" />
+            <Close data-testid='userpreferences-closebutton' />
           </Button>
         </Box>
         <Box>
@@ -144,10 +144,10 @@ const UserSettings = (props: UserSettingsProps) => {
               }
             >
               {/* Values correspond with radio values */}
-              <MenuItem value="Run">Running</MenuItem>
-              <MenuItem value="Swim">Swimming</MenuItem>
-              <MenuItem value="Ride">Cycling</MenuItem>
-              <MenuItem value="Walk">Walking</MenuItem>
+              <MenuItem value='Run'>Running</MenuItem>
+              <MenuItem value='Swim'>Swimming</MenuItem>
+              <MenuItem value='Ride'>Cycling</MenuItem>
+              <MenuItem value='Walk'>Walking</MenuItem>
             </Select>
           </Box>
         </Box>
@@ -173,19 +173,19 @@ const UserSettings = (props: UserSettingsProps) => {
               inputProps={{ sx: { color: theme.palette.strava.contrastColor } }}
               onChange={(event) => setSelectedFormat(event.target.value)}
             >
-              <MenuItem value="speedDesc">Speed: Fastest First</MenuItem>
-              <MenuItem value="dateDesc">Date: Most Recent</MenuItem>
-              <MenuItem value="dateAsc">Date: Least Recent</MenuItem>
-              <MenuItem value="movingTimeDesc">
+              <MenuItem value='speedDesc'>Speed: Fastest First</MenuItem>
+              <MenuItem value='dateDesc'>Date: Most Recent</MenuItem>
+              <MenuItem value='dateAsc'>Date: Least Recent</MenuItem>
+              <MenuItem value='movingTimeDesc'>
                 Moving Time: Longest First
               </MenuItem>
-              <MenuItem value="movingTimeAsc">
+              <MenuItem value='movingTimeAsc'>
                 Moving Time: Shortest First
               </MenuItem>
-              <MenuItem value="timeElapsedDesc">
+              <MenuItem value='timeElapsedDesc'>
                 Time Elapsed: Longest First
               </MenuItem>
-              <MenuItem value="timeElapsedAsc">
+              <MenuItem value='timeElapsedAsc'>
                 Time Elapsed: Shortest First
               </MenuItem>
             </Select>
@@ -215,18 +215,18 @@ const UserSettings = (props: UserSettingsProps) => {
                 setSelectedDate(event.target.value as DateCondition)
               }
             >
-              <MenuItem value="allTime">All Time</MenuItem>
-              <MenuItem value="thisYear">This Year</MenuItem>
-              <MenuItem value="thisMonth">This Month</MenuItem>
-              <MenuItem value="thisWeek">This Week</MenuItem>
+              <MenuItem value='allTime'>All Time</MenuItem>
+              <MenuItem value='thisYear'>This Year</MenuItem>
+              <MenuItem value='thisMonth'>This Month</MenuItem>
+              <MenuItem value='thisWeek'>This Week</MenuItem>
             </Select>
           </Box>
         </Box>
         {/* Dark Mode */}
         <Box>
           <FormControlLabel
-            labelPlacement="start"
-            label="Dark Mode"
+            labelPlacement='start'
+            label='Dark Mode'
             sx={{
               color: theme.palette.strava.contrastColor,
               display: 'flex',
@@ -316,22 +316,22 @@ const UserSettings = (props: UserSettingsProps) => {
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                  });
-                  dispatch(setSportCondition(selectedSport));
-                  dispatch(setSortCondition(selectedFormat));
-                  dispatch(setDateCondition(selectedDate));
-                  dispatch(setDarkMode(selectedDarkMode));
-                  props.closeUserSettingsCB();
-                };
+                  })
+                  dispatch(setSportCondition(selectedSport))
+                  dispatch(setSortCondition(selectedFormat))
+                  dispatch(setDateCondition(selectedDate))
+                  dispatch(setDarkMode(selectedDarkMode))
+                  props.closeUserSettingsCB()
+                }
 
-                asyncFn();
+                asyncFn()
               }}
             >
               Apply
             </Button>
           </Box>
         </Box>
-        <Divider color="white" />
+        <Divider color='white' />
 
         <Box
           sx={{
@@ -344,9 +344,9 @@ const UserSettings = (props: UserSettingsProps) => {
           onClick={() => setDangerArea((ex) => !ex)}
         >
           <Warning sx={{ color: 'red', paddingX: '.25rem' }} />
-          <Typography color="red">Danger Zone</Typography>
+          <Typography color='red'>Danger Zone</Typography>
         </Box>
-        <Collapse in={dangerArea} collapsedSize={'0'} orientation="vertical">
+        <Collapse in={dangerArea} collapsedSize='0' orientation='vertical'>
           <Box
             sx={{
               padding: '.75rem',
@@ -358,7 +358,7 @@ const UserSettings = (props: UserSettingsProps) => {
               disabled={!dangerArea}
               sx={{
                 color: theme.palette.strava.main,
-                border: '1px solid ' + theme.palette.strava.main,
+                border: `1px solid ${theme.palette.strava.main}`,
                 width: '75%',
                 display: 'flex',
                 justifyContent: 'center',
@@ -370,8 +370,8 @@ const UserSettings = (props: UserSettingsProps) => {
                   title: 'Destroy User Information?',
                   severity: 'warning',
                   onConfirm: () => {
-                    props.closeUserSettingsCB();
-                    destroyUser();
+                    props.closeUserSettingsCB()
+                    destroyUser()
                   },
                 })
               }
@@ -382,7 +382,7 @@ const UserSettings = (props: UserSettingsProps) => {
         </Collapse>
       </Box>
     </Dialog>
-  );
-};
+  )
+}
 
-export default UserSettings;
+export default UserSettings

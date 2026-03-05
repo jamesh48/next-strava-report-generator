@@ -1,55 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import EntryUI from './EntryUl';
-// import PageNoUl from '@components/PaginationContainer/PageNoUl';
-import { CachedEntry, Format, Sport, UIEntry } from './EntryTypes.js';
+import { useMobileBrowserCheck } from '@lib'
+import { Box } from '@mui/material'
+import { useDispatch, useSelector } from '@redux/reduxHooks'
 import {
-  useLazyGetIndividualEntryQuery,
-  getSortCondition,
-  getDateCondition,
   getAchievementsOnlyCondition,
+  getDateCondition,
+  getSortCondition,
   setCurrentActivity,
-} from '@redux/slices';
-import { useDispatch, useSelector } from '@redux/reduxHooks';
-import { useMobileBrowserCheck } from '@lib';
+  useLazyGetIndividualEntryQuery,
+} from '@redux/slices'
+import type React from 'react'
+import { useEffect, useState } from 'react'
+// import PageNoUl from '@components/PaginationContainer/PageNoUl';
+import type { CachedEntry, Format, Sport, UIEntry } from './EntryTypes.js'
+import EntryUI from './EntryUl'
 
 export interface ReportProps {
-  sport: Sport;
-  distance: number;
-  format: Format;
-  titleQuery: string;
+  sport: Sport
+  distance: number
+  format: Format
+  titleQuery: string
 }
 
 export type CustomMouseEventHandler = (
   event: React.MouseEvent<HTMLAnchorElement>,
-  cachedEntry?: UIEntry & CachedEntry
-) => void;
+  cachedEntry?: UIEntry & CachedEntry,
+) => void
 
 const Report = (props: ReportProps) => {
-  const dispatch = useDispatch();
-  const _isMobile = useMobileBrowserCheck();
+  const dispatch = useDispatch()
+  const _isMobile = useMobileBrowserCheck()
   const [getIndividualEntry, individualEntryResults] =
-    useLazyGetIndividualEntryQuery();
-  const [fromDateQuery, toDateQuery] = useSelector(getDateCondition);
-  const achievementsOnly = useSelector(getAchievementsOnlyCondition);
-  const sortCondition = useSelector(getSortCondition);
+    useLazyGetIndividualEntryQuery()
+  const [fromDateQuery, toDateQuery] = useSelector(getDateCondition)
+  const achievementsOnly = useSelector(getAchievementsOnlyCondition)
+  const sortCondition = useSelector(getSortCondition)
   // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [entriesPerPage] = useState(7);
+  const [currentPage, setCurrentPage] = useState(1)
+  const [entriesPerPage] = useState(7)
   // Entries
-  const [invalidEntry, setInvalidEntry] = useState(false);
+  const [invalidEntry, setInvalidEntry] = useState(false)
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [props.sport]);
+    setCurrentPage(1)
+  }, [props.sport])
 
   useEffect(() => {
     if (typeof Number(props.distance) !== 'number') {
-      setInvalidEntry(true);
+      setInvalidEntry(true)
     } else {
-      setInvalidEntry(false);
+      setInvalidEntry(false)
     }
-  }, [props.distance]);
+  }, [props.distance])
 
   // totalEntries = totalEntries
   //   ?.filter((entry: Entry) => Number(props.distance) <= Number(entry.distance))
@@ -118,20 +119,20 @@ const Report = (props: ReportProps) => {
   // };
 
   const handleCloseCurrentActivity = () => {
-    dispatch(setCurrentActivity({}));
-  };
+    dispatch(setCurrentActivity({}))
+  }
 
   useEffect(() => {
-    if (individualEntryResults && individualEntryResults.data) {
-      dispatch(setCurrentActivity(individualEntryResults.data));
+    if (individualEntryResults?.data) {
+      dispatch(setCurrentActivity(individualEntryResults.data))
     }
-  }, [individualEntryResults]);
+  }, [individualEntryResults, dispatch])
 
   const showIndividualEntry: CustomMouseEventHandler = async (
     event,
-    cachedEntry?: UIEntry & CachedEntry
+    cachedEntry?: UIEntry & CachedEntry,
   ) => {
-    event.preventDefault();
+    event.preventDefault()
     if (cachedEntry) {
       dispatch(
         setCurrentActivity({
@@ -155,17 +156,17 @@ const Report = (props: ReportProps) => {
             },
           },
           segment_efforts: JSON.parse(cachedEntry.segmentEfforts),
-        })
-      );
+        }),
+      )
     } else {
       getIndividualEntry({
         entryid: Number(event.currentTarget.dataset.indentry),
-      });
+      })
     }
-  };
+  }
 
   return (
-    <Box id="report" sx={{ width: '95%' }}>
+    <Box id='report' sx={{ width: '95%' }}>
       {/* {isMobile ? (
         <PageNoUl
           {...props}
@@ -194,7 +195,7 @@ const Report = (props: ReportProps) => {
         />
       ) : null} */}
     </Box>
-  );
-};
+  )
+}
 
-export default Report;
+export default Report

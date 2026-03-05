@@ -37,6 +37,7 @@
     "sass": "^1.46.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.6",
     "@jest/types": "^29.6.3",
     "@testing-library/dom": "^8.20.1",
     "@testing-library/jest-dom": "^4.2.4",

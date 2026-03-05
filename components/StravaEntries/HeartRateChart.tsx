@@ -1,17 +1,17 @@
-import { Line } from 'react-chartjs-2';
-import { Box, Button, useTheme } from '@mui/material';
+import { Box, Button, useTheme } from '@mui/material'
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { CurrentActivity, Format } from './EntryTypes';
-import { useEffect, useState } from 'react';
+} from 'chart.js'
+import { useEffect, useState } from 'react'
+import { Line } from 'react-chartjs-2'
+import type { CurrentActivity, Format } from './EntryTypes'
 
 ChartJS.register(
   CategoryScale,
@@ -20,18 +20,18 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
-);
+  Legend,
+)
 
 interface HeartRateChartProps {
-  currentActivity: CurrentActivity | undefined;
-  format: Format;
-  isSharedActivity?: true;
+  currentActivity: CurrentActivity | undefined
+  format: Format
+  isSharedActivity?: true
 }
 
 const HeartRateChart = (props: HeartRateChartProps) => {
-  const theme = useTheme();
-  const [hrData, setHrData] = useState(['avgHR']);
+  const theme = useTheme()
+  const [hrData, setHrData] = useState(['avgHR'])
   const [data, setData] = useState({
     labels: ['0'],
     datasets: [
@@ -42,7 +42,7 @@ const HeartRateChart = (props: HeartRateChartProps) => {
         borderColor: theme.palette.strava.contrastColor,
       },
     ],
-  });
+  })
   const options = {
     responsive: true,
     plugins: {
@@ -54,31 +54,31 @@ const HeartRateChart = (props: HeartRateChartProps) => {
         text: 'Heart Rate',
       },
     },
-  };
+  }
 
   const currentMeasurement = (() => {
     if (props.format === 'avgypace') {
-      return 'yds';
+      return 'yds'
     }
-    return 'mtrs';
-  })();
+    return 'mtrs'
+  })()
 
   useEffect(() => {
     if (props.currentActivity?.laps) {
-      let cumulativeDistance = 0;
+      let cumulativeDistance = 0
       const maxHeartRateDataSet = {
         label: 'Max Heart Rate',
         data: props.currentActivity.laps.map((x) => x.max_heartrate),
         borderColor: 'red',
         backgroundColor: 'red',
-      };
+      }
 
       const averageHeartRateDataSet = {
         label: 'Average Heart Rate',
         data: props.currentActivity.laps.map((x) => x.average_heartrate),
         borderColor: 'darkturquoise',
         backgroundColor: 'darkturquoise',
-      };
+      }
 
       setData({
         labels: props.currentActivity.laps.map(
@@ -87,28 +87,28 @@ const HeartRateChart = (props: HeartRateChartProps) => {
               increment.distance *
               (() => {
                 if (props.format === 'avgypace') {
-                  return 1.094;
+                  return 1.094
                 }
-                return 1;
-              })()).toFixed() + ` ${currentMeasurement}`
+                return 1
+              })()).toFixed() + ` ${currentMeasurement}`,
         ),
         datasets: (() => {
           if (hrData.includes('maxHR') && hrData.includes('avgHR')) {
-            return [maxHeartRateDataSet, averageHeartRateDataSet];
+            return [maxHeartRateDataSet, averageHeartRateDataSet]
           }
           if (hrData.includes('maxHR')) {
-            return [maxHeartRateDataSet];
+            return [maxHeartRateDataSet]
           }
 
           if (hrData.includes('avgHR')) {
-            return [averageHeartRateDataSet];
+            return [averageHeartRateDataSet]
           }
 
-          return [];
+          return []
         })(),
-      });
+      })
     }
-  }, [props.currentActivity?.laps, hrData, props.format, currentMeasurement]);
+  }, [props.currentActivity?.laps, hrData, props.format, currentMeasurement])
 
   return data ? (
     <Box
@@ -123,41 +123,41 @@ const HeartRateChart = (props: HeartRateChartProps) => {
       <Line options={options} data={data} />
       <Box sx={{ display: 'flex' }}>
         <Button
-          value="maxHR"
+          value='maxHR'
           onClick={() => {
             setHrData((prev) => {
-              let ex = prev.slice(0);
+              const ex = prev.slice(0)
 
               if (ex.includes('maxHR')) {
-                ex.splice(ex.indexOf('maxHR'), 1);
+                ex.splice(ex.indexOf('maxHR'), 1)
               } else {
-                ex.push('maxHR');
+                ex.push('maxHR')
               }
-              return ex;
-            });
+              return ex
+            })
           }}
         >
           Max Heart Rate
         </Button>
         <Button
-          value="avgHR"
+          value='avgHR'
           onClick={() => {
             setHrData((prev) => {
-              let ex = prev.slice(0);
+              const ex = prev.slice(0)
               if (ex.includes('avgHR')) {
-                ex.splice(ex.indexOf('avgHR'), 1);
+                ex.splice(ex.indexOf('avgHR'), 1)
               } else {
-                ex.push('avgHR');
+                ex.push('avgHR')
               }
-              return ex;
-            });
+              return ex
+            })
           }}
         >
           Average Heart Rate
         </Button>
       </Box>
     </Box>
-  ) : null;
-};
+  ) : null
+}
 
-export default HeartRateChart;
+export default HeartRateChart

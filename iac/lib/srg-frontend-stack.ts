@@ -1,27 +1,27 @@
-import * as cdk from 'aws-cdk-lib';
-import * as ecs from 'aws-cdk-lib/aws-ecs';
-import * as iam from 'aws-cdk-lib/aws-iam';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as logs from 'aws-cdk-lib/aws-logs';
-import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib'
+import * as ec2 from 'aws-cdk-lib/aws-ec2'
+import * as ecs from 'aws-cdk-lib/aws-ecs'
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2'
+import * as iam from 'aws-cdk-lib/aws-iam'
+import * as logs from 'aws-cdk-lib/aws-logs'
+import type { Construct } from 'constructs'
 
 interface SRGFrontendStackProps extends cdk.StackProps {
   aws_env: {
-    AWS_CLUSTER_ARN: string;
-    AWS_DEFAULT_SG: string;
-    AWS_VPC_ID: string;
-  };
+    AWS_CLUSTER_ARN: string
+    AWS_DEFAULT_SG: string
+    AWS_VPC_ID: string
+  }
   svc_env: {
-    CLIENT_ID: string;
-    DATA_BASE_URL: string;
-    REDIRECT_URI_HOST: string;
-    MAPBOX_ACCESS_TOKEN: string;
-  };
+    CLIENT_ID: string
+    DATA_BASE_URL: string
+    REDIRECT_URI_HOST: string
+    MAPBOX_ACCESS_TOKEN: string
+  }
 }
 export class SRGFrontendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: SRGFrontendStackProps) {
-    super(scope, id, props);
+    super(scope, id, props)
 
     const srgFeFargateService = new ecs.FargateService(this, 'srgf-service', {
       assignPublicIp: true,
@@ -39,21 +39,21 @@ export class SRGFrontendStack extends cdk.Stack {
           taskRole: iam.Role.fromRoleName(
             this,
             'jh-ecs-task-definition-role',
-            'jh-ecs-task-definition-role'
+            'jh-ecs-task-definition-role',
           ),
           executionRole: iam.Role.fromRoleName(
             this,
             'jh-ecs-task-execution-role',
-            'jh-ecs-task-execution-role'
+            'jh-ecs-task-execution-role',
           ),
-        }
+        },
       ),
       cluster: ecs.Cluster.fromClusterAttributes(this, 'jh-impoted-cluster', {
         securityGroups: [
           ec2.SecurityGroup.fromSecurityGroupId(
             this,
             'imported-default-sg',
-            props.aws_env.AWS_DEFAULT_SG
+            props.aws_env.AWS_DEFAULT_SG,
           ),
         ],
         clusterName: 'jh-e1-ecs-cluster',
@@ -63,7 +63,7 @@ export class SRGFrontendStack extends cdk.Stack {
         }),
       }),
       enableExecuteCommand: true,
-    });
+    })
 
     const container = srgFeFargateService.taskDefinition.addContainer(
       'srgFrontend-container',
@@ -76,13 +76,13 @@ export class SRGFrontendStack extends cdk.Stack {
           streamPrefix: 'srgf-container',
           logRetention: logs.RetentionDays.FIVE_DAYS,
         }),
-      }
-    );
+      },
+    )
 
     container.addPortMappings({
       containerPort: 8000,
       hostPort: 8000,
-    });
+    })
 
     const importedALBListener = elbv2.ApplicationListener.fromLookup(
       this,
@@ -90,8 +90,8 @@ export class SRGFrontendStack extends cdk.Stack {
       {
         listenerArn:
           'arn:aws:elasticloadbalancing:us-east-1:471507967541:listener/app/jh-alb/5927623bf7b387b8/202d118fecee2aa5',
-      }
-    );
+      },
+    )
 
     const targetGroup = new elbv2.ApplicationTargetGroup(this, 'srgf-tg', {
       // targetGroupName: 'srg-svc-target',
@@ -110,7 +110,7 @@ export class SRGFrontendStack extends cdk.Stack {
         port: '8000',
         timeout: cdk.Duration.seconds(10),
       },
-    });
+    })
 
     importedALBListener.addTargetGroups('srgf-listener-tg', {
       targetGroups: [targetGroup],
@@ -122,6 +122,6 @@ export class SRGFrontendStack extends cdk.Stack {
         ]),
         // elbv2.ListenerCondition.pathPatterns(['/', '/srg/*']),
       ],
-    });
+    })
   }
 }

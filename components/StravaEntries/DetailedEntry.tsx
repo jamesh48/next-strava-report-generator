@@ -1,99 +1,99 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import HeartRateChart from './HeartRateChart';
+import AchievementsByEffort from '@components/DetailedEntry/AchievementsByEffort'
+import AchievementsBySegment from '@components/DetailedEntry/AchievementsBySegment'
+import { useCSX } from '@lib'
 import {
   Box,
   ClickAwayListener,
+  MenuItem,
+  Select,
+  type SelectChangeEvent,
   TextField,
   Typography,
   useTheme,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
-} from '@mui/material';
-import { Format } from './EntryTypes';
+} from '@mui/material'
+import { useSelector } from '@redux/reduxHooks'
 import {
   getAchievementEffortView,
   getCurrentActivity,
-  useGetUserProfileQuery,
   useGetKudoersQuery,
+  useGetUserProfileQuery,
   useUpdateShoeIndividualEntryMutation,
-} from '@redux/slices';
-import { useCSX } from '@lib';
-import ActivityMap from './ActivityMap/ActivityMap';
-import AchievementsByEffort from '@components/DetailedEntry/AchievementsByEffort';
-import AchievementsBySegment from '@components/DetailedEntry/AchievementsBySegment';
-import { useSelector } from '@redux/reduxHooks';
-import PlusOneBox from './PlusOneBox';
+} from '@redux/slices'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
+import ActivityMap from './ActivityMap/ActivityMap'
+import type { Format } from './EntryTypes'
+import HeartRateChart from './HeartRateChart'
+import PlusOneBox from './PlusOneBox'
 
 export interface DetailedEntryProps {
-  editingDescription: boolean;
-  editedDescription: string;
-  handleEditingDescriptionChange: () => void;
-  handleDescriptionChange: (e: { target: { value: string } }) => void;
-  format: Format;
-  handleCloseCurrentActivity: () => void;
-  isSharedActivity?: true;
+  editingDescription: boolean
+  editedDescription: string
+  handleEditingDescriptionChange: () => void
+  handleDescriptionChange: (e: { target: { value: string } }) => void
+  format: Format
+  handleCloseCurrentActivity: () => void
+  isSharedActivity?: true
 }
 
 const DetailedEntry = (props: DetailedEntryProps) => {
-  const theme = useTheme();
-  const currentActivity = useSelector(getCurrentActivity);
-  const { data: kudoersResults } = useGetKudoersQuery(currentActivity.id);
+  const theme = useTheme()
+  const currentActivity = useSelector(getCurrentActivity)
+  const { data: kudoersResults } = useGetKudoersQuery(currentActivity.id)
 
-  const [editingShoes, setEditingShoes] = useState(false);
+  const [editingShoes, setEditingShoes] = useState(false)
   const [updateShoeIndividualEntryMutation] =
-    useUpdateShoeIndividualEntryMutation();
+    useUpdateShoeIndividualEntryMutation()
 
-  const { data: userProfile } = useGetUserProfileQuery(null);
-  const achievementEffortView = useSelector(getAchievementEffortView);
+  const { data: userProfile } = useGetUserProfileQuery(null)
+  const achievementEffortView = useSelector(getAchievementEffortView)
 
-  const [currentStat, setCurrentStat] = useState<null | string>(null);
+  const [currentStat, setCurrentStat] = useState<null | string>(null)
 
-  const descriptionRef = useRef<HTMLInputElement>(null);
-  const gearRef = useRef<HTMLSelectElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null)
+  const gearRef = useRef<HTMLSelectElement>(null)
   useEffect(() => {
     if (props.editingDescription && descriptionRef.current) {
-      descriptionRef.current.focus();
-      const textLength = descriptionRef.current.value.length;
-      descriptionRef.current.setSelectionRange(textLength, textLength);
+      descriptionRef.current.focus()
+      const textLength = descriptionRef.current.value.length
+      descriptionRef.current.setSelectionRange(textLength, textLength)
     }
-  }, [props.editingDescription]);
+  }, [props.editingDescription])
 
   useEffect(() => {
     if (editingShoes && gearRef.current) {
-      gearRef.current.focus();
+      gearRef.current.focus()
     }
-  }, [editingShoes]);
+  }, [editingShoes])
 
   const handleKudosClick = () => {
     setCurrentStat((prevStat) => {
       if (prevStat === 'kudosComments') {
-        return null;
+        return null
       }
-      return 'kudosComments';
-    });
-  };
+      return 'kudosComments'
+    })
+  }
 
   const handleAchievementsClick = () => {
     setCurrentStat((prevStat) => {
       if (prevStat === 'achievements') {
-        return null;
+        return null
       }
-      return 'achievements';
-    });
-  };
+      return 'achievements'
+    })
+  }
 
-  const mobileColumns = useCSX('row', 'column', 'flexDirection');
+  const mobileColumns = useCSX('row', 'column', 'flexDirection')
 
   return (
     <Box
-      className="detailedEntry"
+      className='detailedEntry'
       sx={{
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        border: '2px solid ' + theme.palette.strava.main,
+        border: `2px solid ${theme.palette.strava.main}`,
         display: 'flex',
         bgcolor: theme.palette.mainBackground.entry,
         flexDirection: 'column',
@@ -105,7 +105,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
     >
       {/* Description */}
       <Box
-        className="topActivityDescription"
+        className='topActivityDescription'
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -114,7 +114,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         }}
       >
         <Typography
-          variant="h6"
+          variant='h6'
           color={theme.palette.common.white}
           sx={{ textDecoration: 'underline' }}
         >
@@ -139,21 +139,21 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               InputProps={{
                 sx: {
                   color: theme.palette.common.white,
-                  border: '1px solid ' + theme.palette.common.white,
+                  border: `1px solid ${theme.palette.common.white}`,
                 },
               }}
             />
           </ClickAwayListener>
         ) : (
           <Typography
-            className="topActivityDescription"
+            className='topActivityDescription'
             sx={{
               color: theme.palette.common.white,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               whiteSpace: 'pre-line',
-              border: '1px solid ' + theme.palette.common.white,
+              border: `1px solid ${theme.palette.common.white}`,
               padding: '1rem',
             }}
             onClick={props.handleEditingDescriptionChange}
@@ -166,14 +166,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         {/* Device */}
         {currentActivity.device_name ? (
           <Box
-            id="topActivityDevice"
+            id='topActivityDevice'
             sx={{
               alignSelf: 'flex-start',
               marginLeft: '1.25%',
               color: theme.palette.common.white,
               padding: '.5rem',
               marginY: '.75rem',
-              border: '1px solid ' + theme.palette.common.white,
+              border: `1px solid ${theme.palette.common.white}`,
               cursor: 'default',
             }}
           >
@@ -183,20 +183,20 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         {/* Gear */}
         {currentActivity.gear?.name && !editingShoes ? (
           <Box
-            id="topActivityGear"
+            id='topActivityGear'
             sx={{
               alignSelf: 'flex-start',
               marginLeft: '1.25%',
               color: theme.palette.common.white,
               padding: '.5rem',
               marginY: '.75rem',
-              border: '1px solid ' + theme.palette.common.white,
+              border: `1px solid ${theme.palette.common.white}`,
               cursor: 'default',
             }}
             onClick={() => {
               // Edge case where shoes don't exist or user is rate limited
               if (!props.isSharedActivity && userProfile?.shoes.length) {
-                setEditingShoes(true);
+                setEditingShoes(true)
               }
             }}
           >
@@ -212,38 +212,38 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                   width: '15rem',
                   ml: '7.5%',
                   color: theme.palette.common.white,
-                  border: '1px solid ' + theme.palette.common.white,
+                  border: `1px solid ${theme.palette.common.white}`,
                 }}
-                defaultValue="shoeChoose"
+                defaultValue='shoeChoose'
                 onChange={(e: SelectChangeEvent<string>) => {
                   if (e.target.value === 'shoeChoose') {
-                    return;
+                    return
                   }
-                  const shoeId = e.target.value;
+                  const shoeId = e.target.value
                   const shoeName = userProfile.shoes.find(
-                    (shoe) => shoe.id === shoeId
-                  )?.name;
+                    (shoe) => shoe.id === shoeId,
+                  )?.name
                   if (!shoeName) {
-                    return;
+                    return
                   }
                   updateShoeIndividualEntryMutation({
                     shoeId,
                     activityId: currentActivity.id,
                     shoeName,
-                  });
-                  setEditingShoes(false);
+                  })
+                  setEditingShoes(false)
                 }}
               >
                 {[
-                  <MenuItem key={-1} value="shoeChoose" disabled>
+                  <MenuItem key={-1} value='shoeChoose' disabled>
                     Choose Your Shoe!
                   </MenuItem>,
                 ].concat(
-                  userProfile?.shoes.map((shoe, index) => (
-                    <MenuItem value={shoe.id} key={index}>
+                  userProfile?.shoes.map((shoe) => (
+                    <MenuItem value={shoe.id} key={shoe.id}>
                       {shoe.name}
                     </MenuItem>
-                  ))
+                  )),
                 )}
               </Select>
             ) : null}
@@ -252,7 +252,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       </Box>
 
       <Box
-        id="funStats"
+        id='funStats'
         sx={{
           display: 'flex',
           flex: 1,
@@ -275,7 +275,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         >
           {/* Kudos & Comments */}
           <Box
-            id="kudosX"
+            id='kudosX'
             sx={{
               display: 'flex',
               flex: 1,
@@ -286,14 +286,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             <Image
               height={100}
               width={100}
-              alt="kudos-img"
-              layout="static"
-              src="/images/kudos.jpeg"
+              alt='kudos-img'
+              layout='static'
+              src='/images/kudos.jpeg'
               onClick={handleKudosClick}
               priority={true}
             />
             <Box
-              className="kudosDescriptors"
+              className='kudosDescriptors'
               sx={{
                 paddingLeft: '2.5%',
                 display: 'flex',
@@ -302,14 +302,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography
-                  variant="h6"
-                  id="kudosCount"
-                  className="kudos"
+                  variant='h6'
+                  id='kudosCount'
+                  className='kudos'
                   color={theme.palette.common.white}
                 >
                   Kudos:
                 </Typography>
-                <Typography variant="h6" color={theme.palette.common.white}>
+                <Typography variant='h6' color={theme.palette.common.white}>
                   {kudoersResults?.kudos.length !== undefined
                     ? kudoersResults.kudos.length
                     : currentActivity.kudos_count}
@@ -327,14 +327,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
                 }}
               >
                 <Typography
-                  variant="h6"
-                  id="commentCount"
-                  className="kudos"
+                  variant='h6'
+                  id='commentCount'
+                  className='kudos'
                   color={theme.palette.common.white}
                 >
                   Comments-
                 </Typography>
-                <Typography variant="h6" color={theme.palette.common.white}>
+                <Typography variant='h6' color={theme.palette.common.white}>
                   {kudoersResults?.comments.length !== undefined
                     ? kudoersResults.comments.length
                     : currentActivity.comment_count}
@@ -351,7 +351,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           {/* Heart Rate */}
           {currentActivity.average_heartrate ? (
             <Box
-              id="goldenHeartRate"
+              id='goldenHeartRate'
               sx={{
                 display: 'flex',
                 flex: 1,
@@ -359,50 +359,50 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
             >
               <Image
-                alt="heart-rate"
+                alt='heart-rate'
                 height={100}
                 width={100}
-                layout="static"
-                src="/images/heartrate.png"
+                layout='static'
+                src='/images/heartrate.png'
                 priority={true}
                 onClick={() => {
                   setCurrentStat((prevStat) => {
                     if (prevStat === 'heartRate') {
-                      return null;
+                      return null
                     }
-                    return 'heartRate';
-                  });
+                    return 'heartRate'
+                  })
                 }}
               />
               <Box
-                className="heartRateDescriptors"
+                className='heartRateDescriptors'
                 sx={{ paddingLeft: '2.5%', flex: 1 }}
               >
                 <Box sx={{ display: 'flex' }}>
                   <Typography
-                    id="avgHeartRate"
-                    className="heartRate"
-                    variant="h6"
+                    id='avgHeartRate'
+                    className='heartRate'
+                    variant='h6'
                     color={theme.palette.common.white}
                   >
                     Avg-
                   </Typography>
                   <Typography
-                    variant="h6"
+                    variant='h6'
                     color={theme.palette.common.white}
                   >{`${currentActivity.average_heartrate} bpm`}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex' }}>
                   <Typography
-                    id="maxHeartRate"
-                    className="heartRate"
-                    variant="h6"
+                    id='maxHeartRate'
+                    className='heartRate'
+                    variant='h6'
                     color={theme.palette.common.white}
                   >
                     Max-
                   </Typography>
                   <Typography
-                    variant="h6"
+                    variant='h6'
                     color={theme.palette.common.white}
                   >{`${currentActivity.max_heartrate} bpm`}</Typography>
                 </Box>
@@ -410,7 +410,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             </Box>
           ) : (
             <Box
-              id="goldenHeartRate"
+              id='goldenHeartRate'
               sx={{
                 display: 'flex',
                 flex: 1,
@@ -420,27 +420,27 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
             >
               <Image
-                alt="heart-rate"
+                alt='heart-rate'
                 height={50}
                 width={50}
-                src="/images/heartrate.png"
-                layout="static"
+                src='/images/heartrate.png'
+                layout='static'
                 priority={true}
               />
               <Box
-                className="heartRate"
-                id="avgHeartRate"
+                className='heartRate'
+                id='avgHeartRate'
                 sx={{ paddingLeft: '1.5%' }}
               >
-                <Typography variant="h6" color={theme.palette.common.white}>
+                <Typography variant='h6' color={theme.palette.common.white}>
                   No HR Info Available
                 </Typography>
               </Box>
 
               <Typography
-                variant="h6"
-                className="heartRate"
-                id="maxHeartRate"
+                variant='h6'
+                className='heartRate'
+                id='maxHeartRate'
                 sx={{ display: 'inline-block' }}
               >
                 <Typography sx={{ display: 'inline-block' }}></Typography>
@@ -450,7 +450,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
 
           {/* Trophy Case */}
           <Box
-            id="trophyCase"
+            id='trophyCase'
             sx={{
               display: 'flex',
               flex: 1,
@@ -460,26 +460,26 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             <Image
               height={100}
               width={100}
-              alt="trophy-img"
-              src="/images/trophy.jpeg"
-              layout="static"
+              alt='trophy-img'
+              src='/images/trophy.jpeg'
+              layout='static'
               priority={true}
               onClick={handleAchievementsClick}
             />
             <Box
-              className="achievementCountDescriptor"
+              className='achievementCountDescriptor'
               sx={{ paddingLeft: '2.5%', flex: 1, display: 'flex' }}
             >
               <Box sx={{ display: 'flex' }}>
                 <Typography
-                  variant="h6"
-                  className="achievements"
-                  id="achievementCount"
+                  variant='h6'
+                  className='achievements'
+                  id='achievementCount'
                   color={theme.palette.common.white}
                 >
                   Achievement Count-
                 </Typography>
-                <Typography variant="h6" color={theme.palette.common.white}>
+                <Typography variant='h6' color={theme.palette.common.white}>
                   {currentActivity.achievement_count}
                 </Typography>
               </Box>
@@ -508,8 +508,8 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               src={currentActivity.photos.primary.urls['600']}
               height={400}
               width={320}
-              layout="responsive"
-              alt="highlight-photo"
+              layout='responsive'
+              alt='highlight-photo'
               priority={true}
             />
           ) : null}
@@ -540,14 +540,14 @@ const DetailedEntry = (props: DetailedEntryProps) => {
               }}
             >
               <Typography
-                variant="h5"
+                variant='h5'
                 sx={{ textDecoration: 'underline', width: '100%' }}
               >
                 Kudoers
               </Typography>
               <Box>
-                {kudoersResults?.kudos.map((x, index) => (
-                  <Typography key={index}>
+                {kudoersResults?.kudos.map((x) => (
+                  <Typography key={`${x.firstname}-${x.lastname}`}>
                     {x.firstname} {x.lastname}
                   </Typography>
                 ))}
@@ -556,16 +556,19 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) : null}
           {kudoersResults?.comments.length ? (
             <Box sx={{ marginLeft: '1rem' }}>
-              <Typography variant="h5" sx={{ textDecoration: 'underline' }}>
+              <Typography variant='h5' sx={{ textDecoration: 'underline' }}>
                 Comments
               </Typography>
               <Box>
-                {kudoersResults.comments.map((x, index) => (
-                  <Box key={index} sx={{ display: 'flex' }}>
+                {kudoersResults.comments.map((kudoer) => (
+                  <Box
+                    key={`${kudoer.athlete.firstname}-${kudoer.athlete.lastname}`}
+                    sx={{ display: 'flex' }}
+                  >
                     <Typography>
-                      {x.athlete.firstname} {x.athlete.lastname}:
+                      {kudoer.athlete.firstname} {kudoer.athlete.lastname}:
                     </Typography>
-                    <Typography>{x.text}</Typography>
+                    <Typography>{kudoer.text}</Typography>
                   </Box>
                 ))}
               </Box>
@@ -575,12 +578,12 @@ const DetailedEntry = (props: DetailedEntryProps) => {
       ) : currentStat === 'achievements' ? (
         (() => {
           const bestEffortsExist = !!currentActivity.best_efforts?.some(
-            (bestEffort) => bestEffort.achievements.length
-          );
+            (bestEffort) => bestEffort.achievements.length,
+          )
 
           const segmentEffortsExist = currentActivity.segment_efforts?.some(
-            (segmentEffort) => segmentEffort.achievements.length
-          );
+            (segmentEffort) => segmentEffort.achievements.length,
+          )
 
           // Not only should best_efforts have a length but also at least one bestEffort should have an achievement with a length
           if (
@@ -589,13 +592,15 @@ const DetailedEntry = (props: DetailedEntryProps) => {
           ) {
             return (
               <AchievementsByEffort
-                bestEfforts={currentActivity.best_efforts!.filter(
-                  (bestEffort) => bestEffort.achievements.length
-                )}
+                bestEfforts={
+                  currentActivity.best_efforts?.filter(
+                    (bestEffort) => bestEffort.achievements.length,
+                  ) || []
+                }
                 activityId={currentActivity.id}
                 toggleable={segmentEffortsExist}
               />
-            );
+            )
           }
 
           if (
@@ -605,21 +610,21 @@ const DetailedEntry = (props: DetailedEntryProps) => {
             return (
               <AchievementsBySegment
                 bestSegments={currentActivity.segment_efforts.filter(
-                  (bestSegment) => bestSegment.achievements.length
+                  (bestSegment) => bestSegment.achievements.length,
                 )}
                 activityId={currentActivity.id}
                 toggleable={bestEffortsExist}
               />
-            );
+            )
           }
 
-          return null;
+          return null
         })()
       ) : null}
 
       {!props.isSharedActivity ? (
         <Typography
-          variant="h6"
+          variant='h6'
           color={theme.palette.common.white}
           sx={{
             display: 'flex',
@@ -639,7 +644,7 @@ const DetailedEntry = (props: DetailedEntryProps) => {
         <Box sx={{ marginBottom: '2rem' }} />
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default DetailedEntry;
+export default DetailedEntry

@@ -1,42 +1,59 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@redux/store';
-import { CurrentActivity, Sport } from '@components/StravaEntries/EntryTypes';
+import type {
+  CurrentActivity,
+  Sport,
+} from '@components/StravaEntries/EntryTypes'
+import type { RootState } from '@redux/store'
+import {
+  createSelector,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit'
 
-export type ModalSeverities = 'success' | 'info' | 'warning' | 'error';
-type ModalStates = 'closed' | 'confirmed' | 'canceled' | 'open';
+export type ModalSeverities = 'success' | 'info' | 'warning' | 'error'
+type ModalStates = 'closed' | 'confirmed' | 'canceled' | 'open'
 
 interface PopupModalDetails {
-  title: string;
-  body: string;
-  severity: ModalSeverities;
-  state: ModalStates;
+  title: string
+  body: string
+  severity: ModalSeverities
+  state: ModalStates
 }
 
 type UpdatePayload<T> = {
-  field: keyof T;
-  update: T[keyof T];
-};
+  field: keyof T
+  update: T[keyof T]
+}
 
-export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek';
+export type DateCondition = 'allTime' | 'thisYear' | 'thisMonth' | 'thisWeek'
 
+export enum SortCondition {
+  SPEED_DESC = 'speedDesc',
+  MOVING_TIME_ASC = 'movingTimeAsc',
+  TIME_ELAPSED_DESC = 'timeElapsedDesc',
+  TIME_ELAPSED_ASC = 'timeElapsedAsc',
+  MOVING_TIME_DESC = 'movingTimeDesc',
+  DATE_ASC = 'dateAsc',
+  DATE_DESC = 'dateDesc',
+  DISTANCE_DESC = 'distanceDesc',
+}
 export const appInitialState: {
-  achievementEffortView: 'best-effort' | 'best-segment';
-  achievementsOnly: boolean;
-  currentActivity: CurrentActivity;
-  sortCondition: string;
-  sportCondition: Sport;
-  darkMode: boolean;
-  customDateCondition: boolean;
-  dateCondition: DateCondition;
-  fromDate: string;
-  toDate: string;
-  clientSideTokens: { mapbox: string };
-  popupModalDetails: PopupModalDetails;
+  achievementEffortView: 'best-effort' | 'best-segment'
+  achievementsOnly: boolean
+  currentActivity: CurrentActivity
+  sortCondition: SortCondition
+  sportCondition: Sport
+  darkMode: boolean
+  customDateCondition: boolean
+  dateCondition: DateCondition
+  fromDate: string
+  toDate: string
+  clientSideTokens: { mapbox: string }
+  popupModalDetails: PopupModalDetails
 } = {
   achievementsOnly: false,
   achievementEffortView: 'best-effort',
   currentActivity: {} as CurrentActivity,
-  sortCondition: 'speedDesc',
+  sortCondition: SortCondition.SPEED_DESC,
   sportCondition: 'Run',
   customDateCondition: false,
   darkMode: false,
@@ -52,7 +69,7 @@ export const appInitialState: {
     severity: 'success',
     state: 'closed',
   },
-};
+}
 
 export const appSlice = createSlice({
   name: 'app',
@@ -60,63 +77,63 @@ export const appSlice = createSlice({
   reducers: {
     toggleAchievementEffortView: (state) => {
       if (state.achievementEffortView === 'best-effort') {
-        state.achievementEffortView = 'best-segment';
+        state.achievementEffortView = 'best-segment'
       } else {
-        state.achievementEffortView = 'best-effort';
+        state.achievementEffortView = 'best-effort'
       }
     },
     setCurrentActivity: (state, action) => {
-      state.currentActivity = action.payload;
+      state.currentActivity = action.payload
     },
-    setCurrentActivityField: <T extends Record<string, any>>(
+    setCurrentActivityField: <T extends Record<string, unknown>>(
       state: { currentActivity: T },
-      action: PayloadAction<UpdatePayload<T>>
+      action: PayloadAction<UpdatePayload<T>>,
     ) => {
-      const { field, update } = action.payload;
+      const { field, update } = action.payload
       if (field in state.currentActivity) {
-        state.currentActivity[field] = update;
+        state.currentActivity[field] = update
       }
     },
     setPopupModalDetails: (
       state,
       action: PayloadAction<
         Partial<PopupModalDetails> & Omit<PopupModalDetails, 'state'>
-      >
+      >,
     ) => {
-      Object.assign(state.popupModalDetails, action.payload);
+      Object.assign(state.popupModalDetails, action.payload)
     },
     setModalState: (
       state,
-      action: PayloadAction<PopupModalDetails['state']>
+      action: PayloadAction<PopupModalDetails['state']>,
     ) => {
-      state.popupModalDetails.state = action.payload;
+      state.popupModalDetails.state = action.payload
     },
-    setSortCondition: (state, action: PayloadAction<string>) => {
-      state.sortCondition = action.payload;
+    setSortCondition: (state, action: PayloadAction<SortCondition>) => {
+      state.sortCondition = action.payload
     },
     setSportCondition: (state, action: PayloadAction<Sport>) => {
-      state.sportCondition = action.payload;
+      state.sportCondition = action.payload
     },
     setDarkMode: (state, action: PayloadAction<boolean>) => {
-      state.darkMode = action.payload;
+      state.darkMode = action.payload
     },
     setAchievementsOnlyCondition: (state, action: PayloadAction<boolean>) => {
-      state.achievementsOnly = action.payload;
+      state.achievementsOnly = action.payload
     },
     setDateCondition: (state, action: PayloadAction<DateCondition>) => {
-      state.dateCondition = action.payload;
-      state.customDateCondition = false;
+      state.dateCondition = action.payload
+      state.customDateCondition = false
     },
     setFromDateQuery: (state, action: PayloadAction<string>) => {
-      state.fromDate = action.payload;
-      state.customDateCondition = true;
+      state.fromDate = action.payload
+      state.customDateCondition = true
     },
     setToDateQuery: (state, action: PayloadAction<string>) => {
-      state.toDate = action.payload;
-      state.customDateCondition = true;
+      state.toDate = action.payload
+      state.customDateCondition = true
     },
   },
-});
+})
 
 export const {
   setAchievementsOnlyCondition,
@@ -131,21 +148,21 @@ export const {
   setModalState,
   setPopupModalDetails,
   toggleAchievementEffortView,
-} = appSlice.actions;
+} = appSlice.actions
 
 export const getCurrentActivity = (state: RootState) =>
-  state.app.currentActivity;
-export const getDarkModeCondition = (state: RootState) => state.app.darkMode;
-export const getSortCondition = (state: RootState) => state.app.sortCondition;
-export const getSportCondition = (state: RootState) => state.app.sportCondition;
+  state.app.currentActivity
+export const getDarkModeCondition = (state: RootState) => state.app.darkMode
+export const getSortCondition = (state: RootState) => state.app.sortCondition
+export const getSportCondition = (state: RootState) => state.app.sportCondition
 
 // Date Selectors
 
 const getCustomDateConditionSelector = (state: RootState) =>
-  state.app.customDateCondition;
-const getDateConditionSelector = (state: RootState) => state.app.dateCondition;
-const getFromDateQuerySelector = (state: RootState) => state.app.fromDate;
-const getToDateQuerySelector = (state: RootState) => state.app.toDate;
+  state.app.customDateCondition
+const getDateConditionSelector = (state: RootState) => state.app.dateCondition
+const getFromDateQuerySelector = (state: RootState) => state.app.fromDate
+const getToDateQuerySelector = (state: RootState) => state.app.toDate
 
 export const getDateCondition = createSelector(
   [
@@ -156,61 +173,61 @@ export const getDateCondition = createSelector(
   ],
   (customDateCondition, dateCondition, fromDateResult, toDateResult) => {
     if (customDateCondition) {
-      return [fromDateResult, toDateResult, dateCondition];
+      return [fromDateResult, toDateResult, dateCondition]
     }
 
     if (dateCondition === 'allTime') {
-      return ['', '', dateCondition];
+      return ['', '', dateCondition]
     }
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear().toString();
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear().toString()
 
     if (dateCondition === 'thisYear') {
-      const beginningOfYear = `${currentYear}-01-01`;
-      return [beginningOfYear, '', dateCondition];
+      const beginningOfYear = `${currentYear}-01-01`
+      return [beginningOfYear, '', dateCondition]
     }
     const currentMonth = (currentDate.getMonth() + 1)
       .toString()
-      .padStart(2, '0'); // Adding 1 because months are zero-indexed
+      .padStart(2, '0') // Adding 1 because months are zero-indexed
 
     if (dateCondition === 'thisMonth') {
-      const beginningOfMonth = `${currentYear}-${currentMonth}-01`;
-      return [beginningOfMonth, '', dateCondition];
+      const beginningOfMonth = `${currentYear}-${currentMonth}-01`
+      return [beginningOfMonth, '', dateCondition]
     }
 
     if (dateCondition === 'thisWeek') {
-      const dayOfWeek = currentDate.getDay();
-      const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust for Monday as the start of the week
-      const startOfWeek = new Date(currentDate);
-      startOfWeek.setDate(currentDate.getDate() - daysToSubtract);
+      const dayOfWeek = currentDate.getDay()
+      const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Adjust for Monday as the start of the week
+      const startOfWeek = new Date(currentDate)
+      startOfWeek.setDate(currentDate.getDate() - daysToSubtract)
 
-      const startOfWeekYear = startOfWeek.getFullYear().toString();
+      const startOfWeekYear = startOfWeek.getFullYear().toString()
       const startOfWeekMonth = (startOfWeek.getMonth() + 1)
         .toString()
-        .padStart(2, '0');
-      const startOfWeekDay = startOfWeek.getDate().toString().padStart(2, '0');
+        .padStart(2, '0')
+      const startOfWeekDay = startOfWeek.getDate().toString().padStart(2, '0')
 
-      const beginningOfWeek = `${startOfWeekYear}-${startOfWeekMonth}-${startOfWeekDay}`;
-      return [beginningOfWeek, '', dateCondition];
+      const beginningOfWeek = `${startOfWeekYear}-${startOfWeekMonth}-${startOfWeekDay}`
+      return [beginningOfWeek, '', dateCondition]
     }
-    return ['', '', 'allTime'];
-  }
-);
+    return ['', '', 'allTime']
+  },
+)
 
 export const getClientSideToken =
   (token: keyof (typeof appInitialState)['clientSideTokens']) =>
   (state: RootState) =>
-    state.app.clientSideTokens[token];
+    state.app.clientSideTokens[token]
 
 export const getPopupModalDetails = (state: RootState) =>
-  state.app.popupModalDetails;
+  state.app.popupModalDetails
 export const getModalState = (state: RootState) =>
-  state.app.popupModalDetails.state;
+  state.app.popupModalDetails.state
 
 export const getAchievementsOnlyCondition = (state: RootState) =>
-  state.app.achievementsOnly;
+  state.app.achievementsOnly
 
 export const getAchievementEffortView = (state: RootState) =>
-  state.app.achievementEffortView;
+  state.app.achievementEffortView
 
-export default appSlice.reducer;
+export default appSlice.reducer
