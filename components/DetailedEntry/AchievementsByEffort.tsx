@@ -1,11 +1,11 @@
-import { CSSProperties, useState } from 'react';
-import { BestEffort } from '@components/StravaEntries/EntryTypes';
-import { Wreath } from './Wreath';
-import { Box, Slider, Tooltip, useTheme } from '@mui/material';
-import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
-import AchievementList from './AchievementList';
-import { useCSX } from '@lib';
-import AchievementHeader from './AchievementHeader';
+import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap'
+import type { BestEffort } from '@components/StravaEntries/EntryTypes'
+import { useCSX } from '@lib'
+import { Box, Slider, Tooltip, useTheme } from '@mui/material'
+import { type CSSProperties, useState } from 'react'
+import AchievementHeader from './AchievementHeader'
+import AchievementList from './AchievementList'
+import { Wreath } from './Wreath'
 
 const staticMarks = [
   {
@@ -52,76 +52,76 @@ const staticMarks = [
     value: 21097,
     label: '1/2 Marathon',
   },
-];
+]
 
 function valuetext(value: number) {
-  return `${value}`;
+  return `${value}`
 }
 
 interface AchievementsProps {
-  bestEfforts: BestEffort[] | undefined;
-  activityId: number | undefined;
-  toggleable: boolean | undefined;
+  bestEfforts: BestEffort[] | undefined
+  activityId: number | undefined
+  toggleable: boolean | undefined
 }
 
 const calculateSliderValues = (bestEfforts: BestEffort[]) => {
   // Determing Slider
-  const closestEffortDistance = bestEfforts[0].distance;
-  const furthestEffortDistance = bestEfforts[bestEfforts.length - 1].distance;
+  const closestEffortDistance = bestEfforts[0].distance
+  const furthestEffortDistance = bestEfforts[bestEfforts.length - 1].distance
 
   const staticMarksEndingIndex = staticMarks.findLastIndex(
-    (x) => x.value <= furthestEffortDistance
-  );
+    (x) => x.value <= furthestEffortDistance,
+  )
   const staticMarksStartingIndex = staticMarks.findIndex(
-    (x) => x.value >= closestEffortDistance
-  );
+    (x) => x.value >= closestEffortDistance,
+  )
 
   const marksForSlider = staticMarks.slice(
     staticMarksStartingIndex,
-    staticMarksEndingIndex + 1
-  );
+    staticMarksEndingIndex + 1,
+  )
 
-  return [closestEffortDistance, furthestEffortDistance, marksForSlider];
-};
+  return [closestEffortDistance, furthestEffortDistance, marksForSlider]
+}
 
 const AchievementsByEffort = (props: AchievementsProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   const [closestEffortDistance, furthestEffortDistance, baseMarks] =
     calculateSliderValues(props.bestEfforts || []) as [
       number,
       number,
       {
-        value: number;
-        label: string;
-      }[]
-    ];
+        value: number
+        label: string
+      }[],
+    ]
 
   const marksForSlider = baseMarks.map((mark) => ({
     value: mark.value,
     label: (
-      <Tooltip title={mark.label} arrow placement="top">
+      <Tooltip title={mark.label} arrow placement='top'>
         <span>{mark.label}</span>
       </Tooltip>
     ),
-  }));
+  }))
 
   const [currentSelectedDistance, setCurrentSelectedDistance] = useState(
-    closestEffortDistance
-  );
+    closestEffortDistance,
+  )
 
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(0)
 
   const handleSetPosition = (p: number) => {
-    setPosition(p);
-  };
+    setPosition(p)
+  }
   const mobileColumns = useCSX(
     { flexDirection: 'row' },
-    { flexDirection: 'column', justifyContent: 'center' }
-  );
-  const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
+    { flexDirection: 'column', justifyContent: 'center' },
+  )
+  const mobileWreathWidth = useCSX('48.35%', '100%', 'width')
 
-  const _mobileLabelTransform = useCSX(
+  useCSX(
     {
       transform: 'rotate(45deg) translate(-15%, 25%)',
       '&:nth-of-type(8)': {
@@ -136,12 +136,12 @@ const AchievementsByEffort = (props: AchievementsProps) => {
       '&:nth-last-of-type(2)': {
         transform: 'rotate(90deg) translate(0%, 150%)',
       },
-    }
-  ) as CSSProperties;
+    },
+  ) as CSSProperties
 
   const currentAchievements = props.bestEfforts?.filter(
-    (effort) => effort.distance === currentSelectedDistance
-  );
+    (effort) => effort.distance === currentSelectedDistance,
+  )
 
   return (
     <Box
@@ -172,7 +172,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           />
         </Box>
         <Box
-          id="outer-slider"
+          id='outer-slider'
           sx={{
             overflow: 'hidden',
             position: 'relative',
@@ -181,7 +181,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           }}
         >
           <Box
-            id="inner-slider"
+            id='inner-slider'
             sx={{
               transform: `translateX(${position * -100}%)`,
               display: 'flex',
@@ -190,13 +190,10 @@ const AchievementsByEffort = (props: AchievementsProps) => {
               width: '100%',
             }}
           >
-            {currentAchievements?.map((currentAchievement, key) => {
-              {
-                /* Map the Entries here for each distance in case there are multiple */
-              }
+            {currentAchievements?.map((currentAchievement) => {
               return (
                 <Box
-                  key={key}
+                  key={currentAchievement.name}
                   sx={{
                     display: 'flex',
                     flex: 1,
@@ -231,7 +228,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
                         height: '100%',
                         width: '95%',
 
-                        border: '2px solid ' + theme.palette.strava.main,
+                        border: `2px solid ${theme.palette.strava.main}`,
                         ...mobileColumns,
                       }}
                     >
@@ -246,7 +243,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
                     </Box>
                   </Box>
                 </Box>
-              );
+              )
             })}
           </Box>
         </Box>
@@ -264,12 +261,12 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           max={furthestEffortDistance}
           min={closestEffortDistance}
           value={currentSelectedDistance}
-          aria-label="Custom marks"
+          aria-label='Custom marks'
           defaultValue={closestEffortDistance}
           getAriaValueText={valuetext}
           // Restricted values step=null
           step={null}
-          valueLabelDisplay="off"
+          valueLabelDisplay='off'
           marks={marksForSlider}
           onChange={(_e, value) => setCurrentSelectedDistance(value as number)}
           sx={{
@@ -293,9 +290,9 @@ const AchievementsByEffort = (props: AchievementsProps) => {
                     backgroundColor: theme.palette.common.black,
                     opacity: '0.2',
                   },
-                };
+                }
               }
-              return {};
+              return {}
             })(),
             marginX: '4rem',
             width: 'calc(100% - 8rem)',
@@ -323,7 +320,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
         />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AchievementsByEffort;
+export default AchievementsByEffort

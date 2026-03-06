@@ -1,80 +1,81 @@
-import React, { useCallback } from 'react';
-import { Box, useTheme } from '@mui/material';
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <x> */
+import Radios from '@components/OptionsProfile/Radios/Radios'
+import type { Format, Sport } from '@components/StravaEntries/EntryTypes'
+import Report from '@components/StravaEntries/Report'
 //
-import UserProfile from '@components/UserProfile/UserProfile';
-import Report from '@components/StravaEntries/Report';
-import { Format, Sport } from '@components/StravaEntries/EntryTypes';
-import {
-  getSportCondition,
-  setSportCondition,
-  useGetAllEntriesQuery,
-} from '@redux/slices';
-import Radios from '@components/OptionsProfile/Radios/Radios';
-import { useDispatch, useSelector } from '@redux/reduxHooks';
-import PopupModal from './PopupModal';
+import UserProfile from '@components/UserProfile/UserProfile'
+import { Box, useTheme } from '@mui/material'
+import { useDispatch, useSelector } from '@redux/reduxHooks'
+import { getSportCondition, setSportCondition } from '@redux/slices'
+import React, {
+  type ChangeEventHandler,
+  type MouseEventHandler,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react'
+import PopupModal from './PopupModal'
 
 export default function App() {
-  const theme = useTheme();
+  const theme = useTheme()
   // Radios
-  const sport = useSelector(getSportCondition);
-  const dispatch = useDispatch();
-  const [format, setFormat] = React.useState<Format>('kph');
-  const [titleQuery, setTitleQuery] = React.useState('');
+  const sport = useSelector(getSportCondition)
+  const dispatch = useDispatch()
+  const [format, setFormat] = useState<Format>('kph')
+  const [titleQuery, setTitleQuery] = useState('')
 
-  const [distance, setDistance] = React.useState(0);
-  const [customDistance, setCustomDistance] = React.useState(false);
+  const [distance, setDistance] = useState(0)
+  const [customDistance, setCustomDistance] = React.useState(false)
 
-  useGetAllEntriesQuery(null);
+  useEffect(() => {
+    setDistance(0)
+  }, [sport])
 
-  reset_distance_on_sport_change: React.useEffect(() => {
-    setDistance(0);
-  }, [sport]);
+  useEffect(() => {
+    setFormat(sport === 'Run' ? 'kph' : sport === 'Swim' ? 'avgmpace' : 'kph')
+  }, [sport])
 
-  reset_format_on_sport_change: React.useEffect(() => {
-    setFormat(sport === 'Run' ? 'kph' : sport === 'Swim' ? 'avgmpace' : 'kph');
-  }, [sport]);
+  useEffect(() => {
+    setCustomDistance(false)
+  }, [sport])
 
-  reset_checked_on_sport_change: React.useEffect(() => {
-    setCustomDistance(false);
-  }, [sport]);
+  const setSportCallback: MouseEventHandler<HTMLLabelElement> &
+    ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const value = (e.target as HTMLInputElement).value as Sport
+    dispatch(setSportCondition(value))
+  }
 
-  const setSportCallback: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    const value = (e.target as HTMLInputElement).value as Sport;
-    dispatch(setSportCondition(value));
-  };
+  const setFormatCallback: MouseEventHandler<HTMLLabelElement> &
+    ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const value = (e.target as HTMLInputElement).value
+    setFormat(value as Format)
+  }
 
-  const setFormatCallback: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    const value = (e.target as HTMLInputElement).value;
-    setFormat(value as Format);
-  };
-
-  const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> =
+  const setTitleQueryCallback: ChangeEventHandler<HTMLInputElement> =
     useCallback((event) => {
-      setTitleQuery(event.currentTarget.value);
-    }, []);
+      setTitleQuery(event.currentTarget.value)
+    }, [])
 
-  const setDistanceCallback: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    const placeholder = (e.target as HTMLInputElement).placeholder;
-    let value = (e.currentTarget as HTMLInputElement).value;
+  const setDistanceCallback: MouseEventHandler<HTMLLabelElement> &
+    ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const placeholder = (e.target as HTMLInputElement).placeholder
+    let value = (e.currentTarget as HTMLInputElement).value
     if (!value) {
-      value = (e.target as HTMLInputElement).value;
+      value = (e.target as HTMLInputElement).value
     }
 
-    setDistance(Number(value));
+    setDistance(Number(value))
 
     if (placeholder === 'Custom Distance' && Number(value) !== 0) {
-      setCustomDistance(true);
+      setCustomDistance(true)
     } else {
-      setCustomDistance(false);
+      setCustomDistance(false)
     }
-  };
+  }
 
   return (
     <Box
-      id="mainContainer"
+      id='mainContainer'
       sx={{
         width: '100%',
         display: 'flex',
@@ -82,7 +83,7 @@ export default function App() {
       }}
     >
       <Box
-        id="upperSection"
+        id='upperSection'
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -115,5 +116,5 @@ export default function App() {
       </Box>
       <PopupModal />
     </Box>
-  );
+  )
 }

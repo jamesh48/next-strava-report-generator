@@ -218,6 +218,7 @@ const EntryUI = (props: EntryUIProps) => {
     >
       <Table
         data={entries?.results || []}
+        // @ts-expect-error
         columns={tableColumns}
         paginationType='cursor'
         hasMore={hasMore}

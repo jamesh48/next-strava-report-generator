@@ -21,7 +21,6 @@ import {
   setSortCondition,
   useAddAllActivitiesMutation,
   useDestroyUserAndActivitiesMutation,
-  useGetAllEntriesQuery,
   useGetUserProfileQuery,
 } from '@redux/slices'
 import { useCallback, useEffect, useState } from 'react'
@@ -75,12 +74,12 @@ const ProgressBar = () => {
   const [deletionRate, setDeletionRate] = useState(75)
   const [insertionRate, setInsertionRate] = useState(125)
   const dispatch = useDispatch()
-  const { data: allEntries } = useGetAllEntriesQuery(null)
+
   const { isError, error } = useGetUserProfileQuery(null)
   const sortCondition = useSelector(getSortCondition)
 
   useEffect(() => {
-    const numberOfEntries = allEntries?.count
+    const numberOfEntries = 300
     if (numberOfEntries) {
       const currentDeletionRate =
         (numberOfEntries * dynamoDBDeletionRatePerRecord) / 100
@@ -89,7 +88,7 @@ const ProgressBar = () => {
       setInsertionRate(currentInsertionRate)
       setDeletionRate(currentDeletionRate)
     }
-  }, [allEntries?.count])
+  }, [])
 
   const progressBarProgress = useSelector(getProgressBarProgress)
   const [

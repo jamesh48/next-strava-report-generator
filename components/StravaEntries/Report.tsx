@@ -1,10 +1,8 @@
-import { useMobileBrowserCheck } from '@lib'
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <x> */
+
 import { Box } from '@mui/material'
-import { useDispatch, useSelector } from '@redux/reduxHooks'
+import { useDispatch } from '@redux/reduxHooks'
 import {
-  getAchievementsOnlyCondition,
-  getDateCondition,
-  getSortCondition,
   setCurrentActivity,
   useLazyGetIndividualEntryQuery,
 } from '@redux/slices'
@@ -28,12 +26,10 @@ export type CustomMouseEventHandler = (
 
 const Report = (props: ReportProps) => {
   const dispatch = useDispatch()
-  const _isMobile = useMobileBrowserCheck()
+
   const [getIndividualEntry, individualEntryResults] =
     useLazyGetIndividualEntryQuery()
-  const [fromDateQuery, toDateQuery] = useSelector(getDateCondition)
-  const achievementsOnly = useSelector(getAchievementsOnlyCondition)
-  const sortCondition = useSelector(getSortCondition)
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
   const [entriesPerPage] = useState(7)
@@ -151,7 +147,7 @@ const Report = (props: ReportProps) => {
             count: 1,
             primary: {
               urls: {
-                '600': cachedEntry.primaryPhotoUrl!,
+                '600': cachedEntry.primaryPhotoUrl || '',
               },
             },
           },

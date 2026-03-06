@@ -1,14 +1,15 @@
 import type {
-  PaletteOptions,
-  SimplePaletteColorOptions,
+  //   PaletteOptions,
+  //   SimplePaletteColorOptions,
   ThemeOptions,
 } from '@mui/material'
-import type { ColorPartial } from '@mui/material/styles/createPalette'
 
-interface TypedPalette extends PaletteOptions {
-  baseBackground: SimplePaletteColorOptions
-  grey: ColorPartial
-}
+// import type { ColorPartial } from '@mui/material/styles/createPalette'
+
+// interface TypedPalette extends PaletteOptions {
+//   baseBackground: SimplePaletteColorOptions
+//   grey: ColorPartial
+// }
 
 const muiOverrides = (
   _globalTheme: ThemeOptions,
