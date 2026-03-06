@@ -2774,8 +2774,10 @@ fsevents@~2.3.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
-"fsh-components@file:.yalc/fsh-components":
-  version "0.0.0"
+fsh-components@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/fsh-components/-/fsh-components-0.1.0.tgz#89cc2541316983525ddca81cf0ec7a062a87124a"
+  integrity sha512-/9jqn2qbCFrsyQO5QzaUX6aPcyBWe9nhU73IQvarebOpunaEOXoLViThcmmkO46bJ7RJ4Kx9USwerkmyImjvgA==
 
 function-bind@^1.1.2:
   version "1.1.2"
