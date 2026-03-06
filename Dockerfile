@@ -3,7 +3,6 @@ FROM node:lts-alpine AS deps
 
 WORKDIR /opt/srg-app
 COPY package.json yarn.lock ./
-COPY .yalc ./.yalc
 RUN yarn install --frozen-lockfile
 
 # Rebuild the source code only when needed
