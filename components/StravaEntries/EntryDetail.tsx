@@ -56,7 +56,7 @@ const EntryDetail = ({
   const { data: entryDetail, isLoading: isLoadingEntry } =
     useGetIndividualEntryQuery(
       {
-        entryid: activityId!,
+        entryid: activityId || -1,
       },
       { skip: activityId === undefined },
     )
@@ -130,6 +130,8 @@ const EntryDetail = ({
   const handleDescriptionChange = (e: { target: { value: string } }) => {
     setEditedDescription(e.target.value)
   }
+
+  console.info(kudoersResults)
 
   return (
     <Stack
@@ -941,9 +943,9 @@ const EntryDetail = ({
                                 gap: '1rem',
                               }}
                             >
-                              {kudoersResults.comments.map((comment, index) => (
+                              {kudoersResults.comments.map((comment) => (
                                 <Box
-                                  key={index}
+                                  key={comment.text}
                                   sx={{
                                     padding: '1rem',
                                     backgroundColor: '#f5f5f5',

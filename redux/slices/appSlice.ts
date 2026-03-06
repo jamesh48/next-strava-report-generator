@@ -36,6 +36,7 @@ export enum SortCondition {
   DATE_DESC = 'dateDesc',
   DISTANCE_DESC = 'distanceDesc',
 }
+
 export const appInitialState: {
   achievementEffortView: 'best-effort' | 'best-segment'
   achievementsOnly: boolean

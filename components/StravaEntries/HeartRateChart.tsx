@@ -82,15 +82,11 @@ const HeartRateChart = (props: HeartRateChartProps) => {
 
       setData({
         labels: props.currentActivity.laps.map(
-          (increment) =>
-            (cumulativeDistance +=
-              increment.distance *
-              (() => {
-                if (props.format === 'avgypace') {
-                  return 1.094
-                }
-                return 1
-              })()).toFixed() + ` ${currentMeasurement}`,
+          (increment) => {
+            const multiplier = props.format === 'avgypace' ? 1.094 : 1
+            cumulativeDistance += increment.distance * multiplier
+            return `${cumulativeDistance.toFixed()} ${currentMeasurement}`
+          },
         ),
         datasets: (() => {
           if (hrData.includes('maxHR') && hrData.includes('avgHR')) {

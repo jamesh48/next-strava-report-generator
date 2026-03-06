@@ -10,7 +10,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
 interface TQueryListResponse<T> {
   results: T[]
   count: number
-  lastKey?: { activityId: string; athleteId: string }
+  lastKey?: number | null
 }
 
 const handleTime = (movingTime: number, pace?: boolean) => {
@@ -23,6 +23,7 @@ const handleTime = (movingTime: number, pace?: boolean) => {
     return '00:00'
   }
 }
+
 export const entriesApi = createApi({
   reducerPath: 'entriesApi',
   tagTypes: ['Activities', 'MonthlyStats'],
@@ -33,7 +34,7 @@ export const entriesApi = createApi({
       {
         limit?: number
         activityType: Sport
-        lastKey: string | null
+        lastKey: number | null
         format: Format
         beforeDate?: string
         afterDate?: string
@@ -155,7 +156,7 @@ export const entriesApi = createApi({
       invalidatesTags: ['Activities'],
     }),
     getMonthlyStats: builder.query<
-      { [key: string]: { count: number; distance: number } },
+      { month: string; count: number; distance: number }[],
       { activityType: Sport }
     >({
       query: ({ activityType }) => ({

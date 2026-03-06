@@ -1,3 +1,6 @@
+import type { Sport } from '@components/StravaEntries/EntryTypes'
+import { Box, Button, useTheme } from '@mui/material'
+import { useGetMonthlyStatsQuery } from '@redux/slices'
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -8,6 +11,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js'
+import { useState } from 'react'
 import { Line } from 'react-chartjs-2'
 
 ChartJS.register(
@@ -20,17 +24,31 @@ ChartJS.register(
   Legend,
 )
 
-import type { Sport } from '@components/StravaEntries/EntryTypes'
-import { Box, Button, useTheme } from '@mui/material'
-import { useGetMonthlyStatsQuery } from '@redux/slices'
-import { useState } from 'react'
-
 export interface ActivityChartProps {
   activityType: Sport
 }
 
+const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+
 const ActivityChart = (props: ActivityChartProps) => {
   const theme = useTheme()
+  const [currentlyShownChart, setCurrentlyShownChart] = useState<
+    'count' | 'distance'
+  >('count')
+
   const dataMap = {
     count: {
       title: 'Number of Activities',
@@ -38,11 +56,9 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
     distance: {
       title: 'Distance of Activities',
-      color: theme.palette.baseBackground.main,
+      color: theme.palette.strava.contrastColor,
     },
   }
-  const [currentlyShownChart, setCurrentlyShownChart] =
-    useState<string>('count')
 
   const options = {
     color: theme.palette.strava.main,
@@ -64,50 +80,24 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
   }
 
-  const { data: monthlyStats } = useGetMonthlyStatsQuery(
-    {
-      activityType: props.activityType,
-    },
-    {
-      selectFromResult: ({ data, ...rest }) => {
-        return { data: Object.entries(data || {}), ...rest }
-      },
-    },
-  )
+  const { data: monthlyStats } = useGetMonthlyStatsQuery({
+    activityType: props.activityType,
+  })
 
-  const currentDate = new Date()
-  const currentYear = currentDate.getFullYear()
+  const currentYear = new Date().getFullYear()
 
   const thisYearsActivities =
-    monthlyStats.filter((entry) =>
-      entry[0].startsWith(currentYear.toString()),
+    monthlyStats?.filter((entry) =>
+      entry.month.startsWith(currentYear.toString()),
     ) || []
 
-  // Create a map of year-month to activity data for quick lookup
   const activityMap = new Map(
-    thisYearsActivities.map(([key, value]) => [key, value]),
+    thisYearsActivities.map(({ month, ...value }) => [month, value]),
   )
 
-  // Generate all 12 months for the current year
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
   const allMonths = Array.from({ length: 12 }, (_, i) => {
-    const monthNum = (i + 1).toString().padStart(2, '0')
-    const yearMonth = `${currentYear}-${monthNum}`
+    const yearMonth = `${currentYear}-${(i + 1).toString().padStart(2, '0')}`
     return {
-      key: yearMonth,
       label: monthNames[i],
       data: activityMap.get(yearMonth) || { count: 0, distance: 0 },
     }
@@ -117,16 +107,15 @@ const ActivityChart = (props: ActivityChartProps) => {
     labels: allMonths.map((month) => month.label),
     datasets: [
       {
-        label: dataMap[currentlyShownChart as 'count'].title,
-        data: allMonths.map(
-          (month) => month.data[currentlyShownChart as 'count' | 'distance'],
-        ),
-        borderColor: dataMap[currentlyShownChart as 'count'].color,
+        label: dataMap[currentlyShownChart].title,
+        data: allMonths.map((month) => month.data[currentlyShownChart]),
+        borderColor: dataMap[currentlyShownChart].color,
         backgroundColor: theme.palette.strava.contrastColor,
         yAxisId: 'y',
       },
     ],
   }
+
   return (
     <Box>
       <Line options={options} data={data} />

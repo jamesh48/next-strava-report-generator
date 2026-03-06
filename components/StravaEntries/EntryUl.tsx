@@ -13,7 +13,7 @@ import {
 import { createColumnHelper } from '@tanstack/react-table'
 import { Button, Table, useCursorPagination } from 'fsh-components'
 import type React from 'react'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { When } from 'react-if'
 import EmptyEntry from './EmptyEntry'
 import type { Format, Sport, UIEntry } from './EntryTypes.js'
@@ -49,14 +49,24 @@ const EntryUI = (props: EntryUIProps) => {
     reset,
   } = useCursorPagination()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <needed>
   useEffect(() => {
     reset()
-  }, [props.sport, hasAchievements, reset])
+  }, [
+    props.sport,
+    hasAchievements,
+    sortCondition,
+    afterDate,
+    beforeDate,
+    props.titleQuery,
+    props.distance,
+    reset,
+  ])
 
   const { data: entries } = useGetAllEntriesQuery(
     {
       limit: 50,
-      lastKey: getCurrentToken(),
+      lastKey: Number(getCurrentToken()),
       activityType: props.sport,
       format: props.format,
       afterDate,
@@ -70,8 +80,6 @@ const EntryUI = (props: EntryUIProps) => {
       refetchOnMountOrArgChange: true,
     },
   )
-
-  console.info(entries)
 
   useEffect(() => {
     if (entries) {
@@ -103,13 +111,13 @@ const EntryUI = (props: EntryUIProps) => {
 
   const openActivityDetail = Boolean(currEntry)
 
-  const handleOpenActivityDetail = (entry: UIEntry) => {
+  const handleOpenActivityDetail = useCallback((entry: UIEntry) => {
     setCurrEntry(entry)
-  }
+  }, [])
 
-  const handleCloseActivityDetail = () => {
+  const handleCloseActivityDetail = useCallback(() => {
     setCurrEntry(undefined)
-  }
+  }, [])
 
   const mobileStyles = useCSX({}, { marginBottom: '15%', marginTop: '2.5%' })
 
@@ -188,7 +196,14 @@ const EntryUI = (props: EntryUIProps) => {
         },
       }),
     ]
-  }, [openActivityDetail])
+  }, [
+    openActivityDetail,
+    currEntry?.activityId,
+    handleCloseActivityDetail,
+    handleOpenActivityDetail,
+    props.format,
+    props.sport,
+  ])
 
   return (
     <List
@@ -204,7 +219,7 @@ const EntryUI = (props: EntryUIProps) => {
       <Table
         data={entries?.results || []}
         columns={tableColumns}
-        paginationType='numbered'
+        paginationType='cursor'
         hasMore={hasMore}
         canGoBack={canGoBack}
         onNextPage={handleNextPage}

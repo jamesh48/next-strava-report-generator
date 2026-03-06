@@ -7,8 +7,6 @@ const handler = nextConnect()
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
   const code = req.query.code
 
-  console.info('CODE-> ', code)
-
   if (req.query.error === 'access_denied') {
     return res.redirect(`${process.env.REDIRECT_URI_HOST}/AccessDenied`)
   }

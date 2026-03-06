@@ -1,36 +1,38 @@
 import mapboxgl, {
-  type CircleLayer,
-  type FillLayer,
-  type LineLayer,
-  type SymbolLayer,
+  type CircleLayerSpecification,
+  type FillLayerSpecification,
+  type LineLayerSpecification,
+  type SourceSpecification,
+  type SymbolLayerSpecification,
 } from 'mapbox-gl'
 
-interface MapManager extends mapboxgl.Map {
-  currentTheme: LightOrDark
-}
-
 export type LightOrDark = 'light' | 'dark'
-interface UnitedViewCircleLayer extends CircleLayer {
+
+interface SrgActivityMapCircleLayerSpecification
+  extends CircleLayerSpecification {
   source: string
 }
-interface UnitedViewFillLayer extends FillLayer {
+interface SrgActivityMapFillLayerSpecification extends FillLayerSpecification {
   source: string
 }
-interface UnitedViewLineLayer extends LineLayer {
+interface SrgActivityMapLineLayerSpecification extends LineLayerSpecification {
   source: string
 }
-interface UnitedViewSymbolLayer extends SymbolLayer {
+interface SrgActivityMapSymbolLayerSpecification
+  extends SymbolLayerSpecification {
   source: string
 }
 
-export type UnitedViewLayer =
-  | UnitedViewCircleLayer
-  | UnitedViewFillLayer
-  | UnitedViewLineLayer
-  | UnitedViewSymbolLayer
+export type SrgActivityMapLayer =
+  | SrgActivityMapCircleLayerSpecification
+  | SrgActivityMapFillLayerSpecification
+  | SrgActivityMapLineLayerSpecification
+  | SrgActivityMapSymbolLayerSpecification
 
 class MapManager extends mapboxgl.Map {
-  constructor(options: mapboxgl.MapboxOptions & { initialTheme: LightOrDark }) {
+  currentTheme: LightOrDark
+
+  constructor(options: mapboxgl.MapOptions & { initialTheme: LightOrDark }) {
     const mapboxOptions = { ...options }
     // @ts-expect-error: Unreachable code error
     delete mapboxOptions.initialTheme
@@ -39,9 +41,9 @@ class MapManager extends mapboxgl.Map {
     this.currentTheme = options.initialTheme
   }
 
-  addLayer(layer: UnitedViewLayer): this {
+  addLayer(layer: mapboxgl.AnyLayer, beforeId?: string): this {
     if (!this.getLayer(layer.id)) {
-      super.addLayer(layer)
+      super.addLayer(layer, beforeId)
     }
     return this
   }
@@ -53,7 +55,7 @@ class MapManager extends mapboxgl.Map {
     return this
   }
 
-  addSource(id: string, source: mapboxgl.AnySourceData): this {
+  addSource(id: string, source: SourceSpecification): this {
     if (!this.getSource(id)) {
       super.addSource(id, source)
     }

@@ -78,8 +78,8 @@ const ActivityMap = (props: ActivityMapProps) => {
         },
       })
       setTimeout(() => {
-        if (map.current) {
-          map.current?.resize()
+        if (map.current?.resize) {
+          map.current.resize()
         }
       }, 1000)
     })

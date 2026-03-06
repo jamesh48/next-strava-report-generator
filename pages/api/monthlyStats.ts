@@ -1,34 +1,45 @@
-// /srg/monthlyStats?srg_athlete_id=12345&activity_type=Run
+import axios from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
 
-import axios from 'axios';
-import nextConnect from 'next-connect';
-import { NextApiRequest, NextApiResponse } from 'next';
-const handler = nextConnect();
+const handler = nextConnect()
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const activityType = req.query.activityType;
-  try {
-    const srg_athlete_id = req.cookies.athleteId;
-    const monthlyStats = await axios({
-      url: `${process.env.DATA_BASE_URL}/srg/monthlyStats`,
-      method: 'GET',
-      params: {
-        srg_athlete_id,
-        activity_type: activityType,
-      },
-    });
+  const activityType = req.query.activityType
+  const srg_athlete_id = req.cookies.athleteId
 
-    return res.send(monthlyStats.data);
+  try {
+    const { data } = await axios.post(
+      process.env.GRAPHQL_URL || '',
+      {
+        query: `
+            query MonthlyStats($athleteId: String!, $activityType: String) {
+              monthlyStats(athleteId: $athleteId, activityType: $activityType) {
+                month
+                count
+                distance
+              }
+            }
+          `,
+        variables: {
+          athleteId: srg_athlete_id,
+          activityType,
+        },
+      },
+      { headers: { 'Content-Type': 'application/json' } },
+    )
+
+    return res.send(data.data.monthlyStats)
   } catch (err) {
     const typedErr = err as {
-      message: string;
-      request: { res: { statusCode: number } };
-    };
-    if (typedErr.request.res.statusCode === 429) {
-      return res.status(429).send({ error: typedErr.message });
+      message: string
+      request: { res: { statusCode: number } }
     }
-    return res.status(500).send({ error: typedErr.message });
+    if (typedErr.request?.res?.statusCode === 429) {
+      return res.status(429).send({ error: typedErr.message })
+    }
+    return res.status(500).send({ error: typedErr.message })
   }
-});
+})
 
-export default handler;
+export default handler
