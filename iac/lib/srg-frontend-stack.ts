@@ -89,7 +89,7 @@ export class SRGFrontendStack extends cdk.Stack {
       'imported-https-listener',
       {
         listenerArn:
-          'arn:aws:elasticloadbalancing:us-east-1:471507967541:listener/app/jh-alb/5927623bf7b387b8/202d118fecee2aa5',
+          'arn:aws:elasticloadbalancing:us-east-1:471507967541:listener/app/jh-alb/c64970f58fd07783/1708c911f9b31d9e',
       },
     )
 
