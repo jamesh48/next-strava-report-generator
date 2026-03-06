@@ -120,7 +120,6 @@ export class SRGFrontendStack extends cdk.Stack {
           'www.stravareportgenerator.com',
           'stravareportgenerator.com',
         ]),
-        // elbv2.ListenerCondition.pathPatterns(['/', '/srg/*']),
       ],
     })
   }
