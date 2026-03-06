@@ -1,31 +1,31 @@
-import React from 'react';
-import InputJSON from './input.json';
-import RadioColumn from '@components/OptionsProfile/Radios/RadioColumn';
-import ProgressBar from '@components/OptionsProfile/ProgressBar/ProgressBar';
-import AdditionalFilters from './AdditionalFilters/AdditionalFilters';
-import { Box, useTheme } from '@mui/material';
-import { Format } from '@components/StravaEntries/EntryTypes';
-import { useCSX } from '@lib';
-import { useGetAllEntriesQuery } from '@redux/slices';
+import ProgressBar from '@components/OptionsProfile/ProgressBar/ProgressBar'
+import RadioColumn from '@components/OptionsProfile/Radios/RadioColumn'
+import type { Format } from '@components/StravaEntries/EntryTypes'
+import { useCSX } from '@lib'
+import { Box, useTheme } from '@mui/material'
+import type React from 'react'
+import AdditionalFilters from './AdditionalFilters/AdditionalFilters'
+import InputJSON from './input.json'
 
 export interface RadiosProps {
   setSport: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   setDistance: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   setFormat: React.MouseEventHandler<HTMLLabelElement> &
-    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-  setTitleQuery: React.ChangeEventHandler<HTMLInputElement>;
-  titleQuery: string;
-  sport: string;
-  customDistance: boolean;
-  distance: number;
-  format: Format;
+    React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  setTitleQuery: React.ChangeEventHandler<HTMLInputElement>
+  titleQuery: string
+  sport: string
+  customDistance: boolean
+  distance: number
+  format: Format
 }
 
 const Radios = (props: RadiosProps) => {
-  const theme = useTheme();
-  const { isSuccess } = useGetAllEntriesQuery(null);
+  const theme = useTheme()
+  // const { isSuccess } = useGetAllEntriesQuery(null);
+  const isSuccess = true
   const initArr = [
     {
       title: 'Choose Sport',
@@ -39,10 +39,10 @@ const Radios = (props: RadiosProps) => {
         props.sport === 'Run'
           ? InputJSON.distanceRunRadios
           : props.sport === 'Swim'
-          ? InputJSON.distanceSwimRadios
-          : props.sport === 'Ride'
-          ? InputJSON.distanceRideRadios
-          : InputJSON.distanceRunRadios,
+            ? InputJSON.distanceSwimRadios
+            : props.sport === 'Ride'
+              ? InputJSON.distanceRideRadios
+              : InputJSON.distanceRunRadios,
       customDistance: props.customDistance,
       distance: props.distance,
     },
@@ -53,17 +53,17 @@ const Radios = (props: RadiosProps) => {
         props.sport === 'Run'
           ? InputJSON.formatRunRadios
           : props.sport === 'Swim'
-          ? InputJSON.formatSwimRadios
-          : props.sport === 'Ride'
-          ? InputJSON.formatRideRadios
-          : InputJSON.formatRunRadios,
+            ? InputJSON.formatSwimRadios
+            : props.sport === 'Ride'
+              ? InputJSON.formatRideRadios
+              : InputJSON.formatRunRadios,
       format: props.format,
     },
-  ];
+  ]
 
   return (
     <Box
-      id="buttonsAndBar"
+      id='buttonsAndBar'
       sx={{
         width: '100%',
         display: 'flex',
@@ -72,29 +72,27 @@ const Radios = (props: RadiosProps) => {
       }}
     >
       <Box
-        id="buttonLayout"
+        id='buttonLayout'
         sx={{
           display: 'flex',
           ...useCSX('row', 'column', 'flexDirection'),
           justifyContent: 'center',
           width: '95%',
           margin: '2.5% auto 0 auto',
-          border: '1px solid ' + theme.palette.strava.main,
-          borderTop: 'none',
-          borderLeft: 'none',
           backgroundColor: theme.palette.mainBackground.main,
-          boxShadow: '2.5px 2.5px 5px 0px ' + theme.palette.strava.main,
+          border: `1px solid ${theme.palette.strava.main}`,
+          boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
         }}
       >
-        {initArr.map((radioColumn, index) => {
+        {initArr.map((radioColumn) => {
           return (
             <RadioColumn
-              key={index}
+              key={radioColumn.title}
               {...radioColumn}
               isLoaded={isSuccess}
               format={props.format}
             />
-          );
+          )
         })}
       </Box>
 
@@ -104,7 +102,7 @@ const Radios = (props: RadiosProps) => {
       />
       <ProgressBar />
     </Box>
-  );
-};
+  )
+}
 
-export default Radios;
+export default Radios

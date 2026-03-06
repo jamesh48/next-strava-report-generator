@@ -13,23 +13,29 @@ export type Format =
   | 'mph'
   | undefined;
 
-export type Entry = {
+export type APIEntry = {
   activityId: number;
   name: string;
-  start_date: string;
-  max_speed: string;
+  startDate: string;
+  maxSpeed: string;
   distance: number;
-  moving_time: number;
-  elapsed_time: number;
+  movingTime: number;
+  elapsedTime: number;
   type: string;
   // Shared Details
-  average_heartrate: number;
+  averageHeartrate: number;
   max_heartrate: number;
-  kudos_count: number;
-  comment_count: number;
-  achievement_count: number;
+  kudosCount: number;
+  commentCount: number;
+  achievementCount: number;
   // Cached Detailed Entry
   individualActivityCached?: true;
+};
+
+export type UIEntry = Omit<APIEntry, 'distance' | 'elapsed_time'> & {
+  averagePace: string;
+  distance: string;
+  elapsed_time: string
 };
 
 export type CachedEntry = {
@@ -83,15 +89,20 @@ export type CurrentActivity = {
   id: number;
   name: string;
   kudos_count: number;
+  calories: number
   comment_count: number;
   average_heartrate: number;
+  distance: number
   max_heartrate: number;
   achievement_count: number;
   best_efforts?: BestEffort[];
   segment_efforts: SegmentEffort[];
   description: string;
   device_name?: string;
+  start_date: string;
+  start_date_local: string;
   gear?: {
+    id: string;
     name: string;
   };
   laps:

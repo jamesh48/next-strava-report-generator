@@ -1,20 +1,19 @@
-import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import { useCSX } from '@lib';
-import { YTDRunTotals } from './UserProfileTypes';
-import ActivityChart from './ActivityChart';
+import { useCSX } from '@lib'
+import { Box, Typography, useTheme } from '@mui/material'
+import ActivityChart from './ActivityChart'
+import type { YTDRunTotals } from './UserProfileTypes'
 
 export interface RunningTotalsProps {
   profile: {
-    ytd_run_totals: YTDRunTotals;
-  };
+    ytd_run_totals: YTDRunTotals
+  }
 }
 
 const RunningTotals = (props: RunningTotalsProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <Box
-      className="ytdTotals profileBoxes"
+      className='ytdTotals profileBoxes'
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -24,15 +23,15 @@ const RunningTotals = (props: RunningTotalsProps) => {
         backgroundColor: theme.palette.mainBackground.main,
         paddingLeft: '.25rem',
         ...useCSX(
-          '1px solid ' + theme.palette.strava.contrastColor,
+          `1px solid ${theme.palette.strava.contrastColor}`,
           'none',
-          'borderLeft'
+          'borderLeft',
         ),
       }}
     >
       <Typography
-        variant="h6"
-        className="ytdTotalsTitle"
+        variant='h6'
+        className='ytdTotalsTitle'
         color={theme.palette.strava.main}
         sx={{
           textDecoration: 'underline',
@@ -43,24 +42,25 @@ const RunningTotals = (props: RunningTotalsProps) => {
         Year-To-Date Run Totals
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Number of Runs: {props.profile.ytd_run_totals.count}
+        Number of Runs: {props.profile.ytd_run_totals.count.toLocaleString()}
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         color={theme.palette.strava.main}
         sx={{ cursor: 'default', marginY: 1 }}
       >
-        Total Distance: {props.profile.ytd_run_totals.distance} Meters
+        Total Distance: {props.profile.ytd_run_totals.distance.toLocaleString()}{' '}
+        Meters
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
@@ -73,9 +73,9 @@ const RunningTotals = (props: RunningTotalsProps) => {
             ).toFixed(2)}{' '}
         Meters per Second
       </Typography>
-      <ActivityChart activityType="Run" />
+      <ActivityChart activityType='Run' />
     </Box>
-  );
-};
+  )
+}
 
-export default RunningTotals;
+export default RunningTotals

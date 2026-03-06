@@ -8,14 +8,14 @@ import {
 } from '@mui/material';
 //
 import { useMobileBrowserCheck } from '@lib';
-import { Entry } from '@components/StravaEntries/EntryTypes';
+import { APIEntry } from '@components/StravaEntries/EntryTypes';
 
 export interface PageNoUlProps {
   handleClick: ((event: SelectChangeEvent<string>) => void) &
     React.MouseEventHandler<HTMLLIElement>;
   currentPage: number;
   entriesPerPage: number;
-  entries: Entry[];
+  entries: APIEntry[];
 }
 const PageNoUl = (props: PageNoUlProps) => {
   const isMobile = useMobileBrowserCheck();

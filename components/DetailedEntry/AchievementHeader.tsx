@@ -8,8 +8,8 @@ interface AchievementHeaderProps {
   achievementHeaderTitle: string;
   handleSetPosition: (p: number) => void;
   position: number;
-  currentSegmentDataLength: number;
-  toggleable: boolean;
+  currentSegmentDataLength: number | undefined;
+  toggleable: boolean | undefined;
 }
 
 const AchievementHeader = (props: AchievementHeaderProps) => {
@@ -58,23 +58,30 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
     <Box
       sx={{
         display: 'flex',
-        minWidth: '100%',
+        width: '92.5%',
         flexDirection: 'column',
-        padding: '.5rem',
+        padding: '1rem',
+
+        backgroundColor: '#f5f5f5',
+        borderRadius: '8px 8px 0 0',
+        border: '1px solid #e0e0e0',
+
       }}
     >
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'flex-start',
+          alignItems: 'center',
           width: '100%',
+          gap: '1rem',
         }}
       >
         <Typography
-          variant="h3"
+          variant="h4"
           sx={{
-            borderBottom: '1px solid ' + theme.palette.strava.contrastText,
-            color: theme.palette.common.white,
+            color: theme.palette.text.primary,
+            fontWeight: 600,
             ...mobileTitleCentered,
           }}
         >

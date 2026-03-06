@@ -10,11 +10,13 @@ const SwipeableContainer = styled('div')({
 
 const SwipeableContent = styled('div')({
   display: 'flex',
+  height: '100%',
   transition: 'transform 0.3s ease',
 });
 
 const SwipeableItem = styled('div')({
   flex: '0 0 100%',
+  height: '100%',
 });
 
 const Swipeable = ({ children }: { children: ReactNode }) => {

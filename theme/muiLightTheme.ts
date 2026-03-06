@@ -1,6 +1,7 @@
 import { ThemeOptions } from '@mui/material';
 import componentOverrides from './muiOverrides';
 import { createTheme } from '@mui/material/styles';
+import { ivory } from 'theme/muiDarkTheme';
 
 // const _typography = {
 //   htmlFontSize: 16,
@@ -60,22 +61,25 @@ import { createTheme } from '@mui/material/styles';
 //   },
 // };
 
+export const orangered = '#FF5349';
+
 const lightTheme: ThemeOptions = {
   palette: {
     mode: 'light',
-    baseBackground: { main: 'darkslategray' },
+    baseBackground: { main: '#F5F5F5' },
     strava: {
-      main: 'orangered',
-      contrastText: 'ivory',
+      main: orangered,
+      contrastText: ivory,
       contrastColor: 'coral',
     },
-    common: { black: 'black', white: 'ivory' },
+    common: { black: 'black', white: ivory },
     // Turquoise, Dark Turquoise, Pale Turquoise
     mainBackground: {
-      main: '#52fff3',
-      dark: '#00ced1',
+      // White Smoke
+      main: '#F5F5F5',
+      dark: '#FFFFFF',
       light: '#AFEEEE',
-      accent: 'deepskyblue',
+      accent: '#FFFFFF',
       entry: 'coral',
     },
   },

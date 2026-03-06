@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Box, useTheme } from '@mui/material';
 //
 import UserProfile from '@components/UserProfile/UserProfile';
@@ -50,11 +50,10 @@ export default function App() {
     setFormat(value as Format);
   };
 
-  const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setTitleQuery(event.currentTarget.value);
-  };
+  const setTitleQueryCallback: React.ChangeEventHandler<HTMLInputElement> =
+    useCallback((event) => {
+      setTitleQuery(event.currentTarget.value);
+    }, []);
 
   const setDistanceCallback: React.MouseEventHandler<HTMLLabelElement> &
     React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -88,11 +87,9 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: '95%',
-          margin: '2.5% auto',
-          paddingTop: '25px',
+          margin: '1%',
           border: `1px solid ${theme.palette.strava.contrastColor}`,
-          boxShadow: `0 0 10px ${theme.palette.strava.contrastColor}`,
+          boxShadow: `.125rem .125rem .25rem 0px ${theme.palette.strava.main}`,
           backgroundColor: theme.palette.mainBackground.dark,
         }}
       >

@@ -1,39 +1,44 @@
-import axios from 'axios';
-import nextConnect from 'next-connect';
-import { NextApiRequest, NextApiResponse } from 'next';
-const handler = nextConnect();
+import axios from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import nextConnect from 'next-connect'
+
+const handler = nextConnect()
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
+  var athlete: { data: Record<string, unknown> }
   try {
-    const srg_athlete_id = req.cookies.athleteId;
-    var athlete = await axios({
+    const srg_athlete_id = req.cookies.athleteId
+
+    athlete = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/getLoggedInUser`,
       method: 'GET',
       params: {
         srg_athlete_id,
       },
-    });
+    })
   } catch (err) {
     const typedErr = err as {
-      message: string;
-      request: { res: { statusCode: number } };
-    };
-    if (typedErr.request.res.statusCode === 429) {
-      return res.status(429).send({ error: typedErr.message });
+      message: string
+      request: { res: { statusCode: number } }
     }
-    return res.status(500).send({ error: typedErr.message });
+    if (typedErr.request.res.statusCode === 429) {
+      return res.status(429).send({ error: typedErr.message })
+    }
+    return res.status(500).send({ error: typedErr.message })
   }
+
+  var stats: { data: unknown }
   try {
-    var stats = await axios({
+    stats = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/getAthleteStats/${athlete.data.id}`,
-    });
+    })
   } catch (err) {
-    const typedErr = err as { message: string };
-    return res.status(500).send(typedErr.message);
+    const typedErr = err as { message: string }
+    return res.status(500).send(typedErr.message)
   }
 
-  const fullAthlete = Object.assign(athlete.data, stats.data);
-  return res.status(200).send(fullAthlete);
-});
+  const fullAthlete = Object.assign(athlete.data, stats.data)
+  return res.status(200).send(fullAthlete)
+})
 
-export default handler;
+export default handler

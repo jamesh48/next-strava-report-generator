@@ -25,7 +25,7 @@ export const individualEntrySlice = createApi({
           athlete: Athlete;
         }[];
       },
-      number
+      number | undefined
     >({
       query: (entryid) => ({ url: '/kudoers', params: { entryid } }),
     }),
@@ -73,49 +73,18 @@ export const individualEntrySlice = createApi({
         description: string;
       }
     >({
-      // invalidatesTags: ['IndividualEntry'],
+      invalidatesTags: ['IndividualEntry'],
       query: (event) => ({
         method: 'POST',
         url: '/putActivityUpdate',
         body: event,
       }),
-      // Optimistic Update for the new Activity Description and Name
-      onQueryStarted: async (payload, { dispatch, queryFulfilled }) => {
-        dispatch(
-          entriesApi.util.updateQueryData('getAllEntries', null, (draft) => {
-            const draftIndex = draft.findIndex((existingActivity) => {
-              return (
-                String(existingActivity.activityId) ===
-                String(payload.activityId)
-              );
-            });
-
-            draft[draftIndex].name = payload.name;
-          })
-        );
-
-        dispatch(
-          setCurrentActivityField({
-            field: 'description',
-            update: payload.description,
-          })
-        );
-
-        try {
-          await queryFulfilled;
-        } catch (err) {
-          // Refetch all Activities and Individual Entry on Failure
-          dispatch(entriesApi.util.invalidateTags(['Activities']));
-          dispatch(
-            individualEntrySlice.util.invalidateTags(['IndividualEntry'])
-          );
-        }
-      },
     }),
   }),
 });
 
 export const {
+  useGetIndividualEntryQuery,
   useLazyGetIndividualEntryQuery,
   useGetKudoersQuery,
   useUpdateShoeIndividualEntryMutation,

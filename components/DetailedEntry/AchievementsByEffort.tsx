@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from 'react';
 import { BestEffort } from '@components/StravaEntries/EntryTypes';
 import { Wreath } from './Wreath';
-import { Box, Slider, useTheme } from '@mui/material';
+import { Box, Slider, Tooltip, useTheme } from '@mui/material';
 import ActivityStreamMap from '@components/StravaEntries/ActivityMap/ActivityStreamMap';
 import AchievementList from './AchievementList';
 import { useCSX } from '@lib';
@@ -59,9 +59,9 @@ function valuetext(value: number) {
 }
 
 interface AchievementsProps {
-  bestEfforts: BestEffort[];
-  activityId: number;
-  toggleable: boolean;
+  bestEfforts: BestEffort[] | undefined;
+  activityId: number | undefined;
+  toggleable: boolean | undefined;
 }
 
 const calculateSliderValues = (bestEfforts: BestEffort[]) => {
@@ -87,8 +87,8 @@ const calculateSliderValues = (bestEfforts: BestEffort[]) => {
 const AchievementsByEffort = (props: AchievementsProps) => {
   const theme = useTheme();
 
-  const [closestEffortDistance, furthestEffortDistance, marksForSlider] =
-    calculateSliderValues(props.bestEfforts) as [
+  const [closestEffortDistance, furthestEffortDistance, baseMarks] =
+    calculateSliderValues(props.bestEfforts || []) as [
       number,
       number,
       {
@@ -96,6 +96,15 @@ const AchievementsByEffort = (props: AchievementsProps) => {
         label: string;
       }[]
     ];
+
+  const marksForSlider = baseMarks.map((mark) => ({
+    value: mark.value,
+    label: (
+      <Tooltip title={mark.label} arrow placement="top">
+        <span>{mark.label}</span>
+      </Tooltip>
+    ),
+  }));
 
   const [currentSelectedDistance, setCurrentSelectedDistance] = useState(
     closestEffortDistance
@@ -112,7 +121,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
   );
   const mobileWreathWidth = useCSX('48.35%', '100%', 'width');
 
-  const mobileLabelTransform = useCSX(
+  const _mobileLabelTransform = useCSX(
     {
       transform: 'rotate(45deg) translate(-15%, 25%)',
       '&:nth-of-type(8)': {
@@ -130,15 +139,15 @@ const AchievementsByEffort = (props: AchievementsProps) => {
     }
   ) as CSSProperties;
 
-  const currentAchievements = props.bestEfforts.filter(
+  const currentAchievements = props.bestEfforts?.filter(
     (effort) => effort.distance === currentSelectedDistance
   );
 
   return (
     <Box
       sx={{
-        height: '40rem',
-        width: '97.5%',
+        height: '50rem',
+        width: '100%',
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -148,24 +157,27 @@ const AchievementsByEffort = (props: AchievementsProps) => {
       <Box
         sx={{
           flex: 1,
+          boxSizing: 'border-box',
           width: '100%',
           height: '100%',
-          zIndex: 2,
         }}
       >
-        <AchievementHeader
-          achievementHeaderTitle={currentAchievements[0]?.name || ''}
-          currentSegmentDataLength={currentAchievements.length}
-          toggleable={props.toggleable}
-          position={position}
-          handleSetPosition={handleSetPosition}
-        />
+        <Box sx={{ width: '100%', justifyContent: 'center', display: 'flex' }}>
+          <AchievementHeader
+            achievementHeaderTitle={currentAchievements?.[0]?.name || ''}
+            currentSegmentDataLength={currentAchievements?.length}
+            toggleable={props.toggleable}
+            position={position}
+            handleSetPosition={handleSetPosition}
+          />
+        </Box>
         <Box
           id="outer-slider"
           sx={{
             overflow: 'hidden',
             position: 'relative',
             height: '80%',
+            boxSizing: 'border-box',
           }}
         >
           <Box
@@ -178,7 +190,7 @@ const AchievementsByEffort = (props: AchievementsProps) => {
               width: '100%',
             }}
           >
-            {currentAchievements.map((currentAchievement, key) => {
+            {currentAchievements?.map((currentAchievement, key) => {
               {
                 /* Map the Entries here for each distance in case there are multiple */
               }
@@ -195,23 +207,31 @@ const AchievementsByEffort = (props: AchievementsProps) => {
                     padding: '.5rem',
                   }}
                 >
-                  <Box sx={{ height: '100%', paddingY: '.5rem' }}>
+                  <Box
+                    sx={{
+                      height: '30rem',
+                      left: '50px',
+                      position: 'absolute',
+                      ...mobileWreathWidth,
+                    }}
+                  >
+                    <Wreath />
+                  </Box>
+                  <Box
+                    sx={{
+                      height: '95%',
+                      paddingY: '.5rem',
+                      display: 'flex',
+                      justifyContent: 'center',
+                    }}
+                  >
                     <Box
                       sx={{
-                        height: '30rem',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        position: 'absolute',
-                        ...mobileWreathWidth,
-                      }}
-                    >
-                      <Wreath />
-                    </Box>
-                    <Box
-                      sx={{
-                        width: '100%',
                         display: 'flex',
                         height: '100%',
+                        width: '95%',
+
+                        border: '2px solid ' + theme.palette.strava.main,
                         ...mobileColumns,
                       }}
                     >
@@ -236,7 +256,8 @@ const AchievementsByEffort = (props: AchievementsProps) => {
           width: '100%',
           display: 'flex',
           alignItems: 'center',
-          paddingBottom: '1rem',
+          paddingTop: '1rem',
+          paddingBottom: '8rem',
         }}
       >
         <Slider
@@ -276,8 +297,28 @@ const AchievementsByEffort = (props: AchievementsProps) => {
               }
               return {};
             })(),
-            marginX: '2rem',
-            '& .MuiSlider-markLabel': { ...mobileLabelTransform },
+            marginX: '4rem',
+            width: 'calc(100% - 8rem)',
+            '& .MuiSlider-markLabel': {
+              top: '3rem !important',
+              color: theme.palette.text.primary,
+              fontWeight: 500,
+              fontSize: '0.75rem',
+              transform: 'rotate(-35deg) translateX(-4rem) !important',
+              transformOrigin: 'top left !important',
+              maxWidth: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              textAlign: 'right',
+              '&:nth-of-type(even)': {
+                top: '4rem !important',
+              },
+              '& span': {
+                display: 'inline-block',
+                color: theme.palette.text.primary,
+              },
+            },
           }}
         />
       </Box>

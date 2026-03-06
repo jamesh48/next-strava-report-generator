@@ -3,7 +3,7 @@ import { Box, Button } from '@mui/material';
 interface CarouselArrowsProps {
   position: number;
   changeEffort: (event: React.MouseEvent<HTMLElement>) => void;
-  currentSegmentDataLength: number;
+  currentSegmentDataLength: number | undefined;
 }
 
 const CarouselArrows = (props: CarouselArrowsProps) => {
@@ -74,7 +74,7 @@ const CarouselArrows = (props: CarouselArrowsProps) => {
         className={`arrow-button prev-next-button`}
         id="next-button"
         disabled={
-          Number(props.position) + 1 > props.currentSegmentDataLength - 1
+          Number(props.position) + 1 > (props.currentSegmentDataLength || 0) - 1
             ? true
             : false
         }

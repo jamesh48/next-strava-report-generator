@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from 'react';
-import EntryDescriptor from './EntryDescriptor';
-import NestedEntryDescriptor from './NestedEntryDescriptor';
-import { Entry, Format } from './EntryTypes';
+import { hasStatus } from '@components/UserProfile/UserProfile'
+import { useCSX } from '@lib'
+import { Share } from '@mui/icons-material'
 import {
   Box,
   ClickAwayListener,
@@ -9,95 +8,80 @@ import {
   OutlinedInput,
   Typography,
   useTheme,
-} from '@mui/material';
-
-import { Share } from '@mui/icons-material';
-import { useCSX } from '@lib';
-import { useGetUserProfileQuery } from '@redux/slices';
-import { hasStatus } from '@components/UserProfile/UserProfile';
+} from '@mui/material'
+import { useGetUserProfileQuery } from '@redux/slices'
+import type React from 'react'
+import { useEffect, useRef } from 'react'
+import EntryDescriptor from './EntryDescriptor'
+import type { Format, UIEntry } from './EntryTypes'
+import NestedEntryDescriptor from './NestedEntryDescriptor'
 
 interface GeneralEntryProps {
-  no: number | undefined;
-  editingHeadline: boolean;
-  editedName: string;
-  entry: Entry;
-  sport: string;
-  format: Format;
-  isCurrentActivity: boolean;
-  handleNameChange: (e: { target: { value: string } }) => void;
+  no: number | undefined
+  editingHeadline: boolean
+  editedName: string
+  entry: UIEntry
+  sport: string
+  format: Format
+  isCurrentActivity: boolean
+  handleNameChange: (e: { target: { value: string } }) => void
   handleEditingHeadlineChange: (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true
-  ) => void;
-  isSharedActivity?: true;
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | true,
+  ) => void
+  isSharedActivity?: true
 }
 
 const GeneralEntry = (props: GeneralEntryProps) => {
-  const entryIsCached = props.entry.individualActivityCached;
-  const { isError, error } = useGetUserProfileQuery(null);
+  const entryIsCached = props.entry.individualActivityCached
+  const { isError, error } = useGetUserProfileQuery(null)
 
-  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429;
+  const rateLimitExceeded = isError && hasStatus(error) && error.status === 429
 
-  const preventDetailedEntryClick = rateLimitExceeded && !entryIsCached;
+  const preventDetailedEntryClick = rateLimitExceeded && !entryIsCached
 
-  const theme = useTheme();
-  const { data: userProfile } = useGetUserProfileQuery(null);
-  const m2y = 1.094;
-  const mps2kph = 3.6;
+  const theme = useTheme()
+  const { data: userProfile } = useGetUserProfileQuery(null)
 
   const pastTense =
     props.sport === 'Walk'
       ? 'Walked-'
       : props.sport === 'Swim'
-      ? 'Swam-'
-      : props.sport === 'Ride'
-      ? 'Rode-'
-      : props.sport === 'Run'
-      ? 'Ran'
-      : 'traveled-';
+        ? 'Swam-'
+        : props.sport === 'Ride'
+          ? 'Rode-'
+          : props.sport === 'Run'
+            ? 'Ran'
+            : 'traveled-'
 
-  const handleTime: (movingTime: number, pace?: string) => string = (
-    movingTime,
-    pace
-  ) => {
-    if (movingTime !== Infinity) {
-      if (pace) {
-        return new Date(movingTime * 1000).toISOString().substr(15, 4);
-      }
-      return new Date(movingTime * 1000).toISOString().substr(11, 8);
-    } else {
-      return '00:00';
-    }
-  };
+  const isTopThreeEntry = Number(props.no) >= 0 && Number(props.no) <= 2
 
-  const isTopThreeEntry = Number(props.no) >= 0 && Number(props.no) <= 2;
+  const mobileCentered = useCSX('left', 'center', 'textAlign')
 
-  const mobileCentered = useCSX('left', 'center', 'textAlign');
-
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (props.editingHeadline && ref.current) {
-      ref.current.focus();
-      const textLength = ref.current.value.length;
-      ref.current.setSelectionRange(textLength, textLength);
+      ref.current.focus()
+      const textLength = ref.current.value.length
+      ref.current.setSelectionRange(textLength, textLength)
     }
-  }, [props.editingHeadline]);
-  const mobileEntryWidth = useCSX('20%', '90%', 'width');
-  const mobileTitleCentered = useCSX('flex-start', 'center', 'justifyContent');
+  }, [props.editingHeadline])
+  const mobileEntryWidth = useCSX('20%', '90%', 'width')
+  const mobileTitleCentered = useCSX('flex-start', 'center', 'justifyContent')
   return (
     <Box
       id={
         Number(props.no) === 0
           ? 'entry1'
           : Number(props.no) === 1
-          ? 'entry2'
-          : Number(props.no) === 2
-          ? 'entry3'
-          : ''
+            ? 'entry2'
+            : Number(props.no) === 2
+              ? 'entry3'
+              : ''
       }
-      className="innerEntry"
+      className='innerEntry'
       sx={{
-        border: '1px solid ' + theme.palette.strava.contrastColor,
+        border: `1px solid ${theme.palette.strava.contrastColor}`,
         backgroundColor: props.isCurrentActivity
           ? theme.palette.mainBackground.main
           : theme.palette.mainBackground.light,
@@ -109,16 +93,16 @@ const GeneralEntry = (props: GeneralEntryProps) => {
 
         ...(() => {
           if (Number(props.no) === 0) {
-            return { backgroundColor: 'goldenrod' };
+            return { backgroundColor: 'goldenrod' }
           }
           if (Number(props.no) === 1) {
-            return { backgroundColor: 'silver' };
+            return { backgroundColor: 'silver' }
           }
 
           if (Number(props.no) === 2) {
-            return { backgroundColor: '#cd7f32' };
+            return { backgroundColor: '#cd7f32' }
           }
-          return {};
+          return {}
         })(),
         display: 'flex',
         ...mobileCentered,
@@ -141,7 +125,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                   paddingLeft: '1.5%',
                 },
                 ...mobileEntryWidth,
-              };
+              }
             }
             return {
               // Clickable Area for Detailed Entry
@@ -155,7 +139,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 paddingLeft: '1.5%',
               },
               ...mobileEntryWidth,
-            };
+            }
           })(),
         }}
       >
@@ -165,7 +149,7 @@ const GeneralEntry = (props: GeneralEntryProps) => {
           >
             <OutlinedInput
               inputRef={ref}
-              type="text"
+              type='text'
               value={props.editedName}
               onChange={props.handleNameChange}
               sx={{
@@ -184,8 +168,8 @@ const GeneralEntry = (props: GeneralEntryProps) => {
             }}
           >
             <Link
-              className="entryTitle"
-              href=""
+              className='entryTitle'
+              href=''
               sx={{
                 color: isTopThreeEntry
                   ? theme.palette.strava.contrastText
@@ -196,14 +180,14 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 cursor: preventDetailedEntryClick
                   ? 'not-allowed'
                   : props.isSharedActivity
-                  ? 'default'
-                  : 'pointer',
+                    ? 'default'
+                    : 'pointer',
               }}
               onClick={(e) => {
-                e.preventDefault();
+                e.preventDefault()
                 // Prevent caching a entry when rate limit is exceeded
                 if (!preventDetailedEntryClick) {
-                  props.handleEditingHeadlineChange(e);
+                  props.handleEditingHeadlineChange(e)
                 }
               }}
               data-indentry={props.entry.activityId}
@@ -225,15 +209,15 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                   '&:hover': {
                     color: (() => {
                       if (props.no === 0) {
-                        return 'goldenrod';
+                        return 'goldenrod'
                       }
                       if (props.no === 1) {
-                        return 'silver';
+                        return 'silver'
                       }
                       if (props.no === 2) {
-                        return '#cd7f32';
+                        return '#cd7f32'
                       }
-                      return theme.palette.mainBackground.main;
+                      return theme.palette.mainBackground.main
                     })(),
                   },
                   '&:active': {
@@ -244,127 +228,54 @@ const GeneralEntry = (props: GeneralEntryProps) => {
                 onClick={() => {
                   const handleCopyUrl = async () => {
                     await navigator.clipboard.writeText(
-                      `https://stravareportgenerator.com/SharedEntry?athleteId=${userProfile?.id}&activityId=${props.entry.activityId}`
-                    );
-                  };
-                  handleCopyUrl();
+                      `https://stravareportgenerator.com/SharedEntry?athleteId=${userProfile?.id}&activityId=${props.entry.activityId}`,
+                    )
+                  }
+                  handleCopyUrl()
                 }}
               />
             ) : null}
           </Box>
         )}
-        {props.format !== 'avgypace' ? (
-          <EntryDescriptor
-            title={`Distance ${pastTense}:`}
-            value={`${props.entry.distance} Meters`}
-          />
-        ) : (
-          <EntryDescriptor
-            title={`Distance ${pastTense}`}
-            value={`${(props.entry.distance * 1.094).toFixed()} Yards`}
-          />
-        )}
-
         <EntryDescriptor
+          title={`Distance ${pastTense}`}
+          value={props.entry.distance.toString()}
+        />
+
+        {/* <EntryDescriptor
           title="Time Elapsed- "
           value={handleTime(props.entry.elapsed_time)}
-        />
+        /> */}
 
-        <EntryDescriptor
+        {/* <EntryDescriptor
           title="Moving Time- "
           value={handleTime(props.entry.moving_time)}
-        />
+        /> */}
 
         {/* For Debugging  */}
         {/* <p className="entry-descriptor">id = {entry.activityId}</p> */}
 
         {/* Format */}
-        {props.format === 'kph' ? (
-          <NestedEntryDescriptor
-            title="Avg Pace- "
-            value={(
-              (props.entry.distance / props.entry.moving_time) *
-              mps2kph
-            ).toFixed(2)}
-            extra="kph"
-          />
-        ) : props.format === 'mph' ? (
-          <NestedEntryDescriptor
-            title="Avg Pace- "
-            value={(
-              (props.entry.distance / props.entry.moving_time) *
-              2.237
-            ).toFixed(2)}
-            extra="mph"
-          />
-        ) : props.format === 'mps' ? (
-          <NestedEntryDescriptor
-            title="Avg Pace- "
-            value={(props.entry.distance / props.entry.moving_time).toFixed(2)}
-            extra="mps"
-          />
-        ) : props.format === 'avgypace' ? (
-          <NestedEntryDescriptor
-            title="Avg Pace- "
-            value={handleTime(
-              props.entry.moving_time / ((props.entry.distance * 1.094) / 100),
-              'pace'
-            )}
-            extra="/100 Yards"
-          />
-        ) : props.format === 'avgmpace' ? (
-          <NestedEntryDescriptor
-            title="Avg Pace- "
-            value={handleTime(
-              props.entry.moving_time / (props.entry.distance / 100),
-              'pace'
-            )}
-            extra="/100 Meters"
-          />
-        ) : null}
+
+        <NestedEntryDescriptor
+          title='Avg Pace- '
+          value={props.entry.averagePace}
+          extra=''
+        />
+
         {/* Max Speed Format  */}
+        <NestedEntryDescriptor
+          title='Max Speed-'
+          value={props.entry.maxSpeed}
+          extra=''
+        />
 
-        {props.format === 'kph' ? (
-          <NestedEntryDescriptor
-            title="Max Speed-"
-            value={(Number(props.entry.max_speed) * mps2kph).toFixed(2)}
-            extra="kph"
-          />
-        ) : props.format === 'mph' ? (
-          <NestedEntryDescriptor
-            title="Max Speed- "
-            value={(Number(props.entry.max_speed) * 2.237).toFixed(2)}
-            extra="mph"
-          />
-        ) : props.format === 'mps' ? (
-          <NestedEntryDescriptor
-            title="Max Speed- "
-            value={Number(props.entry.max_speed).toFixed(2)}
-            extra="mps"
-          />
-        ) : props.format === 'avgypace' ? (
-          <NestedEntryDescriptor
-            title="Max Speed- "
-            value={handleTime(
-              100 / (Number(props.entry.max_speed) * m2y),
-              'pace'
-            )}
-            extra="/100 yards"
-          />
-        ) : props.format === 'avgmpace' ? (
-          <NestedEntryDescriptor
-            title="Max Speed- "
-            value={handleTime(100 / Number(props.entry.max_speed), 'pace')}
-            extra="/100 Meters"
-          />
-        ) : null}
-
-        <Typography className="entryDescriptor" sx={{ cursor: 'default' }}>
-          {new Date(props.entry.start_date).toLocaleString()}
+        <Typography className='entryDescriptor' sx={{ cursor: 'default' }}>
+          {new Date(props.entry.startDate).toLocaleString()}
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default GeneralEntry;
+export default GeneralEntry

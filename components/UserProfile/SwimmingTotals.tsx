@@ -1,22 +1,21 @@
-import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
-import { useCSX } from '@lib';
-import { YTDSwimTotals } from './UserProfileTypes';
-import ActivityChart from './ActivityChart';
+import { useCSX } from '@lib'
+import { Box, Typography, useTheme } from '@mui/material'
+import ActivityChart from './ActivityChart'
+import type { YTDSwimTotals } from './UserProfileTypes'
 
 export interface SwimmingTotalsProps {
   profile: {
-    ytd_swim_totals: YTDSwimTotals;
-  };
+    ytd_swim_totals: YTDSwimTotals
+  }
 }
 
 const SwimmingTotals = ({
   profile: { ytd_swim_totals },
 }: SwimmingTotalsProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <Box
-      className="ytdTotals profileBoxes"
+      className='ytdTotals profileBoxes'
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -26,15 +25,15 @@ const SwimmingTotals = ({
         backgroundColor: theme.palette.mainBackground.main,
         paddingLeft: '5px',
         ...useCSX(
-          '1px solid ' + theme.palette.strava.contrastColor,
+          `1px solid ${theme.palette.strava.contrastColor}`,
           'none',
-          'borderLeft'
+          'borderLeft',
         ),
       }}
     >
       <Typography
-        variant="h6"
-        className="ytdTotalsTitle"
+        variant='h6'
+        className='ytdTotalsTitle'
         sx={{
           textDecoration: 'underline',
           cursor: 'default',
@@ -45,24 +44,24 @@ const SwimmingTotals = ({
         Year-To-Date Swim Totals
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Number of Swims: {ytd_swim_totals.count}
+        Number of Swims: {ytd_swim_totals.count.toLocaleString()}
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
-        Total Distance: {ytd_swim_totals.distance} Meters
+        Total Distance: {ytd_swim_totals.distance.toLocaleString()} Meters
       </Typography>
       <Typography
-        variant="h6"
-        className="ytdDescriptor"
+        variant='h6'
+        className='ytdDescriptor'
         sx={{ cursor: 'default', marginY: 1 }}
         color={theme.palette.strava.main}
       >
@@ -72,9 +71,9 @@ const SwimmingTotals = ({
           : 0}{' '}
         Meters per Second
       </Typography>
-      <ActivityChart activityType="Swim" />
+      <ActivityChart activityType='Swim' />
     </Box>
-  );
-};
+  )
+}
 
-export default SwimmingTotals;
+export default SwimmingTotals

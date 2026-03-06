@@ -1,14 +1,18 @@
+import type { Sport } from '@components/StravaEntries/EntryTypes'
+import { Box, Button, useTheme } from '@mui/material'
+import { useGetMonthlyStatsQuery } from '@redux/slices'
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from 'chart.js'
+import { useState } from 'react'
+import { Line } from 'react-chartjs-2'
 
 ChartJS.register(
   CategoryScale,
@@ -17,34 +21,34 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
-);
-
-import { useGetAllEntriesQuery } from '@redux/slices';
-import { useState } from 'react';
-import { Button, Box, useTheme } from '@mui/material';
-
-interface CalendarDates {
-  jan: { count: number; distance: number };
-  feb: { count: number; distance: number };
-  mar: { count: number; distance: number };
-  apr: { count: number; distance: number };
-  may: { count: number; distance: number };
-  june: { count: number; distance: number };
-  july: { count: number; distance: number };
-  aug: { count: number; distance: number };
-  sept: { count: number; distance: number };
-  oct: { count: number; distance: number };
-  nov: { count: number; distance: number };
-  dec: { count: number; distance: number };
-}
+  Legend,
+)
 
 export interface ActivityChartProps {
-  activityType: 'Run' | 'Swim' | 'Ride' | 'Walk';
+  activityType: Sport
 }
 
+const monthNames = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+]
+
 const ActivityChart = (props: ActivityChartProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
+  const [currentlyShownChart, setCurrentlyShownChart] = useState<
+    'count' | 'distance'
+  >('count')
+
   const dataMap = {
     count: {
       title: 'Number of Activities',
@@ -52,11 +56,9 @@ const ActivityChart = (props: ActivityChartProps) => {
     },
     distance: {
       title: 'Distance of Activities',
-      color: theme.palette.baseBackground.main,
+      color: theme.palette.strava.contrastColor,
     },
-  };
-  const [currentlyShownChart, setCurrentlyShownChart] =
-    useState<string>('count');
+  }
 
   const options = {
     color: theme.palette.strava.main,
@@ -72,108 +74,48 @@ const ActivityChart = (props: ActivityChartProps) => {
       },
       title: {
         display: true,
-        text: props.activityType + ' Activities',
+        text: `${props.activityType} Activities`,
         color: theme.palette.strava.main,
       },
     },
-  };
+  }
 
-  const { data: allEntries } = useGetAllEntriesQuery(null);
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const activities = allEntries?.filter(
-    (entry) => entry.type === props.activityType
-  );
+  const { data: monthlyStats } = useGetMonthlyStatsQuery({
+    activityType: props.activityType,
+  })
+
+  const currentYear = new Date().getFullYear()
+
   const thisYearsActivities =
-    activities?.filter((entry) =>
-      entry.start_date.startsWith(currentYear.toString())
-    ) || [];
+    monthlyStats?.filter((entry) =>
+      entry.month.startsWith(currentYear.toString()),
+    ) || []
 
-  const thisYearsActivityData = thisYearsActivities.reduce<CalendarDates>(
-    (total, item) => {
-      if (item.start_date.startsWith(currentYear + '-01')) {
-        total.jan.count = total.jan.count + 1;
-        total.jan.distance = total.jan.distance + Number(item.distance);
-      }
+  const activityMap = new Map(
+    thisYearsActivities.map(({ month, ...value }) => [month, value]),
+  )
 
-      if (item.start_date.startsWith(currentYear + '-02')) {
-        total.feb.count = total.feb.count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-03')) {
-        total.mar.count = total.mar.count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-04')) {
-        total['apr'].count = total['apr'].count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-05')) {
-        total.may.count = total.may.count + 1;
-        total.may.distance = total.may.distance + Number(item.distance);
-      }
-
-      if (item.start_date.startsWith(currentYear + '-06')) {
-        total['june'].count = total['june'].count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-07')) {
-        total['july'].count = total['july'].count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-08')) {
-        total['aug'].count = total['aug'].count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-09')) {
-        total['sept'].count = total['sept'].count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-10')) {
-        total.oct.count = total.oct.count + 1;
-      }
-
-      if (item.start_date.startsWith(currentYear + '-11')) {
-        total.nov.count = total.nov.count + 1;
-        total.nov.distance = total.nov.distance + Number(item.distance);
-      }
-
-      if (item.start_date.startsWith(currentYear + '-12')) {
-        total.dec.count = total.dec.count + 1;
-        total.dec.distance = total.dec.distance + Number(item.distance);
-      }
-      return total;
-    },
-    {
-      jan: { count: 0, distance: 0 },
-      feb: { count: 0, distance: 0 },
-      mar: { count: 0, distance: 0 },
-      apr: { count: 0, distance: 0 },
-      may: { count: 0, distance: 0 },
-      june: { count: 0, distance: 0 },
-      july: { count: 0, distance: 0 },
-      aug: { count: 0, distance: 0 },
-      sept: { count: 0, distance: 0 },
-      oct: { count: 0, distance: 0 },
-      nov: { count: 0, distance: 0 },
-      dec: { count: 0, distance: 0 },
-    } as CalendarDates
-  );
+  const allMonths = Array.from({ length: 12 }, (_, i) => {
+    const yearMonth = `${currentYear}-${(i + 1).toString().padStart(2, '0')}`
+    return {
+      label: monthNames[i],
+      data: activityMap.get(yearMonth) || { count: 0, distance: 0 },
+    }
+  })
 
   const data = {
-    labels: Object.entries(thisYearsActivityData).map(([month]) => month),
+    labels: allMonths.map((month) => month.label),
     datasets: [
       {
-        label: dataMap[currentlyShownChart as 'count'].title,
-        data: Object.entries(thisYearsActivityData).map(
-          ([_month, hits]) => hits[currentlyShownChart]
-        ),
-        borderColor: dataMap[currentlyShownChart as 'count'].color,
+        label: dataMap[currentlyShownChart].title,
+        data: allMonths.map((month) => month.data[currentlyShownChart]),
+        borderColor: dataMap[currentlyShownChart].color,
         backgroundColor: theme.palette.strava.contrastColor,
         yAxisId: 'y',
       },
     ],
-  };
+  }
+
   return (
     <Box>
       <Line options={options} data={data} />
@@ -184,7 +126,7 @@ const ActivityChart = (props: ActivityChartProps) => {
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default ActivityChart;
+export default ActivityChart

@@ -9,7 +9,7 @@ import { useFetchData } from '@lib';
 import { appInitialState, getDarkModeCondition } from '@redux/slices';
 import GlobalStore from '@redux/store';
 import { useSelector } from '@redux/reduxHooks';
-import { CurrentActivity, Entry } from '@components/StravaEntries/EntryTypes';
+import { CurrentActivity, APIEntry } from '@components/StravaEntries/EntryTypes';
 
 const ThemeComponent = (props: AppProps & { initialDarkMode?: boolean }) => {
   const darkMode = useSelector(getDarkModeCondition);
@@ -40,7 +40,7 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
 const StravaReportGenerator = (
   props: AppProps<{
     clientSideTokens?: { mapbox: string };
-    fetchedActivity?: Entry & CurrentActivity;
+    fetchedActivity?: APIEntry & CurrentActivity;
   }>
 ) => {
   const theme = createTheme();
