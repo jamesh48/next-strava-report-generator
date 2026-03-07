@@ -5,7 +5,7 @@ import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
 const handler = nextConnect();
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  const srg_athlete_id = req.cookies.athleteId;
+  const srg_athlete_id = req.cookies.athleteId || req.query.athleteId;
   try {
     const { data } = await axios<{}, AxiosResponse<CurrentActivity>>({
       url: `${process.env.DATA_BASE_URL}/srg/individualEntry/${req.query.entryid}`,

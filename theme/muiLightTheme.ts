@@ -1,7 +1,7 @@
-import { ThemeOptions } from '@mui/material';
-import componentOverrides from './muiOverrides';
-import { createTheme } from '@mui/material/styles';
-import { ivory } from 'theme/muiDarkTheme';
+import type { ThemeOptions } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+import { ivory } from 'theme/muiDarkTheme'
+import componentOverrides from './muiOverrides'
 
 // const _typography = {
 //   htmlFontSize: 16,
@@ -61,7 +61,7 @@ import { ivory } from 'theme/muiDarkTheme';
 //   },
 // };
 
-export const orangered = '#FF5349';
+export const orangered = '#FF5349'
 
 const lightTheme: ThemeOptions = {
   palette: {
@@ -78,7 +78,7 @@ const lightTheme: ThemeOptions = {
       // White Smoke
       main: '#F5F5F5',
       dark: '#FFFFFF',
-      light: '#AFEEEE',
+      light: '#E8E8E8',
       accent: '#FFFFFF',
       entry: 'coral',
     },
@@ -92,13 +92,13 @@ const lightTheme: ThemeOptions = {
       lineHeight: '1rem',
     },
   },
-};
+}
 
 const globalTheme = () => {
   return createTheme({
     ...lightTheme,
     components: componentOverrides(lightTheme, false),
-  });
-};
+  })
+}
 
-export default globalTheme;
+export default globalTheme

@@ -48,7 +48,7 @@ const AchievementList = (
         flexDirection: 'column',
         gap: '1rem',
         padding: '2rem',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: theme.palette.action.hover,
         borderRadius: '.5rem',
         ...mobileMsgCentered,
       }}
@@ -77,9 +77,9 @@ const AchievementList = (
             display: 'flex',
             justifyContent: 'space-between',
             padding: '0.75rem 1rem',
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.background.paper,
             borderRadius: '4px',
-            border: '1px solid #e0e0e0',
+            border: `1px solid ${theme.palette.divider}`,
           }}
         >
           <Typography variant="h6" sx={{ fontWeight: 500, color: theme.palette.text.secondary }}>
@@ -94,9 +94,9 @@ const AchievementList = (
             display: 'flex',
             justifyContent: 'space-between',
             padding: '0.75rem 1rem',
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.background.paper,
             borderRadius: '4px',
-            border: '1px solid #e0e0e0',
+            border: `1px solid ${theme.palette.divider}`,
           }}
         >
           <Typography variant="h6" sx={{ fontWeight: 500, color: theme.palette.text.secondary }}>
@@ -120,9 +120,9 @@ const AchievementList = (
         flexDirection: 'column',
         height: '100%',
         padding: '2rem',
-        backgroundColor: '#fafafa',
+        backgroundColor: theme.palette.action.hover,
         borderRadius: '8px',
-        border: '1px solid #e0e0e0',
+        border: `1px solid ${theme.palette.divider}`,
         ...mobileMsgCentered,
       }}
     >

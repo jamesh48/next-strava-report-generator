@@ -1,10 +1,10 @@
-import { ThemeOptions } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import componentOverrides from './muiOverrides';
+import type { ThemeOptions } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+import componentOverrides from './muiOverrides'
 
-export const darkSlateGray = '#2F4F4F';
-export const lightSlateGray = '#778899';
-export const ivory = '#FFFFF0';
+export const darkSlateGray = '#2F4F4F'
+export const lightSlateGray = '#778899'
+export const ivory = '#FFFFF0'
 
 const darkTheme: ThemeOptions = {
   palette: {
@@ -18,7 +18,7 @@ const darkTheme: ThemeOptions = {
       entry: darkSlateGray,
     },
     strava: {
-      main: '#FFFFF',
+      main: '#FFFFFF',
       contrastColor: ivory,
       contrastText: 'black',
     },
@@ -33,13 +33,13 @@ const darkTheme: ThemeOptions = {
       lineHeight: '1rem',
     },
   },
-};
+}
 
 const globalTheme = () => {
   return createTheme({
     ...darkTheme,
     components: componentOverrides(darkTheme, true),
-  });
-};
+  })
+}
 
-export default globalTheme;
+export default globalTheme

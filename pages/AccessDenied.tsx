@@ -1,11 +1,11 @@
-import Head from 'next/head';
-import { Box, Link, Typography, useTheme } from '@mui/material';
+import { Box, Link, Typography, useTheme } from '@mui/material'
+import Head from 'next/head'
 
 const AccessDenied = () => {
-  const theme = useTheme();
+  const theme = useTheme()
   const handleReload = () => {
-    window.location.replace('https://stravareportgenerator.com');
-  };
+    window.location.replace('https://stravareportgenerator.com')
+  }
   return (
     <Box
       sx={{
@@ -17,8 +17,8 @@ const AccessDenied = () => {
     >
       <Head>
         <title>Well this is Awkward..</title>
-        <meta name="description" content="A ordered list of strava activites" />
-        <link rel="icon" href="/images/favicon.png" />
+        <meta name='description' content='A ordered list of strava activites' />
+        <link rel='icon' href='/images/favicon.png' />
       </Head>
       <Box
         sx={{
@@ -31,7 +31,7 @@ const AccessDenied = () => {
         }}
       >
         <Typography
-          variant="h5"
+          variant='h5'
           sx={{
             color: theme.palette.strava.main,
             textDecoration: 'underline',
@@ -67,7 +67,7 @@ const AccessDenied = () => {
         </Typography>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AccessDenied;
+export default AccessDenied

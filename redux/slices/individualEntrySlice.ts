@@ -1,16 +1,19 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { CurrentActivity } from '@components/StravaEntries/EntryTypes';
-import { entriesApi } from './entriesSlice';
-import { setCurrentActivityField } from './appSlice';
+import type { CurrentActivity } from '@components/StravaEntries/EntryTypes'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react'
+import { setCurrentActivityField } from './appSlice'
+import { entriesApi } from './entriesSlice'
 
-type Athlete = { firstname: string; lastname: string };
+type Athlete = { firstname: string; lastname: string }
 
 export const individualEntrySlice = createApi({
   tagTypes: ['IndividualEntry'],
   reducerPath: 'individualEntriesApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
-    getIndividualEntry: builder.query<CurrentActivity, { entryid: number }>({
+    getIndividualEntry: builder.query<
+      CurrentActivity,
+      { entryid: number; athleteId?: number }
+    >({
       providesTags: ['IndividualEntry'],
       query: (params) => ({
         url: '/individualEntry',
@@ -19,11 +22,11 @@ export const individualEntrySlice = createApi({
     }),
     getKudoers: builder.query<
       {
-        kudos: Athlete[];
+        kudos: Athlete[]
         comments: {
-          text: string;
-          athlete: Athlete;
-        }[];
+          text: string
+          athlete: Athlete
+        }[]
       },
       number | undefined
     >({
@@ -32,9 +35,9 @@ export const individualEntrySlice = createApi({
     updateShoeIndividualEntry: builder.mutation<
       string,
       {
-        shoeId: string;
-        shoeName: string;
-        activityId: number;
+        shoeId: string
+        shoeName: string
+        activityId: number
       }
     >({
       query: (event) => ({
@@ -51,26 +54,26 @@ export const individualEntrySlice = createApi({
           setCurrentActivityField({
             field: 'gear',
             update: { name: payload.shoeName },
-          })
-        );
+          }),
+        )
 
         try {
-          await queryFulfilled;
-        } catch (err) {
+          await queryFulfilled
+        } catch (_err) {
           // Refetch all Activities and Individual Entry on Failure
-          dispatch(entriesApi.util.invalidateTags(['Activities']));
+          dispatch(entriesApi.util.invalidateTags(['Activities']))
           dispatch(
-            individualEntrySlice.util.invalidateTags(['IndividualEntry'])
-          );
+            individualEntrySlice.util.invalidateTags(['IndividualEntry']),
+          )
         }
       },
     }),
     updateIndividualEntry: builder.mutation<
       string,
       {
-        activityId: number;
-        name: string;
-        description: string;
+        activityId: number
+        name: string
+        description: string
       }
     >({
       invalidatesTags: ['IndividualEntry'],
@@ -81,7 +84,7 @@ export const individualEntrySlice = createApi({
       }),
     }),
   }),
-});
+})
 
 export const {
   useGetIndividualEntryQuery,
@@ -89,4 +92,4 @@ export const {
   useGetKudoersQuery,
   useUpdateShoeIndividualEntryMutation,
   useUpdateIndividualEntryMutation,
-} = individualEntrySlice;
+} = individualEntrySlice

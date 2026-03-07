@@ -9,7 +9,7 @@ handler.post(async (req: NextApiRequest, res: NextApiResponse) => {
     const srg_athlete_id = req.cookies.athleteId
     const { data } = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/destroyUser`,
-      method: 'GET',
+      method: 'DELETE',
       params: {
         srg_athlete_id,
       },

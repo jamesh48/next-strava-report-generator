@@ -1,42 +1,43 @@
-import { useCSX, useMobileBrowserCheck } from '@lib';
-import { Box, Typography, useTheme } from '@mui/material';
-import CarouselArrows from './CarouselArrows';
-import { useState, useEffect } from 'react';
-import SwitchLink from './SwitchLink';
+import { useCSX, useMobileBrowserCheck } from '@lib'
+import { Box, Typography, useTheme } from '@mui/material'
+import { useEffect, useState } from 'react'
+import CarouselArrows from './CarouselArrows'
+import SwitchLink from './SwitchLink'
 
 interface AchievementHeaderProps {
-  achievementHeaderTitle: string;
-  handleSetPosition: (p: number) => void;
-  position: number;
-  currentSegmentDataLength: number | undefined;
-  toggleable: boolean | undefined;
+  achievementHeaderTitle: string
+  handleSetPosition: (p: number) => void
+  position: number
+  currentSegmentDataLength: number | undefined
+  toggleable: boolean | undefined
 }
 
 const AchievementHeader = (props: AchievementHeaderProps) => {
-  const theme = useTheme();
-  const [direction, setDirection] = useState('neutral');
-  const isMobile = useMobileBrowserCheck();
+  const theme = useTheme()
+  const [direction, setDirection] = useState('neutral')
+  const isMobile = useMobileBrowserCheck()
 
   useEffect(() => {
     if (direction !== 'neutral') {
-      let counter = Number(props.position);
+      let counter = Number(props.position)
       const wholeNumber = setInterval(() => {
-        props.handleSetPosition(
-          direction === 'forward'
-            ? Number((counter += 0.1).toFixed(1))
-            : Number((counter -= 0.1).toFixed(1))
-        );
-        if (Number(counter.toFixed(1)) % 1 === 0) {
-          clearInterval(wholeNumber);
-          setDirection('neutral');
+        if (direction === 'forward') {
+          counter += 0.1
+        } else {
+          counter -= 0.1
         }
-      }, 35);
+        props.handleSetPosition(Number(counter.toFixed(1)))
+        if (Number(counter.toFixed(1)) % 1 === 0) {
+          clearInterval(wholeNumber)
+          setDirection('neutral')
+        }
+      }, 35)
       return () => {
-        clearInterval(wholeNumber);
-      };
+        clearInterval(wholeNumber)
+      }
     }
-    return;
-  }, [direction]);
+    return
+  }, [direction])
 
   const mobileTitleCentered = useCSX(
     { width: '50%', flex: 1 },
@@ -46,13 +47,13 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
       textAlign: 'center',
       alignItems: 'center',
       display: 'flex',
-    }
-  );
+    },
+  )
 
   const changeEffort = (event: React.MouseEvent<HTMLElement>) => {
-    const nextResult = /next-button/g.test(event.currentTarget.id);
-    nextResult ? setDirection('forward') : setDirection('backward');
-  };
+    const nextResult = /next-button/g.test(event.currentTarget.id)
+    nextResult ? setDirection('forward') : setDirection('backward')
+  }
 
   return (
     <Box
@@ -62,10 +63,9 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
         flexDirection: 'column',
         padding: '1rem',
 
-        backgroundColor: '#f5f5f5',
+        backgroundColor: theme.palette.action.hover,
         borderRadius: '8px 8px 0 0',
-        border: '1px solid #e0e0e0',
-
+        border: `1px solid ${theme.palette.divider}`,
       }}
     >
       <Box
@@ -78,7 +78,7 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
         }}
       >
         <Typography
-          variant="h4"
+          variant='h4'
           sx={{
             color: theme.palette.text.primary,
             fontWeight: 600,
@@ -98,7 +98,7 @@ const AchievementHeader = (props: AchievementHeaderProps) => {
       </Box>
       {props.toggleable && isMobile ? <SwitchLink /> : null}
     </Box>
-  );
-};
+  )
+}
 
-export default AchievementHeader;
+export default AchievementHeader

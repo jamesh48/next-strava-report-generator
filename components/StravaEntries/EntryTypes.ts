@@ -92,8 +92,10 @@ export type CurrentActivity = {
   calories: number
   comment_count: number;
   average_heartrate: number;
+  average_speed: number;
   distance: number
   max_heartrate: number;
+  max_speed: number;
   achievement_count: number;
   best_efforts?: BestEffort[];
   segment_efforts: SegmentEffort[];

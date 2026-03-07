@@ -5,16 +5,19 @@ import type { Format, Sport } from '@components/StravaEntries/EntryTypes'
 import HeartRateChart from '@components/StravaEntries/HeartRateChart'
 import PlusOneBox from '@components/StravaEntries/PlusOneBox'
 import { useCSX } from '@lib'
+import { Share } from '@mui/icons-material'
 import {
   Box,
   Card,
   ClickAwayListener,
+  IconButton,
   MenuItem,
   Select,
   type SelectChangeEvent,
   Skeleton,
   Stack,
   TextField,
+  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material'
@@ -34,6 +37,7 @@ import { Else, If, Then, When } from 'react-if'
 
 interface EntryDetailProps {
   activityId?: number
+  athleteId?: number
   isSharedActivity?: true
   sport: Sport
   format: Format
@@ -41,6 +45,7 @@ interface EntryDetailProps {
 
 const EntryDetail = ({
   activityId,
+  athleteId,
   isSharedActivity,
   sport,
   format,
@@ -57,6 +62,7 @@ const EntryDetail = ({
     useGetIndividualEntryQuery(
       {
         entryid: activityId || -1,
+        ...(athleteId ? { athleteId } : {}),
       },
       { skip: activityId === undefined },
     )
@@ -131,8 +137,6 @@ const EntryDetail = ({
     setEditedDescription(e.target.value)
   }
 
-  console.info(kudoersResults)
-
   return (
     <Stack
       className='detailedEntry'
@@ -140,13 +144,71 @@ const EntryDetail = ({
         boxSizing: 'border-box',
         justifyContent: 'center',
         alignItems: 'center',
-        border: `2px solid ${theme.palette.strava.main}`,
+        // border: `2px solid ${theme.palette.strava.main}`,
         // bgcolor: theme.palette.mainBackground.entry,
         textRendering: 'geometricPrecision',
         padding: 1,
         gap: 2,
       }}
     >
+      <When condition={!!isSharedActivity}>
+        <Box
+          sx={{
+            width: '100%',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            pb: 1,
+          }}
+        >
+          <Typography variant='h5' sx={{ fontWeight: 600 }}>
+            {entryDetail?.name}
+          </Typography>
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.secondary }}
+          >
+            {entryDetail?.start_date_local
+              ? dayjs(entryDetail.start_date_local.replace('Z', '')).format(
+                  'MMM D, YYYY, h:mm:ss A',
+                )
+              : null}
+          </Typography>
+        </Box>
+      </When>
+      <When condition={!isSharedActivity}>
+        <Box
+          sx={{
+            width: '100%',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            pb: 1,
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography
+            variant='body2'
+            sx={{ color: theme.palette.text.secondary, alignSelf: 'center' }}
+          >
+            {entryDetail?.start_date_local
+              ? dayjs(entryDetail.start_date_local.replace('Z', '')).format(
+                  'MMM D, YYYY, h:mm:ss A',
+                )
+              : null}
+          </Typography>
+          <Tooltip title='Copy share link'>
+            <IconButton
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `https://stravareportgenerator.com/SharedEntry?athleteId=${userProfile?.id}&activityId=${activityId}`,
+                )
+              }}
+              sx={{ color: theme.palette.strava.main }}
+            >
+              <Share />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </When>
       <Stack
         className='topActivityDescription'
         sx={{
@@ -299,7 +361,8 @@ const EntryDetail = ({
                   display: 'flex',
                   width: '100%',
                   gap: '1rem',
-                  flexWrap: 'wrap',
+                  flexWrap: 'nowrap',
+                  overflowX: 'auto',
                 }}
               >
                 {/* Distance */}
@@ -325,6 +388,48 @@ const EntryDetail = ({
                     </Typography>
                   </Box>
                 </When>
+                {/* Avg Speed */}
+                <When condition={!!entryDetail?.average_speed}>
+                  <Box
+                    sx={{
+                      alignSelf: 'flex-start',
+                      padding: '.75rem 1rem',
+                      marginY: '.75rem',
+                      backgroundColor: theme.palette.action.hover,
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <Typography variant='body1'>
+                      <Typography component='span' sx={{ fontWeight: 600 }}>
+                        Avg Speed:
+                      </Typography>{' '}
+                      {format === 'mph'
+                        ? `${((entryDetail?.average_speed || 0) * 2.23694).toFixed(2)} mph`
+                        : `${((entryDetail?.average_speed || 0) * 3.6).toFixed(2)} km/h`}
+                    </Typography>
+                  </Box>
+                </When>
+                {/* Max Speed */}
+                <When condition={!!entryDetail?.max_speed}>
+                  <Box
+                    sx={{
+                      alignSelf: 'flex-start',
+                      padding: '.75rem 1rem',
+                      marginY: '.75rem',
+                      backgroundColor: theme.palette.action.hover,
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <Typography variant='body1'>
+                      <Typography component='span' sx={{ fontWeight: 600 }}>
+                        Max Speed:
+                      </Typography>{' '}
+                      {format === 'mph'
+                        ? `${((entryDetail?.max_speed || 0) * 2.23694).toFixed(2)} mph`
+                        : `${((entryDetail?.max_speed || 0) * 3.6).toFixed(2)} km/h`}
+                    </Typography>
+                  </Box>
+                </When>
                 {/* Calories */}
                 <When condition={entryDetail?.calories}>
                   <Box
@@ -341,31 +446,20 @@ const EntryDetail = ({
                     </Typography>
                   </Box>
                 </When>
-                {/* Start Date */}
-                <When condition={entryDetail?.start_date_local}>
-                  <Box
-                    sx={{
-                      alignSelf: 'flex-start',
-                      padding: '.75rem 1rem',
-                      marginY: '.75rem',
-                      backgroundColor: theme.palette.action.hover,
-                      borderRadius: '4px',
-                    }}
-                  >
-                    <Typography variant='body1'>
-                      <strong>Date:</strong>{' '}
-                      {dayjs(
-                        entryDetail?.start_date_local.replace('Z', ''),
-                      ).format('MMM D, YYYY, h:mm:ss A')}
-                    </Typography>
-                  </Box>
-                </When>
-                {/* Device */}
-                <When condition={entryDetail?.device_name}>
+              </Box>
+              {/* Device + Gear row */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '1rem',
+                  alignItems: 'flex-start',
+                }}
+              >
+                <When condition={!!entryDetail?.device_name}>
                   <Box
                     id='topActivityDevice'
                     sx={{
-                      alignSelf: 'flex-start',
                       padding: '.75rem 1rem',
                       marginY: '.75rem',
                       cursor: 'default',
@@ -881,9 +975,9 @@ const EntryDetail = ({
                                   key={`${kudoer.firstname} ${kudoer.lastname}`}
                                   sx={{
                                     padding: '0.5rem 1rem',
-                                    backgroundColor: '#f5f5f5',
+                                    backgroundColor: theme.palette.action.hover,
                                     borderRadius: '.25rem',
-                                    border: '1px solid #e0e0e0',
+                                    border: `1px solid ${theme.palette.divider}`,
                                   }}
                                 >
                                   <Typography
@@ -899,9 +993,9 @@ const EntryDetail = ({
                             <Box
                               sx={{
                                 padding: '1rem',
-                                backgroundColor: '#fafafa',
+                                backgroundColor: theme.palette.action.hover,
                                 borderRadius: '.25rem',
-                                border: '1px solid #e0e0e0',
+                                border: `1px solid ${theme.palette.divider}`,
                                 textAlign: 'center',
                               }}
                             >
@@ -948,9 +1042,9 @@ const EntryDetail = ({
                                   key={comment.text}
                                   sx={{
                                     padding: '1rem',
-                                    backgroundColor: '#f5f5f5',
+                                    backgroundColor: theme.palette.action.hover,
                                     borderRadius: '.25rem',
-                                    border: '1px solid #e0e0e0',
+                                    border: `1px solid ${theme.palette.divider}`,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     gap: '0.5rem',
@@ -982,9 +1076,9 @@ const EntryDetail = ({
                             <Box
                               sx={{
                                 padding: '1rem',
-                                backgroundColor: '#fafafa',
+                                backgroundColor: theme.palette.action.hover,
                                 borderRadius: '4px',
-                                border: '1px solid #e0e0e0',
+                                border: `1px solid ${theme.palette.divider}`,
                                 textAlign: 'center',
                               }}
                             >

@@ -1,27 +1,30 @@
 /* eslint-disable react/no-unknown-property */
-import '../styles/globals.css';
-import { Provider } from 'react-redux';
-import { AppProps } from 'next/app';
-import { ThemeProvider, createTheme, useTheme } from '@mui/material';
-import lightTheme from '../theme/muiLightTheme';
-import darkTheme from '../theme/muiDarkTheme';
-import { useFetchData } from '@lib';
-import { appInitialState, getDarkModeCondition } from '@redux/slices';
-import GlobalStore from '@redux/store';
-import { useSelector } from '@redux/reduxHooks';
-import { CurrentActivity, APIEntry } from '@components/StravaEntries/EntryTypes';
+import '../styles/globals.css'
+import type {
+  APIEntry,
+  CurrentActivity,
+} from '@components/StravaEntries/EntryTypes'
+import { useFetchData } from '@lib'
+import { createTheme, ThemeProvider, useTheme } from '@mui/material'
+import { useSelector } from '@redux/reduxHooks'
+import { appInitialState, getDarkModeCondition } from '@redux/slices'
+import GlobalStore from '@redux/store'
+import type { AppProps } from 'next/app'
+import { Provider } from 'react-redux'
+import darkTheme from '../theme/muiDarkTheme'
+import lightTheme from '../theme/muiLightTheme'
 
 const ThemeComponent = (props: AppProps & { initialDarkMode?: boolean }) => {
-  const darkMode = useSelector(getDarkModeCondition);
+  const darkMode = useSelector(getDarkModeCondition)
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <AppComponent {...props} />
     </ThemeProvider>
-  );
-};
+  )
+}
 const AppComponent = ({ Component, pageProps }: AppProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
 
   return (
     <>
@@ -34,22 +37,22 @@ const AppComponent = ({ Component, pageProps }: AppProps) => {
         }
       `}</style>
     </>
-  );
-};
+  )
+}
 
 const StravaReportGenerator = (
   props: AppProps<{
-    clientSideTokens?: { mapbox: string };
-    fetchedActivity?: APIEntry & CurrentActivity;
-  }>
+    clientSideTokens?: { mapbox: string }
+    fetchedActivity?: APIEntry & CurrentActivity
+  }>,
 ) => {
-  const theme = createTheme();
+  const theme = createTheme()
   const { data: userSettings } = useFetchData<{
-    defaultFormat: string;
-    defaultSport: string;
-    defaultDate: string;
-    darkMode: boolean;
-  }>('/api/userSettings');
+    defaultFormat: string
+    defaultSport: string
+    defaultDate: string
+    darkMode: boolean
+  }>('/api/userSettings')
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,9 +71,9 @@ const StravaReportGenerator = (
                     ...props.pageProps.fetchedActivity,
                     id: Number(props.pageProps.fetchedActivity.activityId),
                   },
-                };
+                }
               }
-              return {};
+              return {}
             })(),
             clientSideTokens: {
               mapbox: props.pageProps.clientSideTokens?.mapbox || '',
@@ -81,7 +84,7 @@ const StravaReportGenerator = (
         <ThemeComponent {...props} initialDarkMode={userSettings?.darkMode} />
       </Provider>
     </ThemeProvider>
-  );
-};
+  )
+}
 
-export default StravaReportGenerator;
+export default StravaReportGenerator

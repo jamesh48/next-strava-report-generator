@@ -2,7 +2,7 @@ import StandardDialog from '@components/StandardDialog'
 import EntryDetail from '@components/StravaEntries/EntryDetail'
 import { formatTime, useCSX } from '@lib'
 import { Visibility } from '@mui/icons-material'
-import { Box, IconButton, List, ListItem, useTheme } from '@mui/material'
+import { Box, IconButton, List, useTheme } from '@mui/material'
 import { useSelector } from '@redux/reduxHooks'
 import {
   getAchievementsOnlyCondition,
@@ -17,7 +17,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { When } from 'react-if'
 import EmptyEntry from './EmptyEntry'
 import type { Format, Sport, UIEntry } from './EntryTypes.js'
-import StravaEntry from './StravaEntry'
 
 interface EntryUIProps {
   entriesPerPage: number
@@ -89,25 +88,6 @@ const EntryUI = (props: EntryUIProps) => {
       )
     }
   }, [entries, updatePagination])
-
-  const renderEntries = entries?.results?.map((entry, index) => {
-    return (
-      <ListItem key={entry.activityId} sx={{ display: 'flex', padding: 0 }}>
-        <StravaEntry
-          showIndividualEntry={props.showIndividualEntry}
-          no={
-            props.currentPage === 1 && index >= 0 && index <= 3
-              ? index
-              : undefined
-          }
-          sport={props.sport}
-          entry={entry}
-          format={props.format}
-          handleCloseCurrentActivity={props.handleCloseCurrentActivity}
-        />
-      </ListItem>
-    )
-  })
 
   const openActivityDetail = Boolean(currEntry)
 
@@ -220,6 +200,7 @@ const EntryUI = (props: EntryUIProps) => {
         data={entries?.results || []}
         // @ts-expect-error
         columns={tableColumns}
+        noDataFoundAction={<EmptyEntry />}
         paginationType='cursor'
         hasMore={hasMore}
         canGoBack={canGoBack}
@@ -230,7 +211,7 @@ const EntryUI = (props: EntryUIProps) => {
           },
           row: {
             '&:nth-of-type(odd)': {
-              backgroundColor: theme.palette.grey[200],
+              backgroundColor: theme.palette.mainBackground.light,
             },
             '&:hover': {
               backgroundColor: theme.palette.mainBackground.main,
@@ -239,12 +220,6 @@ const EntryUI = (props: EntryUIProps) => {
         }}
         onPreviousPage={handlePreviousPage}
       />
-      {(entries?.count === 0 && entries?.results.length) ||
-      props.invalidEntry === true ? (
-        <EmptyEntry />
-      ) : (
-        renderEntries
-      )}
     </List>
   )
 }

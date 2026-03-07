@@ -1,88 +1,64 @@
-import React from 'react';
-import { Box, useTheme } from '@mui/material';
-import { ParsedUrlQuery } from 'querystring';
-import { NextApiRequest, GetServerSidePropsContext, PreviewData } from 'next';
-import { IncomingMessage } from 'http';
-import axios from 'axios';
-import StravaEntry from '@components/StravaEntries/StravaEntry';
-import { CurrentActivity, UIEntry } from '@components/StravaEntries/EntryTypes';
-import Head from 'next/head';
+import EntryDetail from '@components/StravaEntries/EntryDetail'
+import { Box, useTheme } from '@mui/material'
+import type { GetServerSidePropsContext } from 'next'
+import Head from 'next/head'
 
-type SRGReq = IncomingMessage & {
-  cookies: NextApiRequest['cookies'];
-  headers: {
-    host: string;
-  };
-};
-
-interface SRGContext
-  extends GetServerSidePropsContext<ParsedUrlQuery, PreviewData> {
-  req: SRGReq;
-}
-
-export type SRGSharedEventProps = (context: SRGContext) => Promise<{
-  props: {};
-}>;
-//
-const fetchGeneralServerSideActivity = async (
-  athleteId: string,
-  activityId: string
-) => {
-  const { data } = await axios({
-    method: 'GET',
-    url: `${process.env.DATA_BASE_URL}/srg/generalIndividualEntry/${athleteId}/${activityId}`,
-  });
-  return data;
-};
-
-export const getServerSideProps: SRGSharedEventProps = async ({ query }) => {
-  let fetchedActivity = null;
-  if (query.activityId && query.athleteId) {
-    fetchedActivity = await fetchGeneralServerSideActivity(
-      query.athleteId as string,
-      query.activityId as string
-    );
-  }
-
-  const mapboxAccessToken = process.env.MAPBOX_ACCESS_TOKEN;
-
+export const getServerSideProps = async ({
+  query,
+}: GetServerSidePropsContext) => {
+  const { activityId, athleteId } = query
   return {
     props: {
-      fetchedActivity,
+      activityId: activityId ? Number(activityId) : null,
+      athleteId: athleteId ? Number(athleteId) : null,
       clientSideTokens: {
-        mapbox: mapboxAccessToken,
+        mapbox: process.env.MAPBOX_ACCESS_TOKEN || '',
       },
     },
-  };
-};
+  }
+}
 
-const SharedEntry = (props: { fetchedActivity: UIEntry & CurrentActivity }) => {
-  const theme = useTheme();
+const SharedEntry = (props: { activityId: number | null; athleteId: number | null }) => {
+  const theme = useTheme()
 
   return (
     <Box
       sx={{
+        position: 'fixed',
+        inset: 0,
         display: 'flex',
-        bgcolor: theme.palette.mainBackground.dark,
-        alignItems: 'center',
+        bgcolor: theme.palette.mainBackground.main,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        padding: '2rem',
+        boxSizing: 'border-box',
       }}
     >
       <Head>
         <title>SRG Shared Event</title>
-        <meta name="description" content="A ordered list of strava activites" />
-        <link rel="icon" href="/images/favicon.png" />
+        <meta name='description' content='A ordered list of strava activites' />
+        <link rel='icon' href='/images/favicon.png' />
       </Head>
-      <StravaEntry
-        no={0}
-        showIndividualEntry={() => null}
-        handleCloseCurrentActivity={() => null}
-        sport={'Run'}
-        entry={props.fetchedActivity}
-        format="kph"
-        isSharedActivity={true}
-      />
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: '1200px',
+          height: '100%',
+          overflowY: 'auto',
+        }}
+      >
+        {props.activityId && (
+          <EntryDetail
+            activityId={props.activityId}
+            athleteId={props.athleteId ?? undefined}
+            sport='Run'
+            format='kph'
+            isSharedActivity={true}
+          />
+        )}
+      </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default SharedEntry;
+export default SharedEntry

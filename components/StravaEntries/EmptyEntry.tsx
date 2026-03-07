@@ -1,29 +1,22 @@
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { Box, ListItem, Typography } from '@mui/material'
 
 const EmptyEntry = () => {
-  const theme = useTheme()
   return (
     <ListItem sx={{ display: 'flex', padding: 0 }}>
       <Box
         className='innerEntry'
         sx={{
           width: '100%',
-          border: `1px solid ${theme.palette.strava.contrastColor}`,
-          backgroundColor: theme.palette.mainBackground.light,
+          border: (theme) => `1px solid ${theme.palette.strava.contrastColor}`,
+          backgroundColor: (theme) => theme.palette.mainBackground.main,
         }}
       >
-        <Box
-          className='generalEntry'
-          sx={{
-            padding: '10px',
-          }}
-        >
+        <Box className='generalEntry' sx={{ padding: '10px' }}>
           <Typography
             variant='h6'
             className='entryTitle'
             id='noEntriesFound'
             sx={{
-              paddingBottom: '0px',
               textDecoration: 'underline',
               paddingLeft: '.75rem',
             }}
@@ -31,10 +24,8 @@ const EmptyEntry = () => {
             ~No Entries Found~
           </Typography>
           <Typography
-            id='champ'
             sx={{
               paddingLeft: '1rem',
-              paddingTop: '0px',
               paddingBottom: '10px',
             }}
           >
