@@ -70,3 +70,4 @@ jobs:
           DATA_BASE_URL: ${{ vars.DATA_BASE_URL }}
           MAPBOX_ACCESS_TOKEN: ${{ vars.MAPBOX_ACCESS_TOKEN }}
           REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}
+          GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}

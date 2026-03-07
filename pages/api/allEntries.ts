@@ -110,8 +110,9 @@ handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
       count: total,
       lastKey: nextOffset ?? null,
     })
-  } catch (_err) {
-    res.send([])
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    res.status(500).send({ error: message })
   }
 })
 

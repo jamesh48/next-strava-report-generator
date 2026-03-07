@@ -17,6 +17,7 @@ interface SRGFrontendStackProps extends cdk.StackProps {
     DATA_BASE_URL: string
     REDIRECT_URI_HOST: string
     MAPBOX_ACCESS_TOKEN: string
+    GRAPHQL_URL: string
   }
 }
 export class SRGFrontendStack extends cdk.Stack {

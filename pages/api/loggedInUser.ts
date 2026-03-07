@@ -5,40 +5,37 @@ import nextConnect from 'next-connect'
 const handler = nextConnect()
 
 handler.get(async (req: NextApiRequest, res: NextApiResponse) => {
-  var athlete: { data: Record<string, unknown> }
-  try {
-    const srg_athlete_id = req.cookies.athleteId
+  const srg_athlete_id = req.cookies.athleteId
+  if (!srg_athlete_id) {
+    return res.status(401).send({ error: 'Not authenticated' })
+  }
 
+  let athlete: { data: Record<string, unknown> }
+  try {
     athlete = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/getLoggedInUser`,
       method: 'GET',
-      params: {
-        srg_athlete_id,
-      },
+      params: { srg_athlete_id },
     })
   } catch (err) {
-    const typedErr = err as {
-      message: string
-      request: { res: { statusCode: number } }
+    if (axios.isAxiosError(err) && err.response?.status === 429) {
+      return res.status(429).send({ error: err.message })
     }
-    if (typedErr.request.res.statusCode === 429) {
-      return res.status(429).send({ error: typedErr.message })
-    }
-    return res.status(500).send({ error: typedErr.message })
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return res.status(500).send({ error: message })
   }
 
-  var stats: { data: unknown }
+  let stats: { data: unknown }
   try {
     stats = await axios({
       url: `${process.env.DATA_BASE_URL}/srg/getAthleteStats/${athlete.data.id}`,
     })
   } catch (err) {
-    const typedErr = err as { message: string }
-    return res.status(500).send(typedErr.message)
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return res.status(500).send({ error: message })
   }
 
-  const fullAthlete = Object.assign(athlete.data, stats.data)
-  return res.status(200).send(fullAthlete)
+  return res.status(200).send({ ...athlete.data, ...(stats.data as object) })
 })
 
 export default handler
