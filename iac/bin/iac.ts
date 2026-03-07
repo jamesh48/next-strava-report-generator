@@ -18,6 +18,7 @@ const {
   MAPBOX_ACCESS_TOKEN,
   REDIRECT_URI_HOST,
   GRAPHQL_URL,
+  AWS_ALB_LISTENER_ARN,
 } = process.env
 
 if (!AWS_CLUSTER_ARN) throw new Error('AWS_CLUSTER_ARN env is undefined!')
@@ -29,12 +30,15 @@ if (!MAPBOX_ACCESS_TOKEN)
   throw new Error('MAPBOX_ACCESS_TOKEN env is undefined')
 if (!REDIRECT_URI_HOST) throw new Error('REDIRECT_URI_HOST env is undefined!')
 if (!GRAPHQL_URL) throw new Error('GRAPHQL_URL env is undefined!')
+if (!AWS_ALB_LISTENER_ARN)
+  throw new Error('AWS_ALB_LISTENER_ARN env is undefined!')
 
 new SRGFrontendStack(app, 'srg-fe-stack', {
   aws_env: {
     AWS_CLUSTER_ARN,
     AWS_DEFAULT_SG,
     AWS_VPC_ID,
+    AWS_ALB_LISTENER_ARN,
   },
   svc_env: {
     CLIENT_ID,

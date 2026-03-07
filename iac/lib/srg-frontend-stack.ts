@@ -11,6 +11,7 @@ interface SRGFrontendStackProps extends cdk.StackProps {
     AWS_CLUSTER_ARN: string
     AWS_DEFAULT_SG: string
     AWS_VPC_ID: string
+    AWS_ALB_LISTENER_ARN: string
   }
   svc_env: {
     CLIENT_ID: string
@@ -89,8 +90,7 @@ export class SRGFrontendStack extends cdk.Stack {
       this,
       'imported-https-listener',
       {
-        listenerArn:
-          'arn:aws:elasticloadbalancing:us-east-1:471507967541:listener/app/jh-alb/c64970f58fd07783/1708c911f9b31d9e',
+        listenerArn: props.aws_env.AWS_ALB_LISTENER_ARN,
       },
     )
 

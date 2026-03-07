@@ -71,3 +71,4 @@ jobs:
           MAPBOX_ACCESS_TOKEN: ${{ vars.MAPBOX_ACCESS_TOKEN }}
           REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}
           GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+          AWS_ALB_LISTENER_ARN: ${{ vars.AWS_ALB_LISTENER_ARN }}
