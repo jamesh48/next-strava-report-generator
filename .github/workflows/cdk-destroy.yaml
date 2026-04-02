@@ -1,0 +1,43 @@
+name: AWS CDK Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "destroy" to confirm teardown'
+        required: true
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.confirm == 'destroy' }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install CDK
+        run: npm install -g aws-cdk
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ vars.CDK_REGION }}
+      - name: Destroy AWS stack
+        run: |
+          cd iac;
+          npm install;
+          cdk destroy --force;
+        env:
+          AWS_ACCOUNT_NUMBER: ${{ vars.AWS_ACCOUNT_NUMBER }}
+          AWS_CLUSTER_ARN: ${{ vars.AWS_CLUSTER_ARN }}
+          AWS_DEFAULT_SG: ${{ vars.AWS_DEFAULT_SG }}
+          AWS_VPC_ID: ${{ vars.AWS_VPC_ID }}
+          CDK_REGION: ${{ vars.CDK_REGION }}
+          CLIENT_ID: ${{ vars.STRAVA_CLIENT_ID }}
+          DATA_BASE_URL: ${{ vars.DATA_BASE_URL }}
+          MAPBOX_ACCESS_TOKEN: ${{ vars.MAPBOX_ACCESS_TOKEN }}
+          REDIRECT_URI_HOST: ${{ vars.REDIRECT_URI_HOST }}
